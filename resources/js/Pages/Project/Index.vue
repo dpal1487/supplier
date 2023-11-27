@@ -76,7 +76,7 @@ export default defineComponent({
             </div>
         </template>
         <div class="card">
-            <div class="mx-1 p-4 d-flex flex-wrap gap-5 align-items-center justify-content-between">
+            <div class="mx-1 p-4 d-flex flex-wrap align-items-center justify-content-between">
                 <form @submit.prevent="search" class="d-flex flex-wrap flex-grow-1 gap-5 gap-md-5 justify-content-start">
                     <div class="d-flex align-items-center position-relative">
                         <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"

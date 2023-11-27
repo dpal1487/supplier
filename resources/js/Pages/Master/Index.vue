@@ -78,7 +78,7 @@ export default defineComponent({
 
         </template>
         <div class="card">
-            <form class="card-header align-items-center gap-3 p-3" @submit.prevent="search()">
+            <form class="card-header align-items-center gap-3 p-5" @submit.prevent="search()">
                 <!--begin::Card title-->
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative">

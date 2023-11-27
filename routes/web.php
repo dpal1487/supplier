@@ -17,6 +17,7 @@ use App\Http\Controllers\{
     SurveyInitController,
     UserController,
     NotificationController,
+    DashboardController,
 };
 
 /*
@@ -33,7 +34,8 @@ use App\Http\Controllers\{
 
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-    Route::get('/', [ProjectController::class, 'index'])->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name("dashboard");
+    // Route::get('/', [ProjectController::class, 'index'])->name('dashboard');
 
     Route::controller(MasterController::class)->group(function () {
         Route::get('master', 'index')->name('master.index');

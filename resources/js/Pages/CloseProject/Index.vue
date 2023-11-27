@@ -52,7 +52,7 @@ export default defineComponent({
             <li class="breadcrumb-item text-muted">Close Projects</li>
         </template>
         <div class="card card-flush">
-            <form @submit.prevent="search" class="card-header justify-content-start py-4 px-4 gap-2 gap-md-5">
+            <form @submit.prevent="search" class="card-header justify-content-start p-5 gap-2 gap-md-5">
                 <div class="d-flex align-items-center position-relative">
                     <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24" viewBox="0 0 24 24"
                             fill="none" xmlns="http://www.w3.org/2000/svg">

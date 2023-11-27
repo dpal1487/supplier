@@ -13,6 +13,12 @@ export default defineComponent({
         return {
             navigations: [
                 {
+                    link: "/",
+                    title: "Dashbord",
+                    icon: "bi bi-pie-chart-fill",
+                    role: ["pm", "admin"],
+                },
+                {
                     link: "/master",
                     title: "Master",
                     icon: "bi bi-pie-chart-fill",

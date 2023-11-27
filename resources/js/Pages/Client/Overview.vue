@@ -12,6 +12,8 @@ import useVuelidate from "@vuelidate/core";
 import { required, email, url } from "@vuelidate/validators";
 import Multiselect from "@vueform/multiselect";
 import axios from "axios";
+import Loading from "vue-loading-overlay";
+import 'vue-loading-overlay/dist/css/index.css';
 
 export default defineComponent({
     setup() {
@@ -27,7 +29,8 @@ export default defineComponent({
         JetLabel,
         JetValidationErrors,
         InputError,
-        Multiselect
+        Multiselect,
+        Loading
     },
     validations() {
         return {
@@ -76,6 +79,10 @@ export default defineComponent({
             }),
             isEdit: false,
             title: "Client Overview",
+            isLoading : false,
+            isFullPage: true,
+
+
         };
     },
     methods: {
@@ -118,6 +125,8 @@ export default defineComponent({
 <template>
     <Head :title="title" />
     <app-layout :title="title">
+        <loading v-model:active="isLoading" :can-cancel="false" :is-full-page="isFullPage" />
+
         <template #breadcrumb>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>

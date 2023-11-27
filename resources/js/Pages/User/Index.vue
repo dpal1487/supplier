@@ -99,8 +99,8 @@ export default defineComponent({
                 <!--end::Primary button-->
             </div>
         </template>
-        <div class="card card-flush">
-            <form @submit.prevent="search" class="card-header justify-content-start py-5 gap-2 gap-md-5">
+        <div class="card">
+            <form @submit.prevent="search" class="card-header justify-content-start p-5 gap-2 gap-md-5">
                 <!--begin::Card title-->
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative">
@@ -128,8 +128,8 @@ export default defineComponent({
             <div class="card-body pt-0">
                 <!--begin::Table-->
                 <div class="table-responsive">
-                    <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
-                        <thead class="bg-light">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5">
+                        <thead>
                             <tr class="text-gray-400 fw-bold fs-7 w-100 text-uppercase">
                                 <th class="min-w-120px" v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
