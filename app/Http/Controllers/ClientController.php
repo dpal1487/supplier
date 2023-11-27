@@ -145,10 +145,10 @@ class ClientController extends Controller
             $projects = $projects->where('project_name', 'like', "%$request->q%")
                 ->orWhere('project_id', 'like', "%$request->q%");
         }
-        $address = ClientAddress::where(['client_id' => $id])->get()->sortByDesc('address.is_primary');
+        $address = Address::where(['entity_id' => $id, 'entity_type' => 'client'])->first();
         return Inertia::render('Client/Projects', [
             'client' => new ClientResource($this->getClient($id)),
-            'addresses' => count($address) > 0 ? AddressResource::collection($address) : ['data' => []],
+            'address' => $address ? new AddressResource($address) : ['data' => []],
             'projects' => ProjectListResource::collection($projects->paginate(20)->appends(request()->query())),
             'status' => ProjectStatusResource::collection($this->status),
         ]);

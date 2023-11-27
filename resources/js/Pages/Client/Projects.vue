@@ -10,7 +10,7 @@ import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/css/index.css';
 
 export default defineComponent({
-    props: ["projects", "client", "status", "addresses"],
+    props: ["projects", "client", "status", "address"],
     data() {
         return {
             title: "Client Projects",
@@ -66,7 +66,8 @@ export default defineComponent({
             </li>
         </template>
         <!--begin::Navbar-->
-        <Header :client="client?.data" :address="addresses.data" />
+
+        <Header :client="client?.data" :address="address.data" />
         <div class="card">
             <div class="card-header align-items-center">
                 <div class="card-title">

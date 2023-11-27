@@ -69,6 +69,7 @@
         "vue3-select2-component": "^0.1.7",
         "vue3-toastify": "^0.1.6",
         "vuejs-paginate-next": "^1.0.2",
-        "vuejs-smart-table": "^0.0.8"
+        "vuejs-smart-table": "^0.0.8",
+        "vuetify": "^3.4.3"
     }
 }

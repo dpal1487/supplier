@@ -6,6 +6,17 @@ import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+
+
+const vuetify = createVuetify({
+    components,
+    directives,
+  })
+
 import Vue3Toastify from 'vue3-toastify';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
@@ -31,6 +42,7 @@ createInertiaApp({
                 autoSetContainer: true,
                 appendToBody: true,
             })
+            .use(vuetify)
             .use(plugin).use(Vue3Toastify, { autoClose: 3000, theme: "colored" })
             .mixin({ methods: { route } })
             .mount(el);

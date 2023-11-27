@@ -115,9 +115,13 @@ export default defineComponent({
                         class="position-relative app-navbar-item ms-1 ms-md-3">
                         <button @click="getNotifications(notificationDrop ? false : true)"
                         class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px position-relative">
-                        <span
-                        class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink">
+                        <span class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink">
+
+                            <!-- <v-badge :content="notificationCount" @click="getNotifications(notificationDrop ? false : true)">
+                                <v-icon  color="success" icon="$vuetify" size="x-large"></v-icon>
+                              </v-badge> -->
                     </span>
+
                     <!-- <span class="badge badge-success mx-1 text-capitalize" >{{ notificationCount }}</span> -->
                             <span class="svg-icon svg-icon-1">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

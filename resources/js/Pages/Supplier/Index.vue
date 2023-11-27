@@ -122,7 +122,7 @@ export default defineComponent({
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase text-center">
+                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>

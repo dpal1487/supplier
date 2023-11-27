@@ -142,6 +142,7 @@ export default defineComponent({
             </li>
         </template>
         <!--begin::Navbar-->
+        
         <Header :client="client.data" :address="address.data" />
         <!--begin::details View-->
         <div class="card mb-5 mb-xl-10">

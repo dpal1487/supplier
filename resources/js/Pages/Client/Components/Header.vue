@@ -64,8 +64,8 @@ export default defineComponent({
                                         </svg>
                                     </span>
                                     <span>
-                                        {{ address.city }}, {{ address.state }},
-                                        {{ address.country?.name }} - {{ address.pincode }}
+                                        {{ address?.city }}, {{ address?.state }},
+                                        {{ address?.country?.name }} - {{ address?.pincode }}
                                     </span>
                                 </span>
                                 <span class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">

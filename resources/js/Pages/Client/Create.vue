@@ -26,7 +26,7 @@ export default defineComponent({
                     required,
                 },
                 tax_number: {
-                    required
+
                 },
                 description: {
                     required,
@@ -185,15 +185,10 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
-                                <div class="fv-row col-12">
+                                <div class="col-md-6 fv-row">
                                     <jet-label for="display-name" value="Tax number" />
-                                    <jet-input id="display-name" type="text" v-model="v$.form.tax_number.$model" :class="v$.form.tax_number.$errors.length > 0
-                                        ? 'is-invalid'
-                                        : ''
-                                        " placeholder="Enter Tax number" />
-                                    <div v-for="(error, index) of v$.form.tax_number.$errors" :key="index">
-                                        <input-error :message="error.$message" />
-                                    </div>
+                                    <jet-input id="display-name" type="text" v-model="v$.form.tax_number.$model" placeholder="Enter Tax number" />
+
                                 </div>
                                 <div class="fv-row mb-3">
                                     <jet-label for="description " value="Description " />
