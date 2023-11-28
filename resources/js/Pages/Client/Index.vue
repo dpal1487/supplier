@@ -102,7 +102,7 @@ export default defineComponent({
             </form>
             <div class="card-body pt-0">
                 <div class="table-responsive">
-                    <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5">
                         <thead>
                             <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">

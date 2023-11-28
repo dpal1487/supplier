@@ -136,7 +136,7 @@ export default defineComponent({
             <div class="card-body pt-0">
                 <!--begin::Table-->
                 <div class="table-responsive">
-                    <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->

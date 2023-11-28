@@ -264,13 +264,13 @@ export default defineComponent({
                                                         <input type="text" class="form-control form-control-solid mb-2"
                                                             v-model="item.project_name" placeholder="Project name" />
                                                     </td>
-                                                    <td> <input type="number" class="form-control form-control-solid"
+                                                    <td> <input type="text" class="form-control form-control-solid"
                                                             v-model="item.cpi" :placeholder="`${form.currency.symbol}0.00`"
                                                             @keyup="handler()" />
                                                     </td>
-                                                    
+
                                                     <td class="ps-0">
-                                                        <input class="form-control form-control-solid" type="number"
+                                                        <input class="form-control form-control-solid" type="text"
                                                             v-model="item.quantity" placeholder="1" @keyup="handler()" />
                                                     </td>
                                                     <td class="pt-8 text-center text-nowrap">
@@ -306,7 +306,7 @@ export default defineComponent({
                                                     class="border-top border-top-dashed align-top fs-6 fw-bold text-gray-700">
                                                     <th colspan="2" class="text-primary">
                                                         <div class="d-flex">
-                                                            <input type="number"
+                                                            <input type="text"
                                                                 class="form-control form-control-solid w-100px"
                                                                 v-model="rowCount" min="1">
                                                             <button type="button" class="btn btn-primary btn-sm ms-5"

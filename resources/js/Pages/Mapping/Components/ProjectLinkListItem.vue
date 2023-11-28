@@ -13,6 +13,7 @@ export default defineComponent({
     data() {
         return {
             isLoading: false,
+            isFullPage: true,
             isModalOpen: false,
             activeId: null,
             isReadonly: true,
@@ -57,6 +58,8 @@ export default defineComponent({
 </script>
 <template>
     <div class="card-body">
+        <loading v-model:active="isLoading" :can-cancel="false" :is-full-page="isFullPage" />
+
         <div class="d-flex justify-content-between align-items-center">
             <div class="flex-1">
                 <Link class="text-gray-800 text-hover-primary fs-6 fw-bold" :href="`/mapping/${project_link.id}`"

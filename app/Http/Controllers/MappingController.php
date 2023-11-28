@@ -186,9 +186,7 @@ class MappingController extends Controller
     {
         $project =  ProjectLink::where(['id' => $request->id])->first();
 
-        $statusValue =  $request->status ? "activate" : "inactivate";
-
-
+        $statusValue =   $request->status ? "activate" : "inactivate";
 
         if (ProjectLink::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
             $status = $request->status  ? "activate" : "inactivate";
@@ -196,12 +194,11 @@ class MappingController extends Controller
             $activity = ProjectActivity::create([
                 "project_id" => $project->project_id,
                 "type_id" => "status",
-                "text" =>  $statusValue,
+                "text" =>  $project->project_name ." has been " .$statusValue,
                 "user_id"   => Auth::user()->id,
             ]);
             broadcast(new SendMessage($project->project_id));
             auth()->user()->notify(new ActionNotification(Project::where('id' ,  $project->project_id)->first(), Auth::user() ,$project->project_name." has been " . $statusValue,));
-
 
             return response()->json(statusMessage('Project Link'));
         }
