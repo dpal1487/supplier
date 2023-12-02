@@ -54,6 +54,7 @@ export default defineComponent({
                         Save Change
                     </button>
                 </div>
-            </template></mapping-form>
+            </template>
+        </mapping-form>
     </Modal>
 </template>

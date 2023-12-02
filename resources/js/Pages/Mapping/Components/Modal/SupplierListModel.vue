@@ -36,7 +36,9 @@ export default defineComponent({
         return {
             projects: [],
             isLoading: false,
+            isFullPage: true,
             isFullScreenLoading: false,
+
         }
     },
     components: {

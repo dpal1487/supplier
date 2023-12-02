@@ -41,11 +41,11 @@ class ExportFinalIDs implements FromQuery, WithMapping, WithHeadings
     public function map($final): array
     {
         return [
-            $final->respondent?->project->project_id,
-            $final->respondent?->project->project_name,
-            $final->respondent?->project->client_id,
+            $final->respondent?->project?->project_id,
+            $final->respondent?->project?->project_name,
+            $final->respondent?->project?->client?->name,
             $final->respondent?->id,
-            $final->respondent?->user ? $final->respondent->user->first_name . ' ' . $final->respondent->user->last_name : $final->respondent?->user_id,
+            $final->respondent?->user ? $final->respondent?->user?->first_name . ' ' . $final->respondent?->user->last_name : $final->respondent?->user_id,
             $final->respondent?->starting_ip,
             $final->respondent?->end_ip,
             ucfirst($final->respondent?->status),

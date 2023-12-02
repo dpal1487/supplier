@@ -60,6 +60,12 @@ export default defineComponent({
                     icon: "bi bi-person-badge-fill",
                     role: ["pm", "admin"],
                 },
+                {
+                    link: "/final-id",
+                    title: "Final ID",
+                    icon: "bi bi-card-heading",
+                    role: ["pm", "admin", "user"],
+                }
             ],
         };
     },

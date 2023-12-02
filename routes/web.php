@@ -8,6 +8,7 @@ use App\Http\Controllers\{
     CompanyController,
     CloseProjectController,
     DashboardController,
+    FinalIdController,
     ProjectController,
     InvoiceController,
     MappingController,
@@ -182,6 +183,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('user/delAddress/{id}', 'delAddress')->name('user.delAddress');
             //Excel export
             Route::get('user-project/export', 'exportProjectIds')->name('user-project.report');
+        });
+
+        Route::controller(FinalIdController::class)->group(function () {
+            Route::get('final-id', 'index')->name('final-id.index');
+            Route::get('final-id/{id}/export', 'export')->name('final-id.export');
         });
 
         Route::controller(CompanyController::class)->group(function () {

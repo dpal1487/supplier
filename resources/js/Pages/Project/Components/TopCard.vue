@@ -176,12 +176,12 @@ export default defineComponent({
                         />
                     </span>
                 </label>
-                <a
+                <!-- <a
                     target="_blank"
                     class="btn btn-primary m-1 btn-sm"
                     :href="`/project/${project.id}/export`"
                     ><i class="bi bi-file-earmark-arrow-up"></i>Export ID's
-                </a>
+                </a> -->
                 <a
                     target="_blank"
                     :href="`/project/${project.id}/report`"

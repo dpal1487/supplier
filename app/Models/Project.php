@@ -85,4 +85,13 @@ class Project extends Model
     {
         return 'id';
     }
+
+    public function finalids()
+    {
+        return $this->hasMany(FinalId::class, 'project_id', 'id');
+    }
+    public function finalid()
+    {
+        return $this->hasOne(FinalId::class, 'project_id', 'id');
+    }
 }
