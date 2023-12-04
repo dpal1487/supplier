@@ -13,6 +13,10 @@ class FinalId extends Model
     {
         return $this->hasOne(Respondent::class, 'id', 'respondent_id');
     }
+    public function respondents()
+    {
+        return $this->hasMany(Respondent::class, 'id', 'respondent_id');
+    }
     public function project()
     {
         return $this->hasOne(Project::class, 'id', 'project_id');

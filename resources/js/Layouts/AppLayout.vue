@@ -73,9 +73,9 @@ export default {
             class="app-wrapper flex-column flex-row-fluid">
             <div class="app-main flex-column flex-row-fluid">
                 <div class="d-flex flex-column flex-column-fluid">
-                    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+                    <div  class="app-toolbar py-3 py-lg-6">
                         <!--begin::Toolbar container-->
-                        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                        <div class="app-container container-fluid d-flex flex-stack">
                             <!--begin::Page title-->
                             <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
                                 <!--begin::Title-->

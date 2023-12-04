@@ -21,6 +21,8 @@ class FinalIdController extends Controller
     public function index(Request $request)
     {
         $finalId = FinalId::groupBy('project_id');
+
+        // return $finalId;
         if (!empty($request->q)) {
             $finalId = $finalId->whereHas('projects', function ($q) use ($request) {
                 $q->where('project_name', 'like', "%$request->q%");
