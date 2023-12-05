@@ -6,6 +6,8 @@ import Multiselect from "@vueform/multiselect";
 import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
+import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
+
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import axios from 'axios';
@@ -14,7 +16,7 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/css/index.css";
 
 export default defineComponent({
-    props: ['clients', 'currencies', 'status'],
+    props: ['clients', 'currencies', 'status', 'invoice'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -60,28 +62,27 @@ export default defineComponent({
     },
     data() {
         return {
-            title: "Add New Invoice",
+            title: "Edit Invoice",
             isEdit: false,
             isLoading: false,
             items: 1,
             rowCount: 1,
-            selectedDays: 0,
             form: this.$inertia.form({
                 from_address: "121B, F/F Block A, Indira Park, Uttam Nagar,New Delhi,Delhi, India - 110059",
-                to_address: "",
-                client: "",
+                to_address: this.invoice.data.to_address || "",
+                client: this.invoice.data.client.id || "",
                 type: "Invoice",
-                issue_date: "",
-                due_date: "",
-                conversion_rate: "",
-                total_amount: 0,
-                tax_amount: 0,
-                notes: "",
-                status: 2,
-                currency: this.currencies.data[1],
-                tax_rate: 18,
-                items: [{
-                    name: '',
+                issue_date: this.invoice.data.issue_date || "",
+                due_date: this.invoice.data.due_date || "",
+                conversion_rate: this.invoice.data.conversion_rate || "",
+                total_amount: this.invoice.data.total_amount || "",
+                tax_amount: this.invoice.data.tax_amount || "",
+                notes: this.invoice.data.notes || "",
+                status: this.invoice.data.status || "",
+                currency: this.invoice.data.currency_id || this.currencies.data[1],
+                tax_rate: this.invoice.data.tax_rate || "",
+                items: this.invoice.data.items || [{
+                    project_name: '',
                     cpi: '',
                     quantity: '',
                 }],
@@ -96,12 +97,8 @@ export default defineComponent({
         JetInput,
         JetLabel,
         InputError,
-        Loading
-    },
-    inputFormat: {
-        type: String,
-        required: false,
-        default: 'yyyy-MM-dd',
+        Loading,
+        JetValidationErrors
     },
     methods: {
         submit() {
@@ -111,7 +108,7 @@ export default defineComponent({
                     .transform((data) => ({
                         ...data,
                     }))
-                    .post(this.route("invoice.store"), {
+                    .post(this.route("invoice.update", this.invoice.data.id), {
                         onSuccess: (data) => {
                             toast.success(this.$page.props.jetstream.flash.message);
                         },
@@ -156,22 +153,14 @@ export default defineComponent({
             axios.get(`/client/${event}/address`).then((response) => {
                 if (response.data.success) {
                     var address = response.data.data
-                    this.form.to_address = `${address.address}, ${address.city}, ${address.state}, ${address.country.name} - ${address.pincode}`;
+                    this.form.to_address = `${address.address}, ${address.state}, ${address.city}, ${address.country.name} - ${address.pincode}`;
                     return;
                 }
                 toast.error(response.data.message);
             }).finally(() => {
                 this.isLoading = false;
             })
-        },
-        updateDate() {
-            if (this.form.due_date !== "") {
-                const currentDate = new Date(this.form.due_date);
-                currentDate.setDate(currentDate.getDate() + parseInt(this.selectedDays));
-                const formattedDate = currentDate.toISOString().split('T')[0];
-                this.form.due_date = formattedDate;
-            }
-        },
+        }
     },
     created() {
 
@@ -199,17 +188,19 @@ export default defineComponent({
             </li>
         </template>
         <div class="app-content flex-column-fluid">
+            <JetValidationErrors />
+
             <form @submit.prevent="submit()" class="d-flex flex-column flex-lg-row">
                 <div class="flex-lg-row-fluid mb-10 mb-lg-0 me-lg-7 me-xl-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                                <div class="d-flex flex-column align-items-center flex-xxl-row gap-2">
+                                <div class="d-flex flex-column align-items-start flex-xxl-row gap-2">
                                     <div class="d-flex flex-center flex-equal fw-row text-nowrap order-1 order-xxl-2 me-4">
                                         <span class="fs-2x fw-bold text-gray-800">{{ form.type }}</span>
                                     </div>
                                 </div>
-                                <div class="separator separator-dashed"></div>
+                                <div class="separator separator-dashed my-10"></div>
                                 <div class="mb-0">
                                     <div class="row d-flex align-items-start">
                                         <div class="col-6">
@@ -277,9 +268,8 @@ export default defineComponent({
                                                             v-model="item.cpi" :placeholder="`${form.currency.symbol}0.00`"
                                                             @keyup="handler()" />
                                                     </td>
-
                                                     <td class="ps-0">
-                                                        <input class="form-control form-control-solid" type="number"
+                                                        <input class="form-control form-control-solid" type="text"
                                                             v-model="item.quantity" placeholder="1" @keyup="handler()" />
                                                     </td>
                                                     <td class="pt-8 text-center text-nowrap">
@@ -427,9 +417,10 @@ export default defineComponent({
                                     v-model="v$.form.currency.$model" :class="v$.form.currency.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
-                                        ">
+                                        " @change="getCurrencyValue($event)">
                                     <option v-for="(currency, index) in currencies.data" :key="currency" :value="currency">
-                                        {{ currency.label }}</option>
+                                        {{
+                                            currency.label }}</option>
                                 </select>
                                 <div v-for="(error, index) of v$.form.currency.$errors" :key="index">
                                     <input-error :message="error.$message" />
@@ -476,7 +467,6 @@ export default defineComponent({
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
-
                             <div class="mb-5">
                                 <label class="form-label fw-bold fs-6 text-gray-700">Due Date</label>
                                 <input type="date" v-model="v$.form.due_date.$model" class="form-control form-control-solid"
@@ -487,16 +477,6 @@ export default defineComponent({
                                 <div v-for="(error, index) of v$.form.due_date.$errors" :key="index">
                                     <input-error :message="error.$message" />
                                 </div>
-                            </div>
-
-                            <div class="mb-5">
-                                <label class="form-label fw-bold fs-6 text-gray-700" for="daysDropdown">Choose days:</label>
-                                <select class="form-control form-control-solid" v-model="selectedDays" @change="updateDate">
-                                    <option value="0">0 days</option>
-                                    <option value="15">15 days</option>
-                                    <option value="30">30 days</option>
-                                    <option value="45">45 days</option>
-                                </select>
                             </div>
                             <div class="separator separator-dashed mb-8"></div>
                             <div class="mb-0">

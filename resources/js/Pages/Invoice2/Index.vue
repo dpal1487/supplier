@@ -1,4 +1,4 @@
- <script>
+<script>
 import { defineComponent, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
@@ -344,7 +344,7 @@ export default defineComponent({
         <div class="card">
             <form
                 @submit.prevent="search"
-                class="card-header justify-content-start py-4 px-4 gap-2 gap-md-5"
+                class="card-header justify-content-start p-5 gap-2 gap-md-5"
             >
                 <div class="d-flex align-items-center position-relative">
                     <span class="svg-icon svg-icon-1 position-absolute ms-4"
@@ -405,7 +405,7 @@ export default defineComponent({
             <div class="card-body pt-0">
                 <div class="table-responsive">
                     <table
-                        class="table align-middle table-row-dashed fs-6 gy-5 text-center"
+                        class="table align-middle table-row-dashed fs-6 gy-5"
                     >
                         <thead>
                             <tr

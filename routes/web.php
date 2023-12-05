@@ -202,11 +202,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         });
 
         Route::controller(CloseProjectController::class)->group(function () {
-
             Route::get('/close-projects', 'index')->name('close-projects');
-
             Route::post('close-project/restore', 'restore')->name('close-project.restore');
-
             Route::delete('close-project/destroy/{id}', 'destroy')->name('close-project.destroy');
         });
     });
@@ -224,18 +221,14 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 Route::get('/{id}', 'show')->name('invoice.show');
                 Route::get('{id}/edit', 'edit')->name('invoice.edit');
                 Route::post('{id}/update', 'update')->name('invoice.update');
-                //Route::delete('{id}/delete', 'destroy')->name('invoice.delete');
             });
         });
         Route::get('invoice/{id}/currency-value', [CurrencyController::class, 'currenctValue'])->name('invoice.currency-value');
     });
-
     Route::controller(ExportExcelController::class)->group(function () {
         Route::get('export/excel', 'exportExcelFile')->name('export.excel');
     });
-
     route::get('notifications', [NotificationController::class, 'index'])->name('notifications');
-    // route::get('notifications', [NotificationController::class, 'index'])->name('notifications');
 });
 
 Route::group(['prefix' => 'survey'], function () {

@@ -37,6 +37,7 @@ export default defineComponent({
 <template>
     <Head :title="title" />
     <AppLayout :title="title">
+        <loading v-model:active="isLoading" :can-cancel="false" :is-full-page="true" />
         <template #breadcrumb>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
@@ -90,14 +91,13 @@ export default defineComponent({
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="fw-semibold fs-4 text-gray-600 mb-1">To:</div>
-                                            <div class="fw-bold fs-4 text-gray-800 mb-5">{{ invoice.data?.client?.name }}
+                                            <div class="fw-bold fs-4 text-gray-800 mb-5">{{ invoice.data.client.name }}
                                             </div>
                                             <div class="fw-semiboldtext-gray-600 fs-4 mb-5">
                                                 {{ invoice.data.to_address }}
                                             </div>
-                                            <div class="fw-semibold fs-4 text-gray-600"
-                                                v-if="invoice.data?.client?.tax_number">
-                                                GSTIN : {{ invoice.data?.client?.tax_number }}
+                                            <div class="fw-semibold fs-4 text-gray-600" v-if="invoice.data.client.tax_number">
+                                                GSTIN : {{invoice.data.client.tax_number}}
                                             </div>
                                         </div>
                                     </div>
@@ -122,8 +122,7 @@ export default defineComponent({
                                                         </td>
                                                         <td>{{ item.quantity }}</td>
                                                         <td class="text-end text-dark fw-bolder pe-5">
-                                                            {{ invoice.data.currency.symbol }}{{ (item.cpi *
-                                                                item.quantity).toFixed(2) }}
+                                                            {{ invoice.data.currency.symbol }}{{ item.cpi * item.quantity }}
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -196,9 +195,7 @@ export default defineComponent({
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                <tr class="fw-bold text-gray-700 fs-5"
-                                                    v-if="invoice.data?.client?.tax_number && invoice.data?.client?.tax_number == null">
-
+                                                <tr class="fw-bold text-gray-700 fs-5">
                                                     <td class="col-6 text-end">
                                                         <div class="fw-semibold pe-10 text-gray-600 fs-4">GSTIN
                                                             {{ invoice.data.tax_rate }}%</div>
@@ -212,7 +209,7 @@ export default defineComponent({
                                                 <tr class="fw-bold text-gray-700 fs-5">
                                                     <td class="col-6 text-end">
                                                         <div class="fw-semibold pe-10 text-gray-600 fs-4">Applied Exchange
-                                                            Rates</div>
+                                                            Rate</div>
                                                     </td>
                                                     <td class="col-6 text-end border-bottom">
                                                         <div class="text-dark fw-bolder">
@@ -226,13 +223,11 @@ export default defineComponent({
                                                         <div class="fw-semibold pe-10 text-gray-600 fs-4">Total</div>
                                                     </td>
                                                     <td class="col-6 text-end border-bottom">
-
                                                         <div class="text-dark fw-bolder">{{
                                                             invoice.data.currency.symbol }}{{ invoice.data.total_amount }}
                                                             X INR {{ invoice.data.conversion_rate }} =
-                                                            {{ invoice.data.currency.code }} {{ (
-                                                                invoice.data.total_amount *
-                                                                invoice.data.conversion_rate).toFixed(2) }}
+                                                            {{ invoice.data.currency.code }} {{(
+                                                                invoice.data.total_amount * invoice.data.conversion_rate).toFixed(2) }}
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -270,9 +265,7 @@ export default defineComponent({
                 </div>
             </div>
             <div class="d-flex justify-content-end mt-5">
-                <button class="btn btn-success" @click="printDiv('printableArea')"><i class="bi bi-filetype-pdf"></i>Save
-                    PDF</button>
-            </div>
+                <button class="btn btn-success" @click="printDiv('printableArea')"><i class="bi bi-filetype-pdf"></i>Save PDF</button>
         </div>
-    </AppLayout>
-</template>
+    </div>
+</AppLayout></template>

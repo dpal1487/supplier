@@ -43,17 +43,17 @@ class InvoiceController extends Controller
             $invoices = $invoices->where('client_id', '=', $request->client);
         }
         return Inertia::render('Invoice/Index', [
-            'invoices' => InvoiceListResource::collection($invoices->orderBy('id','desc')->paginate(50)->appends($request->all())),
+            'invoices' => InvoiceListResource::collection($invoices->orderBy('id', 'desc')->paginate(50)->appends($request->all())),
             'clients' => $this->clients,
             'status' => $this->status,
             'reports' => [
                 'sent_invoices' => [
                     'count' => $invoiceReport->count(),
-                    'total_amount' => round($invoiceReport->sum('total_amount'),2),
+                    'total_amount' => round($invoiceReport->sum('total_amount'), 2),
                 ],
                 'paid_invoices' => [
                     'count' => $invoiceReport->where('status', 1)->count(),
-                    'total_amount' => round($invoiceReport->where('status', 1)->sum('total_amount'),2),
+                    'total_amount' => round($invoiceReport->where('status', 1)->sum('total_amount'), 2),
                 ],
                 'unpaid_invoices' => [
                     'count' => $invoiceReport->where('status', 2)->count(),
@@ -91,7 +91,7 @@ class InvoiceController extends Controller
             'status' => 'required',
             'total_amount' => 'required'
         ]);
-        $inv = 'INV-' . (str_pad((int)Invoice::orderBy('id','desc')->first()->id+1, 4, '0', STR_PAD_LEFT));
+        $inv = 'INV-' . (str_pad((int)Invoice::orderBy('id', 'desc')->first()->id + 1, 4, '0', STR_PAD_LEFT));
         $invoice = Invoice::create([
             'issue_date' => $request->issue_date,
             'due_date' => $request->due_date,
@@ -137,9 +137,14 @@ class InvoiceController extends Controller
     public function show($id)
     {
         $invoice = Invoice::find($id);
-        return Inertia::render('Invoice/Show', [
-            'invoice' => new InvoiceResource($invoice),
-        ]);
+
+        if ($invoice) {
+            return Inertia::render('Invoice/Show', [
+                'invoice' => new InvoiceResource($invoice),
+            ]);
+        } else {
+            return redirect()->back();
+        }
     }
 
     public function update(Request $request, $id)

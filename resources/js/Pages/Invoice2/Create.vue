@@ -14,7 +14,7 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/css/index.css";
 
 export default defineComponent({
-    props: ['clients', 'currencies', 'status'],
+    props: ['clients', 'currencies','status'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -65,7 +65,6 @@ export default defineComponent({
             isLoading: false,
             items: 1,
             rowCount: 1,
-            selectedDays: 0,
             form: this.$inertia.form({
                 from_address: "121B, F/F Block A, Indira Park, Uttam Nagar,New Delhi,Delhi, India - 110059",
                 to_address: "",
@@ -163,15 +162,7 @@ export default defineComponent({
             }).finally(() => {
                 this.isLoading = false;
             })
-        },
-        updateDate() {
-            if (this.form.due_date !== "") {
-                const currentDate = new Date(this.form.due_date);
-                currentDate.setDate(currentDate.getDate() + parseInt(this.selectedDays));
-                const formattedDate = currentDate.toISOString().split('T')[0];
-                this.form.due_date = formattedDate;
-            }
-        },
+        }
     },
     created() {
 
@@ -204,12 +195,12 @@ export default defineComponent({
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                                <div class="d-flex flex-column align-items-center flex-xxl-row gap-2">
+                                <div class="d-flex flex-column align-items-start flex-xxl-row gap-2">
                                     <div class="d-flex flex-center flex-equal fw-row text-nowrap order-1 order-xxl-2 me-4">
                                         <span class="fs-2x fw-bold text-gray-800">{{ form.type }}</span>
                                     </div>
                                 </div>
-                                <div class="separator separator-dashed"></div>
+                                <div class="separator separator-dashed my-10"></div>
                                 <div class="mb-0">
                                     <div class="row d-flex align-items-start">
                                         <div class="col-6">
@@ -279,7 +270,7 @@ export default defineComponent({
                                                     </td>
 
                                                     <td class="ps-0">
-                                                        <input class="form-control form-control-solid" type="number"
+                                                        <input class="form-control form-control-solid" type="text"
                                                             v-model="item.quantity" placeholder="1" @keyup="handler()" />
                                                     </td>
                                                     <td class="pt-8 text-center text-nowrap">
@@ -315,7 +306,7 @@ export default defineComponent({
                                                     class="border-top border-top-dashed align-top fs-6 fw-bold text-gray-700">
                                                     <th colspan="2" class="text-primary">
                                                         <div class="d-flex">
-                                                            <input type="number"
+                                                            <input type="text"
                                                                 class="form-control form-control-solid w-100px"
                                                                 v-model="rowCount" min="1">
                                                             <button type="button" class="btn btn-primary btn-sm ms-5"
@@ -427,9 +418,10 @@ export default defineComponent({
                                     v-model="v$.form.currency.$model" :class="v$.form.currency.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
-                                        ">
+                                        " @change="getCurrencyValue($event)">
                                     <option v-for="(currency, index) in currencies.data" :key="currency" :value="currency">
-                                        {{ currency.label }}</option>
+                                        {{
+                                            currency.label }}</option>
                                 </select>
                                 <div v-for="(error, index) of v$.form.currency.$errors" :key="index">
                                     <input-error :message="error.$message" />
@@ -441,8 +433,7 @@ export default defineComponent({
                                     ? 'is-invalid'
                                     : ''
                                     ">
-                                    <option v-for="(status, index) in status" :key="index" :value="status.id">{{
-                                        status.label
+                                    <option v-for="(status, index) in status" :key="index" :value="status.id">{{ status.label
                                     }}</option>
                                 </select>
                                 <div v-for="(error, index) of v$.form.status.$errors" :key="index">
@@ -476,7 +467,6 @@ export default defineComponent({
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
-
                             <div class="mb-5">
                                 <label class="form-label fw-bold fs-6 text-gray-700">Due Date</label>
                                 <input type="date" v-model="v$.form.due_date.$model" class="form-control form-control-solid"
@@ -487,16 +477,6 @@ export default defineComponent({
                                 <div v-for="(error, index) of v$.form.due_date.$errors" :key="index">
                                     <input-error :message="error.$message" />
                                 </div>
-                            </div>
-
-                            <div class="mb-5">
-                                <label class="form-label fw-bold fs-6 text-gray-700" for="daysDropdown">Choose days:</label>
-                                <select class="form-control form-control-solid" v-model="selectedDays" @change="updateDate">
-                                    <option value="0">0 days</option>
-                                    <option value="15">15 days</option>
-                                    <option value="30">30 days</option>
-                                    <option value="45">45 days</option>
-                                </select>
                             </div>
                             <div class="separator separator-dashed mb-8"></div>
                             <div class="mb-0">
