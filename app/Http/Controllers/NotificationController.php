@@ -21,7 +21,7 @@ class NotificationController extends Controller
         }
         else{
             $notifications = Notification::orderBy('created_at', 'desc')->get();
-            return Inertia::render('Notification', [
+            return Inertia::render('Notification/Index', [
                 'notifications' =>NotificationsResource::collection( $notifications)
             ]);
             // return Inertia::render('Notification', [
