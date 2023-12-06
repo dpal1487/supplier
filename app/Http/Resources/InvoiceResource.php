@@ -23,13 +23,14 @@ class InvoiceResource extends JsonResource
             'type' => $this->type,
             'issue_date' => $this->issue_date,
             'due_date' => $this->due_date,
+            'selected_days' => $this->add_days,
             'total_amount' => $this->total_amount,
             'tax_rate' => $this->tax_rate,
             'conversion_rate' => $this->conversion_rate,
             'currency' => $this->currency,
             'notes' => $this->notes,
             'status' => $this->status,
-            'items'=>$this->items,
+            'items' => $this->items,
         ];
     }
 }

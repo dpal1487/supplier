@@ -65,7 +65,6 @@ export default defineComponent({
             isLoading: false,
             items: 1,
             rowCount: 1,
-            selectedDays: 0,
             form: this.$inertia.form({
                 from_address: "121B, F/F Block A, Indira Park, Uttam Nagar,New Delhi,Delhi, India - 110059",
                 to_address: "",
@@ -80,6 +79,7 @@ export default defineComponent({
                 status: 2,
                 currency: this.currencies.data[1],
                 tax_rate: 18,
+                selectedDays: 0,
                 items: [{
                     name: '',
                     cpi: '',
@@ -167,7 +167,7 @@ export default defineComponent({
         updateDate() {
             if (this.form.due_date !== "") {
                 const currentDate = new Date(this.form.due_date);
-                currentDate.setDate(currentDate.getDate() + parseInt(this.selectedDays));
+                currentDate.setDate(currentDate.getDate() + parseInt(this.form.selectedDays));
                 const formattedDate = currentDate.toISOString().split('T')[0];
                 this.form.due_date = formattedDate;
             }
@@ -398,7 +398,7 @@ export default defineComponent({
                                                                     }}
                                                                     X INR {{ form.conversion_rate }} =
                                                                     {{ form.currency.code }} {{
-                                                                        form.total_amount * form.conversion_rate }}
+                                                                        (form.total_amount * form.conversion_rate).toFixed(2) }}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -491,7 +491,8 @@ export default defineComponent({
 
                             <div class="mb-5">
                                 <label class="form-label fw-bold fs-6 text-gray-700" for="daysDropdown">Choose days:</label>
-                                <select class="form-control form-control-solid" v-model="selectedDays" @change="updateDate">
+                                <select class="form-control form-control-solid" v-model="form.selectedDays"
+                                    @change="updateDate">
                                     <option value="0">0 days</option>
                                     <option value="15">15 days</option>
                                     <option value="30">30 days</option>

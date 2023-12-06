@@ -70,10 +70,11 @@ export default defineComponent({
             form: this.$inertia.form({
                 from_address: "121B, F/F Block A, Indira Park, Uttam Nagar,New Delhi,Delhi, India - 110059",
                 to_address: this.invoice.data.to_address || "",
-                client: this.invoice.data.client.id || "",
+                client: this.invoice.data.client?.id || "",
                 type: "Invoice",
                 issue_date: this.invoice.data.issue_date || "",
                 due_date: this.invoice.data.due_date || "",
+                selectedDays: this.invoice.data?.selected_days || 0,
                 conversion_rate: this.invoice.data.conversion_rate || "",
                 total_amount: this.invoice.data.total_amount || "",
                 tax_amount: this.invoice.data.tax_amount || "",
@@ -124,7 +125,7 @@ export default defineComponent({
         addItemForm(rowCount) {
             for (var i = 0; i < rowCount; i++) {
                 this.form.items.push({
-                    name: '',
+                    project_name: '',
                     cpi: '',
                     quantity: '',
                     price: ''
@@ -160,7 +161,20 @@ export default defineComponent({
             }).finally(() => {
                 this.isLoading = false;
             })
-        }
+        },
+        updateDate() {
+            if (this.form.due_date !== "") {
+                if (this.form.selectedDays == 0) {
+                    this.form.due_date = this.invoice.data.due_date
+                }
+                else {
+                    const currentDate = new Date(this.form.due_date);
+                    currentDate.setDate(currentDate.getDate() + parseInt(this.form?.selectedDays));
+                    const formattedDate = currentDate.toISOString().split('T')[0];
+                    this.form.due_date = formattedDate;
+                }
+            }
+        },
     },
     created() {
 
@@ -195,12 +209,12 @@ export default defineComponent({
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                                <div class="d-flex flex-column align-items-start flex-xxl-row gap-2">
+                                <div class="d-flex flex-column align-items-center flex-xxl-row gap-2">
                                     <div class="d-flex flex-center flex-equal fw-row text-nowrap order-1 order-xxl-2 me-4">
                                         <span class="fs-2x fw-bold text-gray-800">{{ form.type }}</span>
                                     </div>
                                 </div>
-                                <div class="separator separator-dashed my-10"></div>
+                                <div class="separator separator-dashed"></div>
                                 <div class="mb-0">
                                     <div class="row d-flex align-items-start">
                                         <div class="col-6">
@@ -477,6 +491,16 @@ export default defineComponent({
                                 <div v-for="(error, index) of v$.form.due_date.$errors" :key="index">
                                     <input-error :message="error.$message" />
                                 </div>
+                            </div>
+                            <div class="mb-5">
+                                <label class="form-label fw-bold fs-6 text-gray-700" for="daysDropdown">Choose days:</label>
+                                <select class="form-control form-control-solid" v-model="form.selectedDays"
+                                    @change="updateDate">
+                                    <option value="0">0 days</option>
+                                    <option value="15">15 days</option>
+                                    <option value="30">30 days</option>
+                                    <option value="45">45 days</option>
+                                </select>
                             </div>
                             <div class="separator separator-dashed mb-8"></div>
                             <div class="mb-0">

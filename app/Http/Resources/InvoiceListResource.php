@@ -21,12 +21,13 @@ class InvoiceListResource extends JsonResource
             'type' => $this->type,
             'issue_date' => $this->issue_date,
             'due_date' => $this->due_date,
-            'total_amount' => round($this->total_amount,2),
+            'total_amount' => round($this->total_amount, 2),
             'tax_rate' => $this->tax_rate,
             'conversion_rate' => $this->conversion_rate,
             'currency' => $this->currency,
             'notes' => $this->notes,
             'status' => $this->status,
+            'is_gst_paid' => $this->is_gst_paid,
         ];
     }
 }

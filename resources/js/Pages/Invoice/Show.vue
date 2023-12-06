@@ -51,6 +51,12 @@ export default defineComponent({
                 <span class="text-muted text-hover-primary">Overview</span>
             </li>
         </template>
+        <template #toolbar>
+            <div class="d-flex align-items-center gap-2 gap-lg-3">
+                <Link :href="`/invoice/${invoice.data.id}/edit`" class="btn btn-sm fw-bold btn-primary">
+                <i class="bi bi-pencil"></i>Edit Invoice</Link>
+            </div>
+        </template>
         <div class="app-content flex-column-fluid">
             <div class="card" id="printableArea">
                 <div class="card-body p-lg-20">
@@ -58,9 +64,9 @@ export default defineComponent({
                         <div class="flex-lg-row-fluid me-xl-18 mb-10 mb-xl-0">
                             <div class="mt-n1">
                                 <div class="d-flex flex-stack pb-10">
-                                    <Link href="/">
+                                    <!-- <Link href="/"> -->
                                     <img alt="Logo" src="/assets/images/logo-light.png" style="height:100px;">
-                                    </Link>
+                                    <!-- </Link> -->
                                 </div>
                                 <div class="m-0">
                                     <div class="fw-bold fs-3 text-gray-800 mb-8">Invoice #{{ invoice.data.invoice_number }}
@@ -92,11 +98,12 @@ export default defineComponent({
                                             <div class="fw-semibold fs-4 text-gray-600 mb-1">To:</div>
                                             <div class="fw-bold fs-4 text-gray-800 mb-5">{{ invoice.data?.client?.name }}
                                             </div>
-                                            <div class="fw-semiboldtext-gray-600 fs-4 mb-5">
+                                            <div class="fw-semibold text-gray-600 fs-4 mb-5 text-uppercase">
                                                 {{ invoice.data.to_address }}
                                             </div>
+
                                             <div class="fw-semibold fs-4 text-gray-600"
-                                                v-if="invoice.data?.client?.tax_number">
+                                                v-if="invoice.data?.client?.tax_number && invoice.data?.client?.tax_number != 'null'">
                                                 GSTIN : {{ invoice.data?.client?.tax_number }}
                                             </div>
                                         </div>
@@ -197,8 +204,7 @@ export default defineComponent({
                                                     </td>
                                                 </tr>
                                                 <tr class="fw-bold text-gray-700 fs-5"
-                                                    v-if="invoice.data?.client?.tax_number && invoice.data?.client?.tax_number == null">
-
+                                                    v-if="invoice.data?.client?.tax_number && invoice.data?.client?.tax_number != 'null'">
                                                     <td class="col-6 text-end">
                                                         <div class="fw-semibold pe-10 text-gray-600 fs-4">GSTIN
                                                             {{ invoice.data.tax_rate }}%</div>
@@ -225,8 +231,20 @@ export default defineComponent({
                                                     <td class="col-6 text-end">
                                                         <div class="fw-semibold pe-10 text-gray-600 fs-4">Total</div>
                                                     </td>
-                                                    <td class="col-6 text-end border-bottom">
-
+                                                    <td class="col-6 text-end border-bottom"
+                                                        v-if="invoice.data?.client?.tax_number && invoice.data?.client?.tax_number != 'null'">
+                                                        <div class="text-dark fw-bolder">{{
+                                                            invoice.data.currency.symbol }}{{ invoice.data.total_amount }}
+                                                            X INR {{ invoice.data.conversion_rate }} =
+                                                            {{ invoice.data.currency.code }} {{ (
+                                                                (invoice.data.total_amount *
+                                                                    invoice.data.conversion_rate) +
+                                                                (parseFloat(invoice.data.total_amount
+                                                                    / 118 *
+                                                                    invoice.data.tax_rate))).toFixed(2) }}
+                                                        </div>
+                                                    </td>
+                                                    <td class="col-6 text-end border-bottom" v-else>
                                                         <div class="text-dark fw-bolder">{{
                                                             invoice.data.currency.symbol }}{{ invoice.data.total_amount }}
                                                             X INR {{ invoice.data.conversion_rate }} =
@@ -258,9 +276,9 @@ export default defineComponent({
                                     </div>
                                     <div class="mw-400px">
                                         <div class="d-flex flex-stack">
-                                            <Link href="/">
+                                            <!-- <Link href="/"> -->
                                             <img alt="Logo" src="/assets/images/logo-light.png" style="height:100px;">
-                                            </Link>
+                                            <!-- </Link> -->
                                         </div>
                                     </div>
                                 </div>

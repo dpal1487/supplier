@@ -78,6 +78,8 @@ class InvoiceController extends Controller
     }
     public function store(Request $request)
     {
+
+        // return $request;
         $request->validate([
             'issue_date' => 'required',
             'due_date' => 'required',
@@ -95,6 +97,7 @@ class InvoiceController extends Controller
         $invoice = Invoice::create([
             'issue_date' => $request->issue_date,
             'due_date' => $request->due_date,
+            'add_days' => $request->selectedDays,
             'invoice_number' => $inv,
             'from_address' => $request->from_address,
             'to_address' => $request->to_address,
@@ -168,6 +171,7 @@ class InvoiceController extends Controller
         $invoice = Invoice::where('id', $id)->update([
             'issue_date' => $request->issue_date,
             'due_date' => $request->due_date,
+            'add_days' => $request->selectedDays,
             'from_address' => $request->from_address,
             'to_address' => $request->to_address,
             'type' => $request->type,

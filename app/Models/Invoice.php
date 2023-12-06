@@ -12,8 +12,8 @@ class Invoice extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'string';
     public $incrementing = false;
-    protected $fillable = ['client_id','invoice_number',
-        'issue_date', 'due_date', 'from_address', 'to_address', 'currency_id', 'type', 'tax_rate','client','conversion_rate','notes','status','total_amount'
+    protected $fillable = [
+        'client_id', 'invoice_number', 'issue_date', 'add_days', 'due_date', 'from_address', 'to_address', 'currency_id', 'type', 'tax_rate', 'client', 'conversion_rate', 'notes', 'status', 'total_amount'
     ];
     protected static function boot()
     {

@@ -83,7 +83,7 @@ export default defineComponent({
                                 toast.success(this.$page.props.jetstream.flash.message);
                             },
                             onError: (data) => {
-                                toast.error(data.message)
+                                // toast.error(data.message)
                             },
                         }
                     );
