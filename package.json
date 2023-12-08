@@ -26,6 +26,8 @@
         "vue-loader": "^16.1.2"
     },
     "dependencies": {
+        "@ckeditor/ckeditor5-build-classic": "^40.1.0",
+        "@ckeditor/ckeditor5-vue": "^5.1.0",
         "@codinglabs/laravel-asset": "^1.0.3",
         "@fortawesome/fontawesome-svg-core": "^6.3.0",
         "@inertiajs/inertia": "^0.11.1",
@@ -46,7 +48,7 @@
         "socket.io": "^4.6.1",
         "socket.io-client": "^4.7.2",
         "sweetalert2": "^11.4.8",
-        "vee-validate": "^3.4.14",
+        "vee-validate": "^3.4.15",
         "vform": "^2.1.2",
         "vue": "^3.3.8",
         "vue-echo": "^1.0.2",

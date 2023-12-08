@@ -186,6 +186,26 @@ export default {
                 toast.error(error.message)
             });
     },
+    async imageUpload(route, e, image_id, id) { // event can also be a FilelistObject
+
+        const file = e?.target?.files[0] || e[0];
+        const formdata = new FormData();
+        formdata.append("image", file);
+        formdata.append("image_id", image_id);
+        formdata.append("id", id);
+        try {
+            const response = await axios.post(route, formdata, { headers: { "Content-Type": "multipart/form-data", } });
+            return {
+                file: file,
+                response: response.data,
+            };
+        } catch (error) {
+            console.log("some error occured", error);
+            return {
+                file: file,
+            }
+        }
+    },
     successToast(message) {
         toast.success(message);
     },

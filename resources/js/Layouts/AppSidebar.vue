@@ -57,13 +57,46 @@ export default defineComponent({
                 {
                     link: "/close-projects",
                     title: "Close Projects",
-                    icon: "bi bi-person-badge-fill",
+                    icon: "bi bi-card-heading",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/final-id",
                     title: "Final ID",
                     icon: "bi bi-card-heading",
+                    role: ["pm", "admin", "user"],
+                }
+                ,
+                {
+                    link: "/service",
+                    title: "Services",
+                    icon: "bi bi-diagram-3",
+                    role: ["pm", "admin", "user"],
+                }
+                ,
+                {
+                    link: "/testimonial",
+                    title: "Testimonial",
+                    icon: "bi bi-clipboard2-pulse",
+                    role: ["pm", "admin", "user"],
+                }
+                ,
+                {
+                    link: "/blogs",
+                    title: "Blogs",
+                    icon: "bi bi-file-post",
+                    role: ["pm", "admin", "user"],
+                },
+                {
+                    link: "/question",
+                    title: "Question Answers",
+                    icon: "bi bi-question-square",
+                    role: ["pm", "admin", "user"],
+                },
+                {
+                    link: "/users",
+                    title: "User Role",
+                    icon: "bi bi-people",
                     role: ["pm", "admin", "user"],
                 }
             ],
@@ -138,7 +171,8 @@ export default defineComponent({
         <div class="app-sidebar-footer flex-column-auto pt-2 pb-6 px-6">
             <form method="post" @submit.prevent="logout">
                 <button type="submit"
-                    class="btn btn-flex flex-center btn-custom btn-primary overflow-hidden text-nowrap px-0 h-40px w-100">
+                    class="btn btn-flex flex-center btn-custom btn-primary overflow-hidden text-nowrap px-0 h-40px w-100"
+                    style="background-color: rgb(173 56 97);">
                     <span class="btn-label">Logout</span>
                     <!--begin::Svg Icon | path: icons/duotune/general/gen005.svg-->
                     <span class="svg-icon btn-icon svg-icon-2 m-0">

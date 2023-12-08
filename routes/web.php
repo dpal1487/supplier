@@ -3,12 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     AccountController,
+    AnswerController,
+    BlogController,
     ClientController,
     ExportExcelController,
     CompanyController,
     CloseProjectController,
     DashboardController,
     FinalIdController,
+    ImageController,
     ProjectController,
     InvoiceController,
     MappingController,
@@ -19,6 +22,9 @@ use App\Http\Controllers\{
     SurveyInitController,
     UserController,
     NotificationController,
+    QuestionController,
+    ServiceController,
+    TestimonialController,
 };
 
 /*
@@ -98,17 +104,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('client/update', 'update')->name('client.update');
             Route::get('client/{id}', 'show')->name('client.show');
             Route::delete('client/{id}', 'destroy')->name('client.destroy');
-
             Route::post('client/status', 'changeStatus')->name('client.status');
-
             Route::get('client/{id}/projects', 'projects')->name('client.projects');
-
             Route::get('client/{id}/address', 'address')->name('client.address');
             Route::get('client/{id}/addresses', 'addresses')->name('client.addresses');
             Route::post('client/addAddress/{id}', 'addAddress')->name('client.addAddress');
             Route::post('client/updateAddress/{id}', 'updateAddress')->name('client.updateAddress');
             Route::delete('client/delAddress/{id}', 'delAddress')->name('client.delAddress');
-
             Route::get('client/project/report', 'exportProjectIds')->name('client.project.report');
         });
         Route::controller(MappingController::class)->group(function () {
@@ -205,6 +207,24 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('/close-projects', 'index')->name('close-projects');
             Route::post('close-project/restore', 'restore')->name('close-project.restore');
             Route::delete('close-project/destroy/{id}', 'destroy')->name('close-project.destroy');
+        });
+
+        Route::resource('service', ServiceController::class);
+
+        Route::resource('blog', BlogController::class);
+        Route::post('blog/status', [BlogController::class, 'statusUpdate'])->name('blog.status');
+
+        Route::resource('testimonial', TestimonialController::class);
+        Route::post('testimonial/status', [TestimonialController::class, 'statusUpdate'])->name('testimonial.status');
+
+        Route::resource('question', QuestionController::class);
+        Route::post('questions/delete', [QuestionController::class, 'selectDelete'])->name('questions.delete');
+
+        Route::resource('answer', AnswerController::class);
+        Route::post('answers/delete', [AnswerController::class, 'selectDelete'])->name('answers.delete');
+
+        Route::controller(ImageController::class)->group(function () {
+            Route::post('/upload/service-image', 'serviceImage')->name('upload.service-image');
         });
     });
 
