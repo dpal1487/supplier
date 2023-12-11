@@ -116,20 +116,17 @@ class ServiceController extends Controller
     public function edit($id)
     {
         $service = Service::find($id);
-        $image = Image::where(['entity_id' => $id, 'entity_type' => 'service'])->first();
-        return Inertia::render('Service/Form', [
-            'service' => new ServiceResource($service),
-            'image' => $image ?  new ImageResource($image) : null,
-        ]);
+        if ($service) {
+            $image = Image::where(['entity_id' => $id, 'entity_type' => 'service'])->first();
+            return Inertia::render('Service/Form', [
+                'service' => new ServiceResource($service),
+                'image' => $image ?  new ImageResource($image) : null,
+            ]);
+        }
+        return redirect('service');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -142,9 +139,6 @@ class ServiceController extends Controller
             return redirect()->back()->withErrors(['message' => $validator->errors()->first(), 'success' => false]);
         }
         $service = Service::where(['id' => $id])->first();
-
-        return $request->image;
-
         if ($service) {
             $update =  Service::where(['id' => $id])->update([
                 'name' => $request->name,
@@ -167,12 +161,6 @@ class ServiceController extends Controller
         return redirect()->back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $service = Service::find($id);

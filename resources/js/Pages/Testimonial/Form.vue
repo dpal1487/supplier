@@ -138,71 +138,79 @@ export default defineComponent({
                     enctype="multipart/form-data">
                     <div class="">
                         <div class="row g-5">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title">
+                                            <h2>General</h2>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row mb-5">
+                                            <div class="col-6">
+                                                <jet-label for="name" value="Name" />
+                                                <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
+                                                    ? 'is-invalid'
+                                                    : ''
+                                                    " placeholder="Name" />
+                                                <div v-for="(error, index) of v$.form.name.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <jet-label for="is_published" value="Published" />
+                                                <Multiselect :options="is_published" label="name" valueProp="id"
+                                                    class="form-control form-control-lg form-control-solid"
+                                                    placeholder="Select One" v-model="v$.form.is_published.$model"
+                                                    track-by="name" :class="v$.form.is_published.$errors.length > 0
+                                                        ? 'is-invalid'
+                                                        : ''
+                                                        " />
+                                                <div v-for="(error, index) of v$.form.is_published.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="fv-row col-12">
+                                            <jet-label for="testimonial" value="Testimonial" />
+                                            <ckeditor :editor="editor" v-model="v$.form.testimonial.$model"
+                                                class="form-control form-control-solid" :class="v$.form.testimonial.$errors.length > 0
+                                                    ? 'is-invalid'
+                                                    : ''
+                                                    " />
+                                        </div>
+                                    </div>
 
-                            <div class="col-6">
-                                <jet-label for="name" value="Name" />
-                                <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
-                                    ? 'is-invalid'
-                                    : ''
-                                    " placeholder="Name" />
-                                <div v-for="(error, index) of v$.form.name.$errors" :key="index">
-                                    <input-error :message="error.$message" />
+                                    <!--end::Actions-->
                                 </div>
-                            </div>
-                            <div class="col-6">
-                                <jet-label for="is_published" value="Published" />
-                                <!-- {{ this.testimonial?.data?.is_published }} -->
-                                <Multiselect :options="is_published" label="name" valueProp="id"
-                                    class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                    v-model="v$.form.is_published.$model" track-by="name" :class="v$.form.is_published.$errors.length > 0
-                                        ? 'is-invalid'
-                                        : ''
-                                        " />
-                                <div v-for="(error, index) of v$.form.is_published.$errors" :key="index">
-                                    <input-error :message="error.$message" />
-                                </div>
-                            </div>
-                            <div class="fv-row col-12">
-                                <jet-label for="testimonial" value="Testimonial" />
-                                <ckeditor :editor="editor" v-model="v$.form.testimonial.$model"
-                                    class="form-control form-control-solid" :class="v$.form.testimonial.$errors.length > 0
-                                        ? 'is-invalid'
-                                        : ''
-                                        " placeholder="Text" />
 
-                                <div v-for="(error, index) of v$.form.testimonial.$errors" :key="index">
-                                    <input-error :message="error.$message" />
-                                </div>
                             </div>
-
-
                         </div>
+
                     </div>
-                    <!--end::Variations-->
                     <div class="row">
                         <div class="col-12">
                             <div class="d-flex justify-content-end text-align-center gap-5">
-
                                 <Link href="/testimonial" class="btn btn-outline-secondary">
                                 Discard
                                 </Link>
 
                                 <div>
-                                    <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                        :data-kt-indicator="form.processing ? 'on' : 'off'">
-                                        <span v-if="route().current() == 'testimonial.edit'">Save Changes</span>
+                                    <button type="submit" class="btn btn-primary"
+                                        :class="{ 'text-white-50': form.processing }">
+                                        <div v-show="form.processing" class="spinner-border spinner-border-sm">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <span v-if="route().current() == 'testimonial.edit'">Save
+                                            Changes</span>
                                         <span v-if="route().current() == 'testimonial.create'">Save</span>
-                                        <span class="indicator-progress">
-                                            Please wait... <span
-                                                class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                        </span>
+
                                     </button>
                                 </div>
                                 <!--end::Button-->
                             </div>
                         </div>
                     </div>
-                    <!--end::Actions-->
                 </form>
             </div>
         </div>

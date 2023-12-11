@@ -2,6 +2,8 @@
 import { defineComponent, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
+import AppToolbar from "../../Layouts/AppToolbar.vue";
+// import RadioType from "./Components/QuestionTypes/RadioType.vue"
 import Multiselect from "@vueform/multiselect";
 import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
@@ -9,6 +11,8 @@ import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import useVuelidate from "@vuelidate/core";
 import { required, numeric, url } from "@vuelidate/validators";
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 import { toast } from "vue3-toastify";
 export default defineComponent({
     props: ["clients", "countries", 'status'],
@@ -18,6 +22,7 @@ export default defineComponent({
     },
     components: {
         AppLayout,
+        AppToolbar,
         Link,
         Head,
         Multiselect,
@@ -25,6 +30,8 @@ export default defineComponent({
         JetLabel,
         JetValidationErrors,
         InputError,
+        VueDatePicker,
+        // RadioType
     },
     validations() {
         return {
@@ -118,7 +125,6 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             this.processing = true;
-
             if (!this.v$.form.$invalid) {
                 this.form
                     .transform((data) => ({
@@ -146,14 +152,12 @@ export default defineComponent({
             let segments = path.split("/");
             return segments[numberSegment];
         },
+
+
+
     },
     created() {
     },
-    computed: {
-        customDateFormat() {
-            return 'MM/dd/yyyy';
-        }
-    }
 });
 </script>
 <template>
@@ -314,9 +318,9 @@ export default defineComponent({
                             <!--begin::Input group-->
                             <div class="col-md-6 col-sm-12">
                                 <jet-label for="project-client" value="Project Client" />
-                                <Multiselect :can-clear="false" id="project-client" :options="clients.data" label="label"
-                                    valueProp="id" class="form-control form-control-solid" placeholder="Select client"
-                                    :searchable="true" :class="v$.form.client.$errors.length > 0
+                                <Multiselect :can-clear="false" id="project-client" :options="clients.data"
+                                    label="display_name" valueProp="id" class="form-control form-control-solid"
+                                    placeholder="Select client" :searchable="true" :class="v$.form.client.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
                                         " v-model="form.client" />
@@ -343,13 +347,13 @@ export default defineComponent({
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6 col-sm-12">
-                                <jet-label for="project-start" value="Project Start Date" />
-                                <input type="date" v-model="v$.form.start_date.$model" id="project-start"
-                                    class="form-control form-control-lg form-control-solid"
-                                    placeholder="Enter project start date" :class="v$.form.start_date.$errors.length > 0
+                                <jet-label for="project-start" value="Project start date" />
+                                <VueDatePicker v-model="v$.form.start_date.$model" :enable-time-picker="false"
+                                    :clearable="false" auto-apply
+                                    input-class-name="form-control form-control-lg form-control-solid fw-normal" :class="v$.form.start_date.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
-                                        " />
+                                        " placeholder="Project start date"></VueDatePicker>
 
                                 <div v-for="(error, index) of v$.form.start_date
                                     .$errors" :key="index">
@@ -357,13 +361,13 @@ export default defineComponent({
                                 </div>
                             </div>
                             <div class="col-md-6 col-sm-12">
-                                <jet-label for="project-end" value="Project End Date" />
-                                <input type="date" v-model="v$.form.end_date.$model" id="project-end"
-                                    class="form-control form-control-lg form-control-solid"
-                                    placeholder="Enter project start date" :class="v$.form.end_date.$errors.length > 0
+                                <jet-label for="project-end" value="Project end date" />
+                                <VueDatePicker v-model="v$.form.end_date.$model" :enable-time-picker="false"
+                                    :clearable="false" auto-apply
+                                    input-class-name="form-control form-control-lg form-control-solid fw-normal" :class="v$.form.end_date.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
-                                        " />
+                                        " placeholder="Project end date"></VueDatePicker>
                                 <div v-for="(error, index) of v$.form.end_date
                                     .$errors" :key="index">
                                     <input-error :message="error.$message" />
@@ -474,9 +478,9 @@ export default defineComponent({
                 <!--end::Automation-->
                 <div class="d-flex justify-content-end">
                     <!--begin::Button-->
-                    <a href="/projects" class="btn btn-secondary me-5">
-                        Discard
-                    </a>
+                    <Link href="/projects" class="btn btn-secondary me-5">
+                    Discard
+                    </Link>
                     <!--end::Button-->
                     <!--begin::Button-->
                     <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">

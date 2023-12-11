@@ -9,6 +9,7 @@ use App\Http\Controllers\{
     ExportExcelController,
     CompanyController,
     CloseProjectController,
+    CurrencyController,
     DashboardController,
     FinalIdController,
     ImageController,
@@ -221,7 +222,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::post('questions/delete', [QuestionController::class, 'selectDelete'])->name('questions.delete');
 
         Route::resource('answer', AnswerController::class);
-        Route::post('answers/delete', [AnswerController::class, 'selectDelete'])->name('answers.delete');
+        Route::controller(AnswerController::class)->group(function () {
+            Route::get('answers', 'index')->name('answers.index');
+            Route::group(['prefix' => 'answer'], function () {
+                Route::post('create', 'store')->name('answer.create');
+                Route::delete('delete', 'destroy')->name('answers.delete');
+            });
+        });
 
         Route::controller(ImageController::class)->group(function () {
             Route::post('/image/{entity}', 'store')->name('image.store');
@@ -230,9 +237,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
     Route::group(['middleware' => 'role:account,admin'], function () {
         Route::get('invoice/download/{id}', [InvoiceController::class, 'downloadInvoice']);
-        Route::resources(
-            ['country' => CountryController::class],
-        );
+
         Route::controller(InvoiceController::class)->group(function () {
             Route::get('/invoices', 'index')->name('invoice.index');
             Route::group(['prefix' => 'invoice'], function () {

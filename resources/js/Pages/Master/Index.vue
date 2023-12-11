@@ -99,13 +99,13 @@ export default defineComponent({
                 <div class="w-100 mw-150px">
                     <!--begin::Select2-->
                     <Multiselect :options="users.data" :can-clear="false" label="full_name" valueProp="id"
-                        :searchable="true" track-by="full_name" class="btn btn-sm btn-light py-2 px-0"
+                        :searchable="true" track-by="full_name" class="form-control form-control-solid"
                         placeholder="Select User" v-model="form.user" />
                     <!--end::Select2-->
                 </div>
                 <div class="w-100 mw-150px">
                     <Multiselect :options="status" label="label" :can-clear="false" valueProp="value" :searchable="true"
-                        :track-by="label" class="btn btn-sm btn-light py-2 px-0" placeholder="Select "
+                        :track-by="label" class="form-control form-control-solid" placeholder="Select "
                         v-model="form.status" />
                 </div>
                 <div class="w-100 mw-150px">

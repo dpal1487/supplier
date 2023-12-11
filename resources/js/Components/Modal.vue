@@ -26,6 +26,10 @@ const props = defineProps({
     id: {
         type: String,
         default: ""
+    },
+    page: {
+        type: String,
+        default: ""
     }
 });
 
@@ -82,10 +86,11 @@ const maxWidthClass = computed(() => {
             <div class="modal-content">
                 <div class="modal-header flex-stack h-60px">
                     <h2>{{ title }}</h2>
+
                     <div class="d-flex ">
-                        <div class="mx-10">
+                        <div class="mx-10" v-if="page != 'Answer'">
                             <a target="_blank" :href="`/sampling/${id}/create`" class="btn btn-primary btn-sm"><i
-                                class="bi bi-plus-circle"></i>Add New Supplier</a>
+                                    class="bi bi-plus-circle"></i>Add New Supplier</a>
                         </div>
                         <button type="button" @click="$emit('onhide')" class="btn btn-sm btn-icon btn-active-color-primary">
                             <span class="svg-icon svg-icon-1">

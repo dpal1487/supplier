@@ -9,27 +9,14 @@ import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
-import { required, integer } from "@vuelidate/validators";
-import Dropdown from "../../Jetstream/Dropdown.vue";
+import { required } from "@vuelidate/validators";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-import axios from "axios";
-import { Inertia } from "@inertiajs/inertia";
-
-
-// Vue.use(Datetime);
-// import { Datetime } from 'vue-datetime';
 
 export default defineComponent({
     props: ["questions", 'question', 'industries', 'message'],
     setup() {
         return { v$: useVuelidate() };
-        const notify = () => {
-            toast.info("Wow so easy !", {
-                autoClose: 1000,
-            });
-        }
-        return { notify };
     },
     validations() {
         return {
@@ -59,8 +46,7 @@ export default defineComponent({
         return {
 
             isEdit: false,
-            processing: false,
-
+            title: "Question",
             form: this.$inertia.form({
                 id: this.question?.data?.id || '',
                 question_key: this.question?.data?.question_key || '',
@@ -88,49 +74,46 @@ export default defineComponent({
         JetLabel,
         InputError,
         JetValidationErrors,
-        Dropdown
     },
     methods: {
         nameWithLang({ name, type }) {
             return `${name} — [${type}]`
         },
+
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                this.processing = true
                 if (route().current() == 'question.create') {
-
-                    axios.post(this.route("question.store"), this.form)
-                        .then((response) => {
-                            if (response.data.success) {
-                                toast.success(response.data.message)
-                                this.processing = false
-                                Inertia.get('/question')
-
-                            } else {
-                                toast.info(response.data.message)
-                            }
-                            if (response.data.error) {
-                                toast.error(response.data.error)
-                            }
-                        });
-
+                    this.form.transform((data) => ({
+                        ...data,
+                    }))
+                        .post(this.route("question.store"), {
+                            onSuccess: (data) => {
+                                toast.success(this.$page.props.jetstream.flash.message);
+                                this.isEdit = false;
+                            },
+                            onError: (data) => {
+                                if (data.message) {
+                                    // toast.error(data.message);
+                                }
+                            },
+                        })
                 }
-                else {
-                    axios.put(this.route('question.update', this.form.id), this.form)
-                        .then((response) => {
-                            if (response.data.success) {
-                                toast.success(response.data.message)
-                                this.processing = false
-                                Inertia.get('/question')
-
-                            } else {
-                                toast.info(response.data.message)
-                            }
-                            if (response.data.error) {
-                                toast.error(response.data.error)
-                            }
-                        });
+                if (route().current() == 'question.edit') {
+                    this.form.transform((data) => ({
+                        ...data,
+                    }))
+                        .put(this.route('question.update', this.form.id), {
+                            onSuccess: (data) => {
+                                toast.success(this.$page.props.jetstream.flash.message);
+                                this.isEdit = false;
+                            },
+                            onError: (data) => {
+                                if (data.message) {
+                                    toast.error(data.message);
+                                }
+                            },
+                        })
                 }
             }
         },
@@ -146,13 +129,13 @@ export default defineComponent({
 <template>
     <Head :title="isEdit ? 'Edit Question' : `Add New Question`" />
 
-    <AppLayout>
+    <AppLayout :title="title">
         <template #breadcrumb>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/questions" class="text-muted text-hover-primary">Question</Link>
+                <Link href="/questions" class="text-muted text-hover-primary">{{ title }}</Link>
             </li>
         </template>
 
@@ -171,7 +154,7 @@ export default defineComponent({
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">
-                                <h2>Qustion Form</h2>
+                                <h2>General</h2>
                             </div>
                         </div>
                         <div class="card-body">
@@ -179,7 +162,7 @@ export default defineComponent({
                                 <!-- {{ v$.form.industry.$model }} -->
                                 <div class="fv-row col-6">
                                     <jet-label for="industry" value="Industry" />
-                                    <Multiselect :options="industries" label="name" valueProp="id"
+                                    <Multiselect :can-clear="false" :options="industries" label="name" valueProp="id"
                                         class="form-control form-control-lg form-control-solid"
                                         placeholder="Select Industry" v-model="v$.form.industry.$model" track-by="name"
                                         :searchable="true" :class="v$.form.industry.$errors.length > 0
@@ -220,7 +203,7 @@ export default defineComponent({
 
                                 <div class="fv-row col-6">
                                     <jet-label for="type" value="Type" />
-                                    <Multiselect :options="options" label="name" valueProp="name" id="type"
+                                    <Multiselect :can-clear="false" :options="options" label="name" valueProp="name" id="type"
                                         :custom-label="nameWithLang" class="form-control form-control-lg form-control-solid"
                                         placeholder="Choose One" v-model="v$.form.type.$model" track-by="name" :class="v$.form.type.$errors.length > 0
                                             ? 'is-invalid'
@@ -254,16 +237,14 @@ export default defineComponent({
                                     class="btn btn-outline-secondary align-items-center justify-content-center">
                                 Discard
                                 </Link>
-                                <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="processing ? 'on' : 'off'">
+                                <button type="submit" class="btn btn-primary align-items-center justify-content-center">
+                                    <div v-show="form.processing" class="spinner-border spinner-border-sm">
+                                    </div>
                                     <span class="indicator-label">
                                         <span v-if="route().current() == 'question.edit'">Save Changes</span>
                                         <span v-if="route().current() == 'question.create'">Save</span>
                                     </span>
-                                    <span class="indicator-progress">
-                                        Please wait... <span
-                                            class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                    </span>
+
                                 </button>
                                 <!--end::Button-->
                             </div>

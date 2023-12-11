@@ -67,7 +67,7 @@ export default defineComponent({
         <Head title="Service" />
         <div class="card">
             <div>
-                <form class="card-header justify-content-start py-5 gap-2 gap-md-5" @submit.prevent="search()">
+                <form class="card-header justify-content-start p-5 gap-3" @submit.prevent="search()">
                     <div class="d-flex align-items-center position-relative">
                         <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -112,7 +112,7 @@ export default defineComponent({
                                 <td>{{ service.name }}</td>
                                 <td class="text-capitalize">{{ service.page }}</td>
 
-                                <td class="text-capitalize">{{ service.description }}</td>
+                                <td class="text-capitalize" v-html="service.description"></td>
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"

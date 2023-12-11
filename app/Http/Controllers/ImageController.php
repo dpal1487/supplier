@@ -15,6 +15,7 @@ class ImageController extends Controller
     use ImageManager;
     public function store(Request $request, $entity)
     {
+
         $validator = Validator::make($request->all(), [
             'image' => 'required|mimes:jpeg,png,jpg'
         ]);
@@ -29,14 +30,26 @@ class ImageController extends Controller
             mkdir($path, 0777, true);
         if ($file = $request->file('image')) {
             $fileData = $this->uploadImage($path, $file);
-            $image = ImageModel::create([
-                'name' => $fileData['fileName'],
-                'type' => $fileData['fileType'],
-                'path' => $fileData['filePath'],
-                'size' => $fileData['fileSize'],
-                'entity_type' => $entity
-            ]);
-            return response()->json(['data' => new ImageResource($image), 'success' => true]);
+            if ($request->image_id) {
+                $image = ImageModel::where('entity_id', $request->image_id)->first();
+                $imageUpdate = $image->update([
+                    'name' => $fileData['fileName'],
+                    'type' => $fileData['fileType'],
+                    'path' => $fileData['filePath'],
+                    'size' => $fileData['fileSize'],
+                    'entity_type' => $entity
+                ]);
+                return response()->json(['data' => new ImageResource($image), 'success' => true]);
+            } else {
+                $image = ImageModel::create([
+                    'name' => $fileData['fileName'],
+                    'type' => $fileData['fileType'],
+                    'path' => $fileData['filePath'],
+                    'size' => $fileData['fileSize'],
+                    'entity_type' => $entity
+                ]);
+                return response()->json(['data' => new ImageResource($image), 'success' => true]);
+            }
         }
     }
 }

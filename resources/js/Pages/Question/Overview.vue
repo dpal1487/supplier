@@ -7,8 +7,7 @@ import useVuelidate from "@vuelidate/core";
 import AnswerForm from "./Components/Answer/AnswerForm.vue";
 import { toast } from "vue3-toastify";
 import Pagination from "../../Jetstream/Pagination.vue";
-import Swal from "sweetalert2";
-
+import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 
 export default defineComponent({
     props: ['question', 'answers'],
@@ -45,72 +44,51 @@ export default defineComponent({
         Link,
         Head,
         AnswerForm,
-        Pagination
+        Pagination,
+        JetValidationErrors
     },
     methods: {
         submit(form) {
             this.form = form;
-            console.log(this.form.id)
-            this.form
-                .transform((data) => ({
-                    ...data,
-                }))
-                .post(this.isEdit ? this.route("answer.update", this.form.id) : this.route("answer.store"), {
-                    onSuccess: (data) => {
-                        toast.success(this.$page.props.jetstream.flash.message);
-                        this.isEdit = false;
-                        this.isAdd = false;
-                    },
-                    onError: (data) => {
-                        console.log(data);
-                    },
-                });
+            if (this.isAdd) {
+                this.form
+                    .transform((data) => ({
+                        ...data,
+                    }))
+                    .post(this.route("answer.store"), {
+                        onSuccess: (data) => {
+                            toast.success(this.$page.props.jetstream.flash.message);
+                            this.isAdd = false;
+                        },
+                        onError: (data) => {
+                            toast.error(data.message);
+                        },
+                    });
+            }
+            else {
+                this.form
+                    .transform((data) => ({
+                        ...data,
+                    }))
+                    .put(this.route("answer.update", this.form.id), {
+                        onSuccess: (data) => {
+                            toast.success(this.$page.props.jetstream.flash.message);
+                            this.isEdit = false;
+                        },
+                        onError: (data) => {
+                            toast.error(data.message);
+                        },
+                    });
+            }
         },
         toggleModal(isEdit, answer) {
             this.isEdit = isEdit;
             this.form = answer;
         },
-        confirmDelete(id, index) {
-            const name = this.answers.data[index].question?.question_key;
-
-            Swal.fire({
-                title: "Are you sure you want to delete " + name + " ?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#dc3545",
-                cancelButtonColor: "#6c757d",
-                confirmButtonText: "Yes, delete it!",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    axios
-                        .delete("/answer/" + id)
-                        .then((response) => {
-                            toast.success(response.data.message)
-                            if (response.data.success) {
-                                this.answers.data.splice(index, 1);
-                                return;
-                            }
-                        })
-
-                        .catch((error) => {
-                            if (error.response.status == 400) {
-                                toast.error(error.response.data.message);
-                            }
-                        });
-                } else if (result.dismiss === 'cancel') {
-                    Swal.fire({
-                        text: name + " was not deleted.",
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn fw-bold btn-primary",
-                        }
-                    });
-                }
-
-            });
+        async confirmDelete(id, index) {
+            this.isLoading = true;
+            await utils.deleteIndexDialog(route('answer.destroy', id), this.answers.data, index);
+            this.isLoading = false;
         },
 
     }
@@ -120,7 +98,7 @@ export default defineComponent({
 <template>
     <Head :title="isEdit ? 'Edit Answer' : `Add New Answer`" />
 
-    <AppLayout>
+    <AppLayout :title="title">
         <template #breadcrumb>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
@@ -131,7 +109,7 @@ export default defineComponent({
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
-            <li class="breadcrumb-item text-muted">
+            <li class="breadcrumb-item text-muted text-capitalize ">
                 {{ question?.data?.question_key }}
             </li>
         </template>
@@ -149,8 +127,8 @@ export default defineComponent({
                     <!-- {{ question }} -->
                 </div>
                 <!--end::Card title-->
-                <button class="btn btn-primary align-self-center" v-if="!isEdit"
-                    @click="this.isAdd = true, this.form = {}"><i class="bi bi-plus-circle"></i>Add A New Answer
+                <button class="btn btn-primary btn-sm align-self-center" v-if="!isEdit"
+                    @click="this.isAdd = true, this.form = {}"><i class="bi bi-plus-circle "></i>Add A New Answer
                 </button>
                 <!-- <a href="settings.html" class="btn btn-primary align-self-center">Edit Profile</a> -->
             </div>
@@ -160,6 +138,7 @@ export default defineComponent({
                 <!--begin::Form-->
                 <div class="row" v-if="isEdit || isAdd">
                     <div class="col-12">
+                        <!-- <JetValidationErrors /> -->
 
                         <AnswerForm @submitted="submit" :answer="form" :question="question.data">
                             <template #action>

@@ -66,9 +66,9 @@ export default defineComponent({
     <div
         :class="`dropzone ${(files.length > 0 || isDefaultImage) && !className ? 'h-300px' : 'h-150px'} ${className || ''} position-relative`">
         <div class="w-100" @dragover="dragover" @dragleave="dragleave" @drop="drop">
+
             <input type="file" :multiple="multiple" name="file" id="fileInput" class="d-none" @change="onChange" ref="file"
                 accept=".pdf,.jpg,.jpeg,.png" />
-
             <label v-if="files.length === 0 && !isDefaultImage" for="fileInput"
                 class="position-absolute w-100 h-100 top-0 start-0 d-flex flex-column gap-4 align-items-center justify-content-center">
                 <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
@@ -83,8 +83,9 @@ export default defineComponent({
                 <div class="spinner-border spinner-border-sm w-50px h-50px"></div>
             </div>
 
+
             <div class="position-absolute image-hover w-100 h-100 top-0 start-0" v-else-if="isDefaultImage">
-                <img style="z-index: 1;" class="position-absolute top-0 start-0 w-100 h-100" :src="image"
+                <img style="z-index: 1;" class="position-absolute top-0 start-0 w-100 h-100" :src="image?.url"
                     alt="preview image" />
                 <div style="z-index: 2; background-color: rgba(0, 0, 0, 0.365);"
                     class="position-absolute top-0 start-0 close-container w-100 h-100">

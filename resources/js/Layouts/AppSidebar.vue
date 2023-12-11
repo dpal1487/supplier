@@ -82,15 +82,21 @@ export default defineComponent({
                 }
                 ,
                 {
-                    link: "/blogs",
+                    link: "/blog",
                     title: "Blogs",
                     icon: "bi bi-file-post",
                     role: ["pm", "admin", "user"],
                 },
                 {
                     link: "/question",
-                    title: "Question Answers",
+                    title: "Question",
                     icon: "bi bi-question-square",
+                    role: ["pm", "admin", "user"],
+                },
+                {
+                    link: "/answer",
+                    title: "Answers",
+                    icon: "bi bi-book",
                     role: ["pm", "admin", "user"],
                 },
                 {

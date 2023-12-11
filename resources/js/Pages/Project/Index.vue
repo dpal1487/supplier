@@ -93,17 +93,17 @@ export default defineComponent({
                     </div>
                     <div class="w-100 mw-200px  ">
                         <Multiselect :can-clear="false" :options="status.data" label="label" valueProp="value"
-                            class="btn btn-sm btn-light py-2 px-0" placeholder="Select Status" v-model="form.status" />
+                            class="form-control form-control-solid" placeholder="Select Status" v-model="form.status" />
                     </div>
                     <div class="w-100 mw-200px">
                         <Multiselect :can-clear="false" :options="clients.data" label="display_name" valueProp="id"
-                            class="btn btn-sm btn-light py-2" placeholder="Select Client" v-model="form.client" />
+                            class="form-control form-control-solid" placeholder="Select Client" v-model="form.client" />
                     </div>
                     <button type="submit" class="btn btn-primary">Search</button>
                 </form>
                 <div class="w-100 mw-200px mx-5 justify-content-end">
                     <Multiselect :can-clear="false" :options="order_by" label="label" valueProp="value" @select="orderBy()"
-                        class="btn btn-sm btn-light py-2 px-0" placeholder="Order By" v-model="selectOrderBy" />
+                        class="form-control form-control-solid" placeholder="Order By" v-model="selectOrderBy" />
                 </div>
             </div>
         </div>

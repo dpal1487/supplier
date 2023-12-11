@@ -38,7 +38,7 @@ export default defineComponent({
                 question_name: this.question?.question_key || {},
                 question: this?.question?.id,
                 answer: this.answer?.answer || '',
-                order_by: this.answer?.order_by || '',
+                order_by: this.answer?.order_by || 0,
                 questionpage: 'question-page',
             }),
             order_by: [
@@ -73,7 +73,7 @@ export default defineComponent({
         <div class="card">
             <div class="card-header">
                 <div class="card-title">
-                    <h2>Answer Form</h2>
+                    <h2>General</h2>
                 </div>
             </div>
             <div class="card-body">
@@ -101,7 +101,7 @@ export default defineComponent({
                     </div>
                     <div class="fv-row col-6">
                         <jet-label for="order_by" value="Order By" />
-                        <Multiselect :options="order_by" label="name" valueProp="id"
+                        <Multiselect :can-clear="false" :options="order_by" label="name" valueProp="id"
                             class="form-control form-control-lg form-control-solid" placeholder="Select One"
                             v-model="v$.form.order_by.$model" track-by="name" :searchable="true" :class="v$.form.order_by.$errors.length > 0
                                 ? 'is-invalid'

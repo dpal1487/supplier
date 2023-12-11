@@ -53,7 +53,7 @@ export default defineComponent({
                 page: this.service?.data?.page || '',
                 description: this.service?.data.description || '',
                 image: this.image
-                    ? this.image
+                    ? this.image?.data
                     : {
                         id: "",
                         url: "",
@@ -71,7 +71,7 @@ export default defineComponent({
         InputError,
         ClassicEditor,
         ImageInput,
-        DragDropFile
+        DragDropFile,
     },
     methods: {
         submit() {
@@ -112,12 +112,14 @@ export default defineComponent({
             }
         },
         async uploadImage(e) {
+
             this.thumbnail.isLoading = true;
-            const data = await utils.imageUpload(route("image.store", 'service'), e);
-            if (data.response.success) {
+            const data = await utils.imageUpload(route("image.store", 'service'), e, this.image?.data?.entity_id);
+            if (data.response) {
+                console.log(data.response)
                 this.form.image = data.response.data;
             } else {
-                toast.error(data.response.message);
+                toast.error(data.response);
             }
 
             this.thumbnail.url = URL.createObjectURL(data.file);
@@ -158,41 +160,58 @@ export default defineComponent({
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
                     <div class="">
                         <div class="row g-5">
-                            <div class="col-4">
-                                <div class="card p-6">
-                                    <div class="fv-row">
-                                        <ImageInput :image="this.image?.data" :onchange="uploadImage"
-                                            :remove="removeSelectedAvatar" :selectedImage="thumbnail?.url"
-                                            :errors="v$.form.image.$errors" :isUploading="thumbnail?.isLoading" />
+                            <div class="col-md-4 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title">
+                                            <h2>Image</h2>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="fv-row">
+                                            <!-- <ImageInput :image="this.image?.data" :onchange="uploadImage"
+                                                :remove="removeSelectedAvatar" :selectedImage="thumbnail?.url"
+                                                :errors="v$.form.image.$errors" :isUploading="thumbnail?.isLoading" /> -->
+                                            <DragDropFile :image="this.image?.data" :onchange="uploadImage"
+                                                :remove="removeSelectedAvatar" :selectedImage="thumbnail?.url"
+                                                :errors="v$.form.image.$errors" :isUploading="thumbnail?.isLoading" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-8 ">
-                                <div class="card p-6">
-                                    <div class="fv-row mb-6">
-                                        <jet-label for="name" value="Service Name" />
-                                        <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                            " placeholder="Service Name" />
-                                        <div v-for="(error, index) of v$.form.name.$errors" :key="index">
-                                            <input-error :message="error.$message" />
+                            <div class="col-md-8 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title">
+                                            <h2>General</h2>
                                         </div>
                                     </div>
-                                    <div class="fv-row mb-6">
-                                        <jet-label for="page" value="Page Name" />
-                                        <jet-input id="page" type="text" v-model="v$.form.page.$model" :class="v$.form.page.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                            " placeholder="Page Name" />
-                                        <div v-for="(error, index) of v$.form.page.$errors" :key="index">
-                                            <input-error :message="error.$message" />
+                                    <div class="card-body">
+                                        <div class="fv-row mb-6">
+                                            <jet-label for="name" value="Service Name" />
+                                            <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
+                                                ? 'is-invalid'
+                                                : ''
+                                                " placeholder="Service Name" />
+                                            <div v-for="(error, index) of v$.form.name.$errors" :key="index">
+                                                <input-error :message="error.$message" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="fv-row">
-                                        <jet-label for="description" value="Description" />
-                                        <ckeditor :editor="editor" v-model="v$.form.description.$model"
-                                            class="form-control form-control-solid" />
+                                        <div class="fv-row mb-6">
+                                            <jet-label for="page" value="Page Name" />
+                                            <jet-input id="page" type="text" v-model="v$.form.page.$model" :class="v$.form.page.$errors.length > 0
+                                                ? 'is-invalid'
+                                                : ''
+                                                " placeholder="Page Name" />
+                                            <div v-for="(error, index) of v$.form.page.$errors" :key="index">
+                                                <input-error :message="error.$message" />
+                                            </div>
+                                        </div>
+                                        <div class="fv-row">
+                                            <jet-label for="description" value="Description" />
+                                            <ckeditor :editor="editor" v-model="v$.form.description.$model"
+                                                class="form-control form-control-solid" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -205,14 +224,13 @@ export default defineComponent({
                                 Discard
                                 </Link>
                                 <div>
-                                    <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                        :data-kt-indicator="form.processing ? 'on' : 'off'">
+                                    <button type="submit" class="btn btn-primary"
+                                        :class="{ 'text-white-50': form.processing }">
+                                        <div v-show="form.processing" class="spinner-border spinner-border-sm">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
                                         <span v-if="route().current() == 'service.edit'">Save Changes</span>
                                         <span v-if="route().current() == 'service.create'">Save</span>
-                                        <span class="indicator-progress">
-                                            Please wait... <span
-                                                class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                        </span>
                                     </button>
                                 </div>
                             </div>

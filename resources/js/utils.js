@@ -186,13 +186,14 @@ export default {
                 toast.error(error.message)
             });
     },
-    async imageUpload(route, e, image_id, id) { // event can also be a FilelistObject
+    async imageUpload(route, e, image_id) { // event can also be a FilelistObject
 
+        console.log('async image upload', image_id)
         const file = e?.target?.files[0] || e[0];
         const formdata = new FormData();
         formdata.append("image", file);
-        formdata.append("image_id", image_id);
-        formdata.append("id", id);
+        formdata.append("image_id", image_id ? image_id : '');
+        // formdata.append("id", id ? id : '');
         try {
             const response = await axios.post(route, formdata, { headers: { "Content-Type": "multipart/form-data", } });
             return {

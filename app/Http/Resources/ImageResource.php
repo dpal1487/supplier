@@ -11,6 +11,7 @@ class ImageResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'entity_id' => $this->entity_id,
             'url' => asset("/images/$this->entity_type") . '/' . $this->name,
         ];
     }
