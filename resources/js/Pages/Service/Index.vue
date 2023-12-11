@@ -36,7 +36,7 @@ export default defineComponent({
     },
     methods: {
 
-        async confirmDelete(index) {
+        async confirmDelete(id, index) {
             this.isLoading = true;
             await utils.deleteIndexDialog(route('service.destroy', this.services.data[index].id), this.services.data, index);
             this.isLoading = false;
@@ -99,9 +99,9 @@ export default defineComponent({
                         </thead>
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(service, index) in services.data" :key="index">
-                                <td v-if="service.image?.medium_path">
+                                <td v-if="service.image">
                                     <div class="symbol symbol-50px me-5">
-                                        <img alt="Logo" :src="service.image?.medium_path">
+                                        <img alt="Logo" :src="service.image?.url">
                                     </div>
                                 </td>
                                 <td v-else>

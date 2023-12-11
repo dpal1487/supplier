@@ -79,8 +79,6 @@ export default defineComponent({
         },
 
         async onBannerChange(e) {
-
-            console.log("this is services image", e);
             this.service_upload.isLoading = true;
             const data = await utils.imageUpload(route('upload.service-image'), e, this.form.service_image)
             if (data.response.success) {
@@ -125,28 +123,19 @@ export default defineComponent({
         </template>
 
         <form @submit.prevent="submit()" class="form">
-
             <div class="card g-5 mb-5">
-                <!--begin::Card header-->
                 <div class="card-header">
                     <div class="card-title">
                         <h2>Banner Image </h2>
                     </div>
                 </div>
-                <!--end::Card header-->
-                <!--begin::Card body-->
                 <div class="card-body pt-5">
-                    <!--begin::Input group-->
                     <div class="fv-row mb-2">
                         <DragDropFile :image="banner?.data?.image?.file_path" :isUploading="banner?.isLoading"
                             @change="onBannerChange" />
                     </div>
-                    <!--end::Input group-->
-                    <!--begin::Description-->
                     <div class="text-muted fs-7 mx-2">Allowed file types: png, jpg, jpeg.</div>
-                    <!--end::Description-->
                 </div>
-                <!--end::Card header-->
             </div>
 
             <div class="card">

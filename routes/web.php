@@ -224,7 +224,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::post('answers/delete', [AnswerController::class, 'selectDelete'])->name('answers.delete');
 
         Route::controller(ImageController::class)->group(function () {
-            Route::post('/upload/service-image', 'serviceImage')->name('upload.service-image');
+            Route::post('/image/{entity}', 'store')->name('image.store');
         });
     });
 

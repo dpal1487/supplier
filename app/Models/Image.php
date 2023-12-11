@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Image extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'base_url', 'base_path'];
+    protected $fillable = ['name', 'entity_id', 'entity_type', 'path', 'size' , 'type'];
     public function image()
     {
         return $this->hasOne(ItemImage::class, 'image_id', 'id');

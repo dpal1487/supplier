@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ImageResource;
 use App\Http\Resources\ServiceListResource;
 use App\Http\Resources\ServiceResource;
+use App\Models\Image;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -28,15 +30,9 @@ class ServiceController extends Controller
                 ->orWhere('page', 'like', "%$request->q%")
                 ->orWhere('description', 'like', "%$request->q%");
         }
-        if ($request->expectsJson()) {
-            if ($services) {
-                return ServiceListResource::collection($services->paginate(10));
-            } else {
-                return response()->json(['data' => [], 'success' => true]);
-            }
-        }
+
         return Inertia::render('Service/Index', [
-            'services' => ServiceResource::collection($services->paginate(10)->appends($request->all())),
+            'services' => ServiceListResource::collection($services->paginate(10)->appends($request->all())),
         ]);
     }
 
@@ -47,7 +43,7 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Banner/Form');
+        return Inertia::render('Service/Form');
     }
 
     /**
@@ -60,7 +56,7 @@ class ServiceController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'image_id' => 'required',
+            'image' => 'required',
             'page' => 'required',
             'description' => 'required',
         ]);
@@ -70,11 +66,11 @@ class ServiceController extends Controller
         $service = Service::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
-            'image_id' => $request->image_id,
             'page' => $request->page,
             'description' => $request->description,
         ]);
         if ($service) {
+            Image::where(['id' => $request->image['id']])->update(['entity_id' => $service->id, 'entity_type' => 'service']);
             return redirect('service')->with('flash', [
                 'success' => true,
                 'message' => 'Service create successfully',
@@ -120,8 +116,10 @@ class ServiceController extends Controller
     public function edit($id)
     {
         $service = Service::find($id);
+        $image = Image::where(['entity_id' => $id, 'entity_type' => 'service'])->first();
         return Inertia::render('Service/Form', [
             'service' => new ServiceResource($service),
+            'image' => $image ?  new ImageResource($image) : null,
         ]);
     }
 
@@ -136,40 +134,37 @@ class ServiceController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'image_id' => 'required',
+            'image' => 'required',
             'page' => 'required',
             'description' => 'required',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors(['message' => $validator->errors()->first(), 'success' => false]);
         }
-        if ($request->image_id) {
-            $service = Service::where(['id' => $id])->update([
-                'name' => $request->name,
-                'slug' => Str::slug($request->name),
-                'image_id' => $request->image_id,
-                'page' => $request->page,
-                'description' => $request->description,
-            ]);
-        } else {
-            $service = Service::where(['id' => $id])->update([
-                'name' => $request->name,
-                'slug' => Str::slug($request->name),
-                'page' => $request->page,
-                'description' => $request->description,
-            ]);
-        }
+        $service = Service::where(['id' => $id])->first();
+
+        return $request->image;
 
         if ($service) {
-            return redirect('service')->with('flash', [
+            $update =  Service::where(['id' => $id])->update([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+                'page' => $request->page,
+                'description' => $request->description,
+            ]);
+            if ($update) {
+                Image::where('id', $request->image['id'])->update(['entity_id' => $service->id, 'entity_type' => 'service']);
+                return redirect('service')->with('flash', [
+                    'success' => true,
+                    'message' => 'Service updated successfully',
+                ]);
+            }
+            return response()->json([
                 'success' => true,
-                'message' => 'Service updated successfully',
+                'message' => 'Service not updated',
             ]);
         }
-        return response()->json([
-            'success' => true,
-            'message' => 'Industries not updated',
-        ], 400);
+        return redirect()->back();
     }
 
     /**
