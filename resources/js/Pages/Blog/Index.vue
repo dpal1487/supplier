@@ -96,7 +96,7 @@ export default defineComponent({
                     </div>
                     <div class="w-100 mw-200px">
                         <Multiselect :can-clear="false" :options="$page.props.ziggy.status" label="name" valueProp="value"
-                            class="form-control form-control-solid" placeholder="Select Status" v-model="form.s" />
+                            class="form-control form-control-solid" placeholder="Select Status" v-model="form.status" />
                     </div>
                     <button type="submit" class="btn btn-primary">
                         Search
