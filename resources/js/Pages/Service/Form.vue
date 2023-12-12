@@ -29,7 +29,6 @@ export default defineComponent({
                     required,
                 },
                 description: {
-                    required,
                 },
                 image: {
 
@@ -112,7 +111,6 @@ export default defineComponent({
             }
         },
         async uploadImage(e) {
-
             this.thumbnail.isLoading = true;
             const data = await utils.imageUpload(route("image.store", 'service'), e, this.image?.data?.entity_id);
             if (data.response) {
@@ -169,9 +167,6 @@ export default defineComponent({
                                     </div>
                                     <div class="card-body">
                                         <div class="fv-row">
-                                            <!-- <ImageInput :image="this.image?.data" :onchange="uploadImage"
-                                                :remove="removeSelectedAvatar" :selectedImage="thumbnail?.url"
-                                                :errors="v$.form.image.$errors" :isUploading="thumbnail?.isLoading" /> -->
                                             <DragDropFile :image="this.image?.data" :onchange="uploadImage"
                                                 :remove="removeSelectedAvatar" :selectedImage="thumbnail?.url"
                                                 :errors="v$.form.image.$errors" :isUploading="thumbnail?.isLoading" />

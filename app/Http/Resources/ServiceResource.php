@@ -20,6 +20,8 @@ class ServiceResource extends JsonResource
             'slug' => $this->slug,
             'page' => $this->page,
             'description' => $this->description,
+            'image' => new ImageResource($this->image),
+
         ];
     }
 }

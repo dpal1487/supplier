@@ -19,7 +19,7 @@ class ServiceListResource extends JsonResource
             'name'  => $this->name,
             'slug'  => $this->slug,
             'page'  => $this->page,
-            'description'  => $this->description,
+            'description' =>  substr($this->description, 0, 100),
             'image' => new ImageResource($this->image),
         ];
     }

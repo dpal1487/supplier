@@ -16,11 +16,7 @@ use League\OAuth1\Client\Server\Server;
 
 class ServiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index(Request $request)
     {
         $services = new Service();
@@ -36,29 +32,16 @@ class ServiceController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return Inertia::render('Service/Form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'image' => 'required',
             'page' => 'required',
-            'description' => 'required',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors(['message' => $validator->errors()->first(), 'success' => false]);
@@ -82,37 +65,14 @@ class ServiceController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show(Request $request, $id)
     {
         $service = Service::find($id);
 
-        if ($request->expectsJson()) {
-
-            $service = Service::where('slug', $request->slug)->first();
-
-            if ($service) {
-                return response()->json(['data' => new ServiceResource($service), 'success' => true]);
-            } else {
-                return response()->json(['data' => [], 'success' => true]);
-            }
-        }
         return Inertia::render('Service/Show', [
             'service' => new ServiceResource($service),
         ]);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $service = Service::find($id);
@@ -131,9 +91,7 @@ class ServiceController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'image' => 'required',
             'page' => 'required',
-            'description' => 'required',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors(['message' => $validator->errors()->first(), 'success' => false]);

@@ -20,7 +20,7 @@ export default defineComponent({
     setup() {
         return { v$: useVuelidate() };
     },
-    props: ['show', 'id'],
+    props: ['show', 'id', 'questions'],
 
     components: {
         Link,
@@ -114,9 +114,7 @@ export default defineComponent({
             async handler() {
                 this.isLoading = true;
                 const response = await axios.get(`/answer/${this.id}/edit`);
-
                 this.form = response?.data?.answer;
-                this.questions = response?.data?.questions;
                 this.isLoading = false;
             }
         }

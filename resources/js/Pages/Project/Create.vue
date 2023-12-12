@@ -179,20 +179,13 @@ export default defineComponent({
         </template>
         <JetValidationErrors />
         <form @submit.prevent="submit" autocomplete="off" class="form d-flex flex-column flex-lg-row">
-            <!--begin::Aside column-->
-            <div class="d-flex flex-column gap-5 w-100 w-lg-300px mb-7 me-lg-5 col-sm-12">
-                <!--begin::Status-->
+            <div class="d-flex flex-column gap-7 gap-lg-10 w-lg-300px mb-7 me-lg-10">
                 <div class="card card-flush py-4">
-                    <!--begin::Card header-->
                     <div class="card-header">
-                        <!--begin::Card title-->
                         <div class="card-title">
                             <h2>Status</h2>
                         </div>
-                        <!--end::Card title-->
                     </div>
-                    <!--end::Card header-->
-                    <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <div class="fv-row mb-2">
                             <Multiselect id="project-status" :can-clear="false" :options="status.data" label="label"
@@ -208,21 +201,13 @@ export default defineComponent({
                         </div>
                         <div class="text-muted fs-7">Set the project status.</div>
                     </div>
-                    <!--end::Card body-->
                 </div>
-                <!--end::Status-->
                 <div class="card card-flush py-4">
-                    <!--begin::Card header-->
                     <div class="card-header">
-                        <!--begin::Card title-->
                         <div class="card-title">
                             <h2>Device Type</h2>
                         </div>
-                        <!--end::Card title-->
                     </div>
-                    <!--end::Card header-->
-
-                    <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <div class="fv-row mb-2">
                             <Multiselect id="project-status" :can-clear="false" :options="devices" label="label"
@@ -240,21 +225,14 @@ export default defineComponent({
                             Set the project device type.
                         </div>
                     </div>
-                    <!--end::Card body-->
                 </div>
 
                 <div class="card card-flush py-4">
-                    <!--begin::Card header-->
                     <div class="card-header">
-                        <!--begin::Card title-->
                         <div class="card-title">
                             <h2>Project Link Type</h2>
                         </div>
-                        <!--end::Card title-->
                     </div>
-                    <!--end::Card header-->
-
-                    <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <div class="fv-row mb-2">
                             <Multiselect :can-clear="false" id="project-status" :options="[
@@ -280,26 +258,16 @@ export default defineComponent({
                             Set the project link type.
                         </div>
                     </div>
-                    <!--end::Card body-->
                 </div>
             </div>
-            <!--end::Aside column-->
-
-            <!--begin::Main column-->
             <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                <!--begin::General options-->
-                <div class="card card-flush py-4">
-                    <!--begin::Card header-->
+                <div class="card">
                     <div class="card-header">
                         <div class="card-title">
                             <h2>General</h2>
                         </div>
                     </div>
-                    <!--end::Card header-->
-
-                    <!--begin::Card body-->
-                    <div class="card-body pt-0">
-                        <!--begin::Input group-->
+                    <div class="card-body pt-2">
                         <div class="fv-row mb-3">
                             <jet-label for="project-name" value="Project Name" />
                             <jet-input id="project-name" type="text" placeholder="Enter project Name / ID"
@@ -312,10 +280,7 @@ export default defineComponent({
                                 <input-error :message="error.$message" />
                             </div>
                         </div>
-                        <!--end::Input group-->
-
                         <div class="row mb-3">
-                            <!--begin::Input group-->
                             <div class="col-md-6 col-sm-12">
                                 <jet-label for="project-client" value="Project Client" />
                                 <Multiselect :can-clear="false" id="project-client" :options="clients.data"
@@ -383,17 +348,14 @@ export default defineComponent({
                             </div>
                         </div>
                     </div>
-                    <!--end::Card header-->
                 </div>
-                <div class="card card-flush py-4">
-                    <!--begin::Card header-->
+                <div class="card">
                     <div class="card-header">
                         <div class="card-title">
                             <h2>Pricing</h2>
                         </div>
                     </div>
-                    <!--begin::Card body-->
-                    <div class="card-body pt-0">
+                    <div class="card-body pt-2">
                         <div class="row mb-3">
                             <div class="col-12">
                                 <jet-label for="project-link" value="Project Link" />
@@ -461,9 +423,8 @@ export default defineComponent({
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
-                            <!--end::Input group-->
                         </div>
-                        <div class="fv-row col-12">
+                        <div class="fv-row col-12 mt-5">
                             <div class="form-check">
                                 <input class="form-check-input" v-model="form.add_more" type="checkbox" value=""
                                     id="addMore" />
@@ -473,27 +434,19 @@ export default defineComponent({
                             </div>
                         </div>
                     </div>
-                    <!--end::Card header-->
                 </div>
-                <!--end::Automation-->
                 <div class="d-flex justify-content-end">
-                    <!--begin::Button-->
                     <Link href="/projects" class="btn btn-secondary me-5">
                     Discard
                     </Link>
-                    <!--end::Button-->
-                    <!--begin::Button-->
                     <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
                         <div v-show="form.processing" class="spinner-border spinner-border-sm">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                         Save
                     </button>
-
-                    <!--end::Button-->
                 </div>
             </div>
-            <!--end::Main column-->
         </form>
     </app-layout>
 </template>

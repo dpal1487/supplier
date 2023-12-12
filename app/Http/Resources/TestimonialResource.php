@@ -18,7 +18,7 @@ class TestimonialResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'is_published' => $this->is_published,
-            'testimonial' => $request->segment(3)  == 'testimonial' ?  $this->testimonial : substr($this->testimonial, 0, 100),
+            'testimonial' => $this->testimonial,
         ];
     }
 }

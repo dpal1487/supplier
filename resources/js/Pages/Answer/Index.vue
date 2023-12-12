@@ -8,7 +8,7 @@ import { Inertia } from "@inertiajs/inertia";
 import Loading from "vue-loading-overlay";
 import AnswerForm from "./Components/AnswerForm.vue";
 export default defineComponent({
-    props: ["answers", "message"],
+    props: ["answers", "message","questions"],
 
     data() {
         return {
@@ -43,8 +43,11 @@ export default defineComponent({
             Inertia.get("/answer", this.form);
         },
         showAnswerForm(id) {
+            if (id) {
+                this.isModalOpen = true;
+                this.activeId = id;
+            }
             this.isModalOpen = true;
-            this.activeId = id;
         },
         hideAnswerForm() {
             this.isModalOpen = false;
@@ -71,7 +74,7 @@ export default defineComponent({
         </template>
 
         <Head :title="title" />
-        <AnswerForm :show="isModalOpen" @hidemodal="hideAnswerForm" :id="activeId" />
+        <AnswerForm :show="isModalOpen" @hidemodal="hideAnswerForm" :id="activeId" :questions="questions"/>
         <div class="card">
             <div>
                 <form class="card-header justify-content-start p-5 gap-3" @submit.prevent="search()">

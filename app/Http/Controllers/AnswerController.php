@@ -15,6 +15,7 @@ class AnswerController extends Controller
 {
     public function index(Request $request)
     {
+        $questions = Question::get();
         $answers = new Answer();
         if (!empty($request->q)) {
             $answers = $answers
@@ -25,6 +26,7 @@ class AnswerController extends Controller
         }
         return Inertia::render('Answer/Index', [
             'answers' => AnswerListResources::collection($answers->paginate(10)->appends($request->all())),
+            'questions' => $questions
         ]);
     }
 

@@ -149,7 +149,7 @@ export default defineComponent({
         <form @submit.prevent="submit" autocomplete="off"
             class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework">
             <!--begin::Aside column-->
-            <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
+            <div class="d-flex flex-column gap-7 gap-lg-10 w-xl-300px w-lg-300px mb-7 me-lg-10">
                 <!--begin::Status-->
                 <div class="card card-flush py-4">
                     <!--begin::Card header-->
