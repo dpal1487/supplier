@@ -63,10 +63,11 @@ class AnswerController extends Controller
         }
     }
 
-    public function edit(Answer $answer)
+    public function edit($id)
     {
 
         $questions = Question::get();
+        $answer = Answer::find($id);
 
         return response()->json([
             'answer' => new AnswerResources($answer),
@@ -74,7 +75,7 @@ class AnswerController extends Controller
         ]);
     }
 
-    public function update(Request $request, Answer $answer)
+    public function update(Request $request)
     {
 
         $validator = Validator::make($request->all(), [
@@ -87,18 +88,17 @@ class AnswerController extends Controller
             return redirect()->back()->withErrors(['message' => $validator->errors()->first(), 'success' => false]);
         }
 
-        $answer = Answer::where(['id' => $answer->id])->update([
+        $answer = Answer::where(['id' => $request->id])->update([
             'question_id' => $request->question,
             'answer' => $request->answer,
             'order_by' => $request->order_by,
         ]);
         if ($answer) {
             if ($request->questionpage) {
-
                 return redirect('question/' . $request->question)->with('flash', updateMessage('Answer'));
             }
-
-            return redirect('answer')->with('flash', updateMessage('Answer'));
+            // return redirect('answers')->with('flash', updateMessage('Answer'));
+            return response()->json(updateMessage('Answer'));
         } else {
             return response()->json(['success' => true, 'message' => 'Answer not updated']);
         }

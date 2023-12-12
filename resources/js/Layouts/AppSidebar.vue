@@ -94,7 +94,7 @@ export default defineComponent({
                     role: ["pm", "admin", "user"],
                 },
                 {
-                    link: "/answer",
+                    link: "/answers",
                     title: "Answers",
                     icon: "bi bi-book",
                     role: ["pm", "admin", "user"],

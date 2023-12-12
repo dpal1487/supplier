@@ -221,11 +221,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::resource('question', QuestionController::class);
         Route::post('questions/delete', [QuestionController::class, 'selectDelete'])->name('questions.delete');
 
-        Route::resource('answer', AnswerController::class);
+        // Route::resource('answer', AnswerController::class);
         Route::controller(AnswerController::class)->group(function () {
             Route::get('answers', 'index')->name('answers.index');
             Route::group(['prefix' => 'answer'], function () {
                 Route::post('create', 'store')->name('answer.create');
+                Route::get('{id}/edit', 'edit')->name('answer.edit');
+                Route::post('update', 'update')->name('answer.update');
                 Route::delete('delete', 'destroy')->name('answers.delete');
             });
         });

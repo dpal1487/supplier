@@ -67,42 +67,43 @@ export default defineComponent({
         async submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                if (this.id) {
-                    this.processing = true;
-                    axios.put(this.route("answer.update", this.id), this.form)
-                        .then((response) => {
-                            if (response.data.success) {
-                                this.processing = false;
-                                toast.success(response.data.message)
-                                Inertia.get('/answer')
-                            } else {
-                                toast.info(response.data.message)
-                            }
-                            if (response.data.error) {
-                                toast.error(response.data.error)
-                            }
-                        })
-                } else {
-                    axios.post(this.route('answer.store'), this.form)
-                        .then((response) => {
-                            if (response.data.success) {
-                                toast.success(response.data.message)
-                                this.processing = false;
-                                if (this.form.add_more != true) {
-                                    this.$emit('hidemodal')
-                                    Inertia.get('/answer')
-                                }
-                                this.form.question = ''
-                                this.form.answer = ''
-                                this.form.order_by = ''
-                            } else {
-                                toast.info(response.data.message)
-                            }
-                            if (response.data.error) {
-                                toast.error(response.data.error)
-                            }
-                        })
-                }
+                // if (this.id) {
+                this.processing = true;
+                axios.post(this.id ? this.route("answer.update", this.id) : this.route('answer.store'), this.form)
+                    .then((response) => {
+                        if (response.data.success) {
+                            this.processing = false;
+                            toast.success(response.data.message)
+                            Inertia.get('/answers')
+                            this.$emit('hidemodal')
+                        } else {
+                            toast.info(response.data.message)
+                        }
+                        if (response.data.error) {
+                            toast.error(response.data.error)
+                        }
+                    })
+                // } else {
+                //     axios.post(this.route('answer.store'), this.form)
+                //         .then((response) => {
+                //             if (response.data.success) {
+                //                 toast.success(response.data.message)
+                //                 this.processing = false;
+                //                 if (this.form.add_more != true) {
+                //                     this.$emit('hidemodal')
+                //                     Inertia.get('/answer')
+                //                 }
+                //                 this.form.question = ''
+                //                 this.form.answer = ''
+                //                 this.form.order_by = ''
+                //             } else {
+                //                 toast.info(response.data.message)
+                //             }
+                //             if (response.data.error) {
+                //                 toast.error(response.data.error)
+                //             }
+                //         })
+                // }
             }
         },
     },

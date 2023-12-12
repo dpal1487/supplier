@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TestimonialListResource;
 use App\Http\Resources\TestimonialResource;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
@@ -31,7 +32,7 @@ class TestimonialController extends Controller
             }
         }
         return Inertia::render('Testimonial/Index', [
-            'testimonials' => TestimonialResource::collection($testimonials->paginate(10)->appends($request->all())),
+            'testimonials' => TestimonialListResource::collection($testimonials->paginate(10)->appends($request->all())),
         ]);
     }
 

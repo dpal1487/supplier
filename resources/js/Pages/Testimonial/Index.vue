@@ -93,7 +93,7 @@ export default defineComponent({
                 </div>
                 <div class="w-100 mw-200px">
                     <Multiselect :options="$page.props.ziggy.status" label="name" valueProp="value"
-                        class="form-control form-control-solid" placeholder="Select Status" v-model="form.s" />
+                        class="form-control form-control-solid" placeholder="Select Status" v-model="form.status" />
                 </div>
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
@@ -110,7 +110,7 @@ export default defineComponent({
                         </thead>
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(testimonial, index) in testimonials.data" :key="index">
-                                <td>{{ testimonial.name }}</td>
+                                <td class="text-capitalize">{{ testimonial.name }}</td>
                                 <td v-html="testimonial.testimonial"></td>
                                 <td>
                                     <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
