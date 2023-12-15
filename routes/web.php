@@ -23,7 +23,9 @@ use App\Http\Controllers\{
     SurveyInitController,
     UserController,
     NotificationController,
+    PermissionController,
     QuestionController,
+    RoleController,
     ServiceController,
     TestimonialController,
 };
@@ -229,6 +231,26 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 Route::get('{id}/edit', 'edit')->name('answer.edit');
                 Route::post('update', 'update')->name('answer.update');
                 Route::delete('delete', 'destroy')->name('answers.delete');
+            });
+        });
+
+        Route::controller(RoleController::class)->group(function () {
+            Route::group(['prefix' => 'role'], function () {
+                Route::get('/', 'index')->name('role.index');
+                Route::post('/store', 'store')->name('role.store');
+                Route::get('{id}/edit', 'edit')->name('role.edit');
+                Route::post('{id}/update', 'update')->name('role.update');
+                Route::delete('delete/{id}', 'destroy')->name('role.destroy');
+            });
+        });
+
+        Route::controller(PermissionController::class)->group(function () {
+            Route::get('/permissions', 'index')->name('permission.index');
+            Route::group(['prefix' => 'permission'], function () {
+                Route::post('/store', 'store')->name('permission.store');
+                Route::get('{id}/edit', 'edit')->name('permission.edit');
+                Route::post('{id}/update', 'update')->name('permission.update');
+                Route::delete('destroy/{id}', 'destroy')->name('permission.destroy');
             });
         });
 

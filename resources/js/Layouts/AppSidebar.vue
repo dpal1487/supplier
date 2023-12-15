@@ -100,8 +100,15 @@ export default defineComponent({
                     role: ["pm", "admin", "user"],
                 },
                 {
-                    link: "/users",
-                    title: "User Role",
+                    link: "/role",
+                    title: "Role",
+                    icon: "bi bi-people",
+                    role: ["pm", "admin", "user"],
+                }
+                ,
+                {
+                    link: "/permissions",
+                    title: "Permissions",
                     icon: "bi bi-people",
                     role: ["pm", "admin", "user"],
                 }
@@ -126,9 +133,9 @@ export default defineComponent({
 <template>
     <div class="app-sidebar flex-column"
         :style="`left: ${sidebar ? '0px' : 'calc(0px - var(--kt-app-sidebar-width))'}; transition: .4s all ease;`">
-        <div class="px-6" style="border-bottom: 1px solid rgb(64, 64, 64); height: 70px;">
+        <div class="app-sidebar-logo px-6" style="border-bottom: 1px solid rgb(64, 64, 64); height: 70px;">
             <Link href="/">
-            <img alt="Logo" src="/assets/images/logo-light.png" class="h-40px mt-5 app-sidebar-logo-default" />
+            <img alt="Logo" src="/assets/images/logo-light.png" class="h-50px app-sidebar-logo-default" />
             </Link>
             <button @click="() => this.$emit('toggleSidebar')"
                 class="bg-white btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary body-bg h-30px w-30px position-absolute translate-middle shadow-lg"
@@ -145,36 +152,41 @@ export default defineComponent({
                 </span>
             </button>
             <!--end::Sidebar toggle-->
-
         </div>
         <!--end::Logo-->
         <!--begin::sidebar menu-->
         <div class="app-sidebar-menu overflow-hidden flex-column-fluid">
             <!--begin::Menu wrapper-->
-            <div class="app-sidebar-wrapper my-5">
+            <div class="app-sidebar-wrapper">
                 <!--begin::Menu-->
-                <div class="menu menu-column menu-rounded menu-sub-indention px-3">
-                    <!--begin:Menu item-->
-                    <div class="menu-item m-0" v-for="(navigation, index) in navigations" :key="index">
-                        <!--begin:Menu link-->
-                        <Link class="menu-link m-0" v-if="navigation?.role?.includes(
-                            $page?.props?.ziggy?.user?.role?.role?.slug
-                        )
-                            " :href="navigation.link">
-                        <i :class="`${navigation.icon}  mx-1 fs-2`"></i>
-                        {{ navigation.title }}
-                        </Link>
-                        <!--end:Menu link-->
+                <div class="scroll m-0" style="height: 594px;">
+                    <!--begin::Menu-->
+                    <div class="menu menu-column menu-rounded menu-sub-indention px-3">
+                        <!--begin:Menu item-->
+                        <div class="menu-item m-0" v-for="(navigation, index) in navigations" :key="index">
+                            <!--begin:Menu link-->
+                            <Link class="menu-link m-0" v-if="navigation?.role?.includes(
+                                $page?.props?.ziggy?.user?.role?.role?.slug
+                            )
+                                " :href="navigation.link">
+                            <i :class="`${navigation.icon}  mx-2 fs-2`"></i>
+                            {{ navigation.title }}
+                            </Link>
+                            <!--end:Menu link-->
+                        </div>
+                        <!--end:Menu item-->
                     </div>
-                    <!--end:Menu item-->
+                    <!--end::Menu-->
+               
                 </div>
+
                 <!--end::Menu-->
             </div>
             <!--end::Menu wrapper-->
         </div>
         <!--end::sidebar menu-->
         <!--begin::Footer-->
-        <div class="app-sidebar-footer flex-column-auto pt-2 pb-6 px-6">
+        <div class="app-sidebar-footer flex-column-auto m-0 pb-6 px-6">
             <form method="post" @submit.prevent="logout">
                 <button type="submit"
                     class="btn btn-flex flex-center btn-custom btn-primary overflow-hidden text-nowrap px-0 h-40px w-100"

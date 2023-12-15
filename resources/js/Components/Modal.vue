@@ -88,7 +88,8 @@ const maxWidthClass = computed(() => {
                     <h2>{{ title }}</h2>
 
                     <div class="d-flex ">
-                        <div class="mx-10" v-if="page != 'Answer'">
+                        <!-- {{ $page }} -->
+                        <div class="mx-10" v-if="page">
                             <a target="_blank" :href="`/sampling/${id}/create`" class="btn btn-primary btn-sm"><i
                                     class="bi bi-plus-circle"></i>Add New Supplier</a>
                         </div>

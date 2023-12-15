@@ -77,7 +77,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Modal :show="show" @onhide="$emit('hidemodal')" title="Suppliers" :isFullscreen="true" :id="id">
+    <Modal :show="show" @onhide="$emit('hidemodal')" title="Suppliers" :isFullscreen="true" :id="id" page="Supplier">
         <loading :active="isFullScreenLoading" :can-cancel="true" :is-full-page="isFullPage"></loading>
         <div class="card-body p-0">
             <SectionLoader v-if="isLoading" :width="40" :height="40" />
