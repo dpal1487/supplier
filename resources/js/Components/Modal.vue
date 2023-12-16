@@ -80,15 +80,12 @@ const maxWidthClass = computed(() => {
 
 <template>
     <div :class="`modal fade ${show ? 'show d-block' : 'd-none'}`" tabindex="-1" :aria-hidden="show ? false : true"
-        :style="`${show && 'background: rgba(0, 0, 0, 0.3)'}`">
-        <div
-            :class="` modal-dialog ${isFullscreen ? 'modal-fullscreen' : 'modal-dialog-centered mw-950px modal-dialog'}  `">
+        :style="`${show && 'background:rgba(0, 0, 0, 0.3)'}`">
+        <div :class="`modal-dialog ${isFullscreen ? 'modal-fullscreen' : 'modal-dialog-centered mw-750px modal-dialog'}`">
             <div class="modal-content">
                 <div class="modal-header flex-stack h-60px">
                     <h2>{{ title }}</h2>
-
                     <div class="d-flex ">
-                        <!-- {{ $page }} -->
                         <div class="mx-10" v-if="page">
                             <a target="_blank" :href="`/sampling/${id}/create`" class="btn btn-primary btn-sm"><i
                                     class="bi bi-plus-circle"></i>Add New Supplier</a>

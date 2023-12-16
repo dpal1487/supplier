@@ -14,7 +14,7 @@ export default defineComponent({
             navigations: [
                 {
                     link: "/",
-                    title: "Dashbord",
+                    title: "Dashboard",
                     icon: "bi bi-pie-chart-fill",
                     role: ["pm", "admin"],
                 },

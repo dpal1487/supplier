@@ -38,29 +38,23 @@ class PermissionController extends Controller
 
         $validator = Validator::make($request->all(), [
             // 'name' => 'required|unique:permissions,name',
-            'name' => 'required|string|max:255|unique:permission_menus,name',
+            'name' => 'required|string|max:255|unique:permissions,name',
 
         ]);
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first(), 'success' => false]);
         }
-        $permissionMenu = PermissionMenu::create([
-            'name' => $request->name,
-        ]);
+        $existingPermission = Permission::where('name', 'like', "%$request->name")->first();
 
-        if ($permissionMenu) {
-            Permission::create(['name' => $request->name . ' read']);
-            Permission::create(['name' => $request->name . ' write']);
-            Permission::create(['name' => $request->name . ' delete']);
-            return response()->json([
-                'success' => true,
-                'message' => 'Permission created Successfully',
-            ]);
+        // return $existingPermission;
+
+        if ($existingPermission) {
+            $existingPermission->delete();
         }
-        return response()->json([
-            'success' => false,
-            'message' => 'Permission not created'
-        ]);
+        Permission::create(['name' => $request->name . ' read']);
+        Permission::create(['name' => $request->name . ' write']);
+        Permission::create(['name' => $request->name . ' delete']);
+        return response()->json(createMessage('Permission'));
     }
     public function show($id)
     {

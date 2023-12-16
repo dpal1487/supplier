@@ -40,23 +40,23 @@ export default defineComponent({
                 permissions: []
             }),
             permissions: [
-				"dashbord",
-				"master",
-				"project",
-				"client",
+                "dashboard",
+                "master",
+                "project",
+                "client",
                 "supplier",
-				"invoice",
-				"user",
-				"close-project",
+                "invoice",
+                "user",
+                "close-project",
                 "final-id",
-				"service",
-				"testimonial",
-				"blog",
+                "service",
+                "testimonial",
+                "blog",
                 "question",
-				"answer",
-				"role",
-				"permission",
-			],
+                "answer",
+                "role",
+                "permission",
+            ],
         }
     },
     components: {
@@ -73,7 +73,7 @@ export default defineComponent({
                 for (let key in element) {
                     if (key !== "page_name") {
                         if (element[key]) {
-                            resultArray.push(`${element.page_name } ${key}`)
+                            resultArray.push(`${element.page_name} ${key}`)
                         }
                     }
                 }
@@ -189,7 +189,6 @@ export default defineComponent({
                                         <td class="text-red-800 text-uppercase">{{ permission }} </td>
                                         <td>
                                             <div class="d-flex">
-                                                {{form.permissions[index]?.read}}
                                                 <label
                                                     class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-8">
                                                     <input id="read" class="form-check-input" type="checkbox"

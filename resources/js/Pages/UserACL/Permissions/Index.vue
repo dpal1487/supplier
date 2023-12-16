@@ -96,9 +96,9 @@ export default defineComponent({
 		<div class="card card-flush">
 			<div class="card-body pt-0">
 				<div class="table-responsive">
-					<table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
+					<table class="table align-middle table-row-dashed fs-6 gy-5 text-left">
 						<thead>
-							<tr class="text-gray-400 fw-bold fs-7 text-uppercase ">
+							<tr class="text-gray-400 fw-bold fs-7 text-uppercase">
 								<th v-for="(th, index) in tbody" :key="index">
 									{{ th }}
 								</th>
@@ -107,9 +107,10 @@ export default defineComponent({
 						<tbody class="fw-semibold text-gray-600">
 							<tr v-for="(permission, index) in permissions.data" :key="index">
 								<td>{{ permission.name }}</td>
-								<td>{{ permission }}</td>
+								<td v-if="permission.role == []">{{ permission.role }}</td>
+								<td v-else>non</td>
 								<td>{{ permission.created_at }}</td>
-								<td class="text-end">
+								<td class="">
 									<button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
 										@click="toggleModal(true, permission.id)">
 										<span class="svg-icon svg-icon-3">
