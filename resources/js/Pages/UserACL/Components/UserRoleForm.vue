@@ -12,7 +12,7 @@ import { Inertia } from '@inertiajs/inertia';
 
 export default defineComponent({
 
-    props: ['isEdit', 'show', 'permissions', 'role'],
+    props: ['isEdit', 'show', 'role'],
     emits: ['hidemodal'],
 
     setup() {
@@ -39,6 +39,24 @@ export default defineComponent({
                 role: '',
                 permissions: []
             }),
+            permissions: [
+				"dashbord",
+				"master",
+				"project",
+				"client",
+                "supplier",
+				"invoice",
+				"user",
+				"close-project",
+                "final-id",
+				"service",
+				"testimonial",
+				"blog",
+                "question",
+				"answer",
+				"role",
+				"permission",
+			],
         }
     },
     components: {
@@ -55,7 +73,7 @@ export default defineComponent({
                 for (let key in element) {
                     if (key !== "page_name") {
                         if (element[key]) {
-                            resultArray.push(`${element.page_name}.${key}`)
+                            resultArray.push(`${element.page_name } ${key}`)
                         }
                     }
                 }
@@ -64,7 +82,6 @@ export default defineComponent({
                 this.processing = true;
                 axios
                     .post(this.isEdit ? route('role.update', this.role) : route('role.store'), { ...this.form, permissions: resultArray })
-
                     .then((response) => {
                         if (response?.data?.success) {
                             toast.success(response?.data?.message)
@@ -109,7 +126,7 @@ export default defineComponent({
         }
         if (!this.isEdit) {
             this.form.permissions = this.permissions.map(m => ({
-                page_name: m.name,
+                page_name: m,
                 read: false,
                 write: false,
                 delete: false,
@@ -150,7 +167,6 @@ export default defineComponent({
                     </div>
                     <div class="fv-row">
                         <label class="fs-5 fw-bold form-label mb-2">Role Permissions</label>
-
                         <div class="table-responsive">
                             <table class="table align-middle table-row-dashed fs-6 gy-5">
                                 <tbody class="text-gray-600 fw-semibold">
@@ -170,15 +186,16 @@ export default defineComponent({
                                         </td>
                                     </tr>
                                     <tr v-for="(permission, index) in permissions" :key="index">
-                                        <td class="text-red-800 text-uppercase">{{ permission.name }} </td>
+                                        <td class="text-red-800 text-uppercase">{{ permission }} </td>
                                         <td>
                                             <div class="d-flex">
+                                                {{form.permissions[index]?.read}}
                                                 <label
                                                     class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-8">
                                                     <input id="read" class="form-check-input" type="checkbox"
                                                         :v-model="form.permissions[index]?.read"
                                                         :checked="form.permissions[index]?.read || admin_access"
-                                                        @change="(event) => handleCheckChange(event, index, 'read')" />
+                                                        @change="(event) => handleCheckChange(event, index, ' read')" />
                                                     <span class="form-check-label">Read</span>
                                                 </label>
                                                 <label
@@ -187,7 +204,7 @@ export default defineComponent({
                                                         :v-model="form.permissions[index]?.write"
                                                         :disabled="!form.permissions[index]?.read"
                                                         :checked="form.permissions[index]?.write"
-                                                        @change="(event) => handleCheckChange(event, index, 'write')" />
+                                                        @change="(event) => handleCheckChange(event, index, ' write')" />
                                                     <span class="form-check-label">Write</span>
                                                 </label>
                                                 <label class="form-check form-check-sm form-check-custom form-check-solid">
@@ -195,7 +212,7 @@ export default defineComponent({
                                                         :v-model="form.permissions[index]?.delete"
                                                         :disabled="!form.permissions[index]?.read"
                                                         :checked="form.permissions[index]?.delete"
-                                                        @change="(event) => handleCheckChange(event, index, 'delete')" />
+                                                        @change="(event) => handleCheckChange(event, index, ' delete')" />
                                                     <span class="form-check-label">Delete</span>
                                                 </label>
                                             </div>

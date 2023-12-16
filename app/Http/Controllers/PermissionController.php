@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PermissionResource;
+use App\Models\PermissionMenu;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -37,15 +38,17 @@ class PermissionController extends Controller
 
         $validator = Validator::make($request->all(), [
             // 'name' => 'required|unique:permissions,name',
-            'name' => 'required|string|max:255|unique:'.config('permission.table_names.permissions', 'permissions').',name',
-            
+            'name' => 'required|string|max:255|unique:permission_menus,name',
+
         ]);
-        return $request;
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first(), 'success' => false]);
         }
+        $permissionMenu = PermissionMenu::create([
+            'name' => $request->name,
+        ]);
 
-        if ($request->name) {
+        if ($permissionMenu) {
             Permission::create(['name' => $request->name . ' read']);
             Permission::create(['name' => $request->name . ' write']);
             Permission::create(['name' => $request->name . ' delete']);

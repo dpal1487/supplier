@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PermissionResource;
+use App\Http\Resources\PermissionMenuResource;
 use App\Http\Resources\RoleResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -11,14 +12,11 @@ use Inertia\Inertia;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\PermissionMenu;
 
 class RoleController extends Controller
 {
-
     public $user;
-
-
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
@@ -28,11 +26,8 @@ class RoleController extends Controller
     }
     public function index()
     {
-        $permissions = Permission::get();
         $roles = Role::all();
-
         return Inertia::render('UserACL/RoleList', [
-            'permissions' => PermissionResource::collection($permissions),
             'roles' => RoleResource::collection($roles),
         ]);
     }
@@ -54,15 +49,9 @@ class RoleController extends Controller
             $role->syncPermissions($permissions);
         }
         if ($role) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Role created Successfully',
-            ]);
+            return response()->json([createMessage('Role')]);
         }
-        return response()->json([
-            'success' => false,
-            'message' => 'Role not created'
-        ]);
+        return response()->json([errorMessage()]);
     }
 
     public function edit(int $id)
@@ -89,10 +78,7 @@ class RoleController extends Controller
 
         ]);
         if ($permission) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Role updated Successfully',
-            ]);
+            return response()->json([updateMessage('Role')]);
         }
         return response()->json([
             'success' => false,

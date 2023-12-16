@@ -7,7 +7,7 @@ import { Head } from '@inertiajs/inertia-vue3';
 import UserRoleForm from './Components/UserRoleForm.vue';
 import utils from '../../utils.js';
 export default defineComponent({
-    props: ['permissions', 'roles'],
+    props: ['roles'],
     data() {
         return {
             isEdit: false,
@@ -49,7 +49,7 @@ export default defineComponent({
     <Head title="User Role" />
     <AppLayout>
         <UserRoleForm v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)"
-            :permissions="permissions.data" :role="role_id" />
+            :role="role_id" />
         <template #breadcrumb>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>

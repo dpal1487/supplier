@@ -65,22 +65,19 @@ export default defineComponent({
                     title: "Final ID",
                     icon: "bi bi-card-heading",
                     role: ["pm", "admin", "user"],
-                }
-                ,
+                },
                 {
                     link: "/service",
                     title: "Services",
                     icon: "bi bi-diagram-3",
                     role: ["pm", "admin", "user"],
-                }
-                ,
+                },
                 {
                     link: "/testimonial",
                     title: "Testimonial",
                     icon: "bi bi-clipboard2-pulse",
                     role: ["pm", "admin", "user"],
-                }
-                ,
+                },
                 {
                     link: "/blog",
                     title: "Blogs",
@@ -104,8 +101,7 @@ export default defineComponent({
                     title: "Role",
                     icon: "bi bi-people",
                     role: ["pm", "admin", "user"],
-                }
-                ,
+                },
                 {
                     link: "/permissions",
                     title: "Permissions",
