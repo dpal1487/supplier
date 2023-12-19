@@ -30,6 +30,7 @@
         "rinvex/laravel-subscriptions": "^6.1",
         "santigarcor/laratrust": "^7.2",
         "spatie/image-optimizer": "^1.7",
+        "spatie/laravel-permission": "^6.2",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {

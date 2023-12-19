@@ -7,15 +7,18 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Cashier\Billable;
-use App\Permissions\HasPermissionsTrait;
+// use App\Permissions\HasPermissionsTrait;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Traits\HasPermissions;
 
 class User extends Authenticatable
 {
     use Billable;
-    use HasApiTokens, HasFactory, Notifiable, HasPermissionsTrait;
-
+    use HasApiTokens, HasFactory, Notifiable;
+    use HasRoles;
+    use HasPermissions;
     use HasFactory;
     protected $primaryKey = 'id';
     protected $keyType = 'string';
