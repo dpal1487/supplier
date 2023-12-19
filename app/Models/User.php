@@ -66,6 +66,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(UsersRole::class, 'user_id', 'id');
     }
+    public function roles()
+    {
+        return $this->hasMany(UsersRole::class , 'user_id' , 'id');
+    }
+    public function hasRole($role)
+    {
+        return $this->roles->contains('name' , $role);
+    }
+
     public function completes()
     {
         return $this->HasMany(Respondent::class, 'user_id', 'id')->where('status', 'complete');

@@ -41,7 +41,7 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         $this->user = $request->user();
-        $this->role = $request->user() ? $request->user()->role->role->pluck('slug') : [];
+        $this->role = $request->user() ? $request->user()->role?->role->pluck('slug') : [];
         return array_merge(parent::share($request), [
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy())->toArray(), [
@@ -52,6 +52,13 @@ class HandleInertiaRequests extends Middleware
                         'message' => fn () => $request->session()->get('message'),
                     ],
                 ]);
+            },
+            'user.user' => $this->user,
+            'user.permissions' => function () use ($request) {
+                return ($request->user() ? $request->user()->getAllPermissions()->pluck('name') : null);
+            },
+            'user.roles' => function () use ($request) {
+                return ($request->user() ? $request->user()->roles()->pluck('name') : null);
             },
         ]);
     }

@@ -16,6 +16,7 @@ export default defineComponent({
 
 <template>
     <app-layout title="Dashboard">
+      {{ $page.props.user }}
       <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
         <div class="col-md-6">
           <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end "

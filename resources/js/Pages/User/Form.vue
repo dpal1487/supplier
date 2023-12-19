@@ -11,7 +11,7 @@ import useVuelidate from "@vuelidate/core";
 import { required} from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
 export default defineComponent({
-    props: ["user", "role"],
+    props: ["user", "role" , "userHasRoles"],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -47,7 +47,7 @@ export default defineComponent({
                 first_name: this.user?.data?.first_name || "",
                 last_name: this.user?.data?.last_name || "",
                 email: this.user?.data?.email || "",
-                role: this.user?.data?.role?.id || "",
+                role: this.userHasRoles || "",
                 password: this.user?.data?.password || "",
                 status: this.user?.data?.status || "",
             }),
@@ -163,9 +163,8 @@ export default defineComponent({
                                     </div>
                                 </div>
                                 <div class="fv-row col-md-6">
-                                    
                                     <jet-label for="role" value="Role" />
-                                    <Multiselect :options="role.roles" label="name" valueProp="id"
+                                    <Multiselect :can-clear="false" :options="role.roles" label="name" valueProp="id"
                                         :class="v$.form.role.$errors.length > 0 ? 'is-invalid form-control form-control-lg form-control-solid' : 'form-control form-control-lg form-control-solid'"
                                         placeholder="Select Role" v-model="form.role" track-by="name" :searchable="true" />
                                     <div v-for="(error, index) of v$.form.role.$errors" :key="index">
@@ -184,7 +183,7 @@ export default defineComponent({
                                 </div>
                                 <div class="fv-row col-md-6">
                                     <jet-label value="Status" />
-                                    <Multiselect :options="status" label="name" valueProp="id"
+                                    <Multiselect :can-clear="false" :options="status" label="name" valueProp="id"
                                         :class="v$.form.status.$errors.length > 0 ? 'is-invalid form-control form-control-lg form-control-solid' : 'form-control form-control-lg form-control-solid'"
                                         placeholder="Select status" v-model="form.status" track-by="name"
                                         :searchable="true" />

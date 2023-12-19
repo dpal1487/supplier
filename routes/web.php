@@ -98,7 +98,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
     // });
 
-    Route::group(['middleware' => 'role:pm,admin'], function () {
+    Route::group(['middleware' => 'auth'], function () {
         Route::controller(ClientController::class)->group(function () {
             Route::get('clients', 'index')->name('clients.index');
             Route::get('client/create', 'create')->name('client.create');
@@ -259,7 +259,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         });
     });
 
-    Route::group(['middleware' => 'role:account,admin'], function () {
+    // Route::group(['middleware' => 'role:admin,account'], function () {
         Route::get('invoice/download/{id}', [InvoiceController::class, 'downloadInvoice']);
 
         Route::controller(InvoiceController::class)->group(function () {
@@ -273,7 +273,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             });
         });
         Route::get('invoice/{id}/currency-value', [CurrencyController::class, 'currenctValue'])->name('invoice.currency-value');
-    });
+    // });
     Route::controller(ExportExcelController::class)->group(function () {
         Route::get('export/excel', 'exportExcelFile')->name('export.excel');
     });

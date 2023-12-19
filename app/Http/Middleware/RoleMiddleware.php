@@ -13,5 +13,15 @@ class RoleMiddleware
             return $next($request);
         }
         return redirect('/');
+
+        if(!$request->user()->hasRole($role)){
+            abort(404);
+        }
+
+        if($permission != null && !$request->user()->can($permission)){
+            abort(404);
+        }
+        
+        return $next($request);
     }
 }

@@ -6,7 +6,7 @@ use App\Exports\UserProjectReports;
 use App\Http\Resources\RespondentResource;
 use App\Http\Resources\UserResource;
 use App\Models\Respondent;
-use App\Models\Role;
+use App\Models\Role as OriginalRole;
 use App\Models\Survey;
 use App\Models\User;
 use App\Models\UsersRole;
@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
+use Spatie\Permission\Models\Role ;
 
 class UserController extends Controller
 {
@@ -26,11 +27,13 @@ class UserController extends Controller
     }
     public function index(Request $request)
     {
+
         $users = User::orderBy('first_name', 'asc');
         if ($request->q) {
             $users = $users->where('first_name', 'like', "%{$request->q}%");
         }
         $users = $users->paginate(20)->appends(request()->query());
+
         return Inertia::render('User/Index', [
             'users' => UserResource::collection($users),
         ]);
@@ -63,14 +66,17 @@ class UserController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
         }
-        if ($id = User::create([
+        if ($user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'status' => $request->status,
             'password' => Hash::make($request->password)
         ])) {
-            UsersRole::create(['role_id' => $request->role, 'user_id' => $id->id]);
+
+            $user->assignRole($request->role);
+
+            // UsersRole::create(['role_id' => $request->role, 'user_id' => $user->id]);
             return redirect('/users')->with('flash', ['message' => 'User added successfully.']);
         }
         return redirect('/users')->with('flash', ['message' => 'Opps! something went wrong.']);
@@ -78,10 +84,13 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        $user = User::find($id);
+        $user = User::find($id);        
+        $userHasRoles = array_column(json_decode($user->roles, true), 'id');
+        
         return Inertia::render('User/Form', [
             'user' => new UserResource($user),
             'role' => $this->role,
+            'userHasRoles' => $userHasRoles,
         ]);
     }
     public function show($id)
@@ -108,15 +117,21 @@ class UserController extends Controller
         // if (!Hash::check($request->password, auth()->user()->password)) {
         //     return back()->withErrors(["message" => "Password Doesn't match!"]);
         // }
+
+        $user = User::where('id', $id)->first();
         if ($id != 1) {
-            if (User::where('id', $id)->update([
+            if ($user->update([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'status' => $request->status,
             ])) {
-                UsersRole::where('user_id', $id)->update(['role_id' => $request->role]);
+                    $user->syncRoles($request->role);
+
+                    // assignRole
+
+                // UsersRole::where('user_id', $id)->update(['role_id' => $request->role]);
                 if ($request->action == "user.overview") {
                     return redirect('/user/' . $id)->with('flash', ['message' => 'User updated successfully.']);
                 } else {

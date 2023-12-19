@@ -73,7 +73,7 @@ export default defineComponent({
                 for (let key in element) {
                     if (key !== "page_name") {
                         if (element[key]) {
-                            resultArray.push(`${element.page_name} ${key}`)
+                            resultArray.push(`${element.page_name}${key}`)
                         }
                     }
                 }
@@ -96,6 +96,9 @@ export default defineComponent({
         },
         handleCheckChange(event, index, field) {
             this.form.permissions[index][field] = event.target.checked;
+
+            console.log("see this", this.form.permissions[index][field])
+
             if (field === "read" && !event.target.checked) {
                 this.form.permissions[index].write = false;
                 this.form.permissions[index].delete = false;
@@ -194,7 +197,7 @@ export default defineComponent({
                                                     <input id="read" class="form-check-input" type="checkbox"
                                                         :v-model="form.permissions[index]?.read"
                                                         :checked="form.permissions[index]?.read || admin_access"
-                                                        @change="(event) => handleCheckChange(event, index, ' read')" />
+                                                        @change="(event) => handleCheckChange(event, index, 'read')" />
                                                     <span class="form-check-label">Read</span>
                                                 </label>
                                                 <label
@@ -203,7 +206,7 @@ export default defineComponent({
                                                         :v-model="form.permissions[index]?.write"
                                                         :disabled="!form.permissions[index]?.read"
                                                         :checked="form.permissions[index]?.write"
-                                                        @change="(event) => handleCheckChange(event, index, ' write')" />
+                                                        @change="(event) => handleCheckChange(event, index, 'write')" />
                                                     <span class="form-check-label">Write</span>
                                                 </label>
                                                 <label class="form-check form-check-sm form-check-custom form-check-solid">
@@ -211,7 +214,7 @@ export default defineComponent({
                                                         :v-model="form.permissions[index]?.delete"
                                                         :disabled="!form.permissions[index]?.read"
                                                         :checked="form.permissions[index]?.delete"
-                                                        @change="(event) => handleCheckChange(event, index, ' delete')" />
+                                                        @change="(event) => handleCheckChange(event, index, 'delete')" />
                                                     <span class="form-check-label">Delete</span>
                                                 </label>
                                             </div>

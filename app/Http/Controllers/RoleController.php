@@ -46,12 +46,12 @@ class RoleController extends Controller
         ]);
         $permissions = $request->input('permissions');
         if (!empty($permissions)) {
-            $role->syncPermissions($permissions);
+            $role->givePermissionTo($permissions);
         }
         if ($role) {
-            return response()->json([createMessage('Role')]);
+            return response()->json(createMessage('Role'));
         }
-        return response()->json([errorMessage()]);
+        return response()->json(errorMessage());
     }
 
     public function edit(int $id)
@@ -78,7 +78,7 @@ class RoleController extends Controller
 
         ]);
         if ($permission) {
-            return response()->json([updateMessage('Role')]);
+            return response()->json(updateMessage('Role'));
         }
         return response()->json([
             'success' => false,
