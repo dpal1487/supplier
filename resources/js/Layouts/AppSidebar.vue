@@ -64,49 +64,49 @@ export default defineComponent({
                     link: "/final-id",
                     title: "Final ID",
                     icon: "bi bi-card-heading",
-                    role: ["pm", "admin", "user"],
+                    role: ["pm", "admin"],
                 },
                 {
                     link: "/service",
                     title: "Services",
                     icon: "bi bi-diagram-3",
-                    role: ["pm", "admin", "user"],
+                    role: ["pm", "admin"],
                 },
                 {
                     link: "/testimonial",
                     title: "Testimonial",
                     icon: "bi bi-clipboard2-pulse",
-                    role: ["pm", "admin", "user"],
+                    role: ["pm", "admin"],
                 },
                 {
                     link: "/blog",
                     title: "Blogs",
                     icon: "bi bi-file-post",
-                    role: ["pm", "admin", "user"],
+                    role: ["pm", "admin"],
                 },
                 {
                     link: "/question",
                     title: "Question",
                     icon: "bi bi-question-square",
-                    role: ["pm", "admin", "user"],
+                    role: ["pm", "admin"],
                 },
                 {
                     link: "/answers",
                     title: "Answers",
                     icon: "bi bi-book",
-                    role: ["pm", "admin", "user"],
+                    role: ["pm", "admin"],
                 },
                 {
                     link: "/role",
                     title: "Role",
                     icon: "bi bi-people",
-                    role: ["pm", "admin", "user"],
+                    role: ["pm", "admin"],
                 },
                 {
                     link: "/permissions",
                     title: "Permissions",
                     icon: "bi bi-people",
-                    role: ["pm", "admin", "user"],
+                    role: ["pm", "admin"],
                 }
             ],
         };
@@ -173,7 +173,7 @@ export default defineComponent({
                         <!--end:Menu item-->
                     </div>
                     <!--end::Menu-->
-               
+
                 </div>
 
                 <!--end::Menu-->

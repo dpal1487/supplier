@@ -73,7 +73,7 @@ export default defineComponent({
                 for (let key in element) {
                     if (key !== "page_name") {
                         if (element[key]) {
-                            resultArray.push(`${element.page_name}${key}`)
+                            resultArray.push(`${element.page_name} ${key}`)
                         }
                     }
                 }
@@ -96,9 +96,6 @@ export default defineComponent({
         },
         handleCheckChange(event, index, field) {
             this.form.permissions[index][field] = event.target.checked;
-
-            console.log("see this", this.form.permissions[index][field])
-
             if (field === "read" && !event.target.checked) {
                 this.form.permissions[index].write = false;
                 this.form.permissions[index].delete = false;
@@ -111,17 +108,15 @@ export default defineComponent({
             const response = await axios.get(`/role/${this.role}/edit`);
             const fetched_permissions = response?.data?.permissions;
             const finalMutated_permissions = [];
-
-            this.menus?.forEach(m => {
-                const sets = fetched_permissions.filter(p => p.name?.startsWith(m.title));
-                const form_permission = { page_name: m?.title };
+            this.permissions?.forEach(m => {
+                const sets = fetched_permissions.filter(p => p.name?.startsWith(m));
+                const form_permission = { page_name: m };
                 sets?.forEach(s => {
-                    let [_, access] = s.name?.split(".");
+                    let [_, access] = s.name?.split(" ");
                     form_permission[access] = true;
                 })
                 finalMutated_permissions.push(form_permission)
             })
-
             this.form.role = response?.data?.role?.name;
             this.form.permissions = finalMutated_permissions;
             this.form.id = this.id;

@@ -4,9 +4,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
-import axios from "axios";
-import Swal from "sweetalert2";
-import { toast } from "vue3-toastify";
+import utils from "../../utils";
 import { Inertia } from "@inertiajs/inertia";
 export default defineComponent({
     props: ["users"],
@@ -32,43 +30,10 @@ export default defineComponent({
         Multiselect,
     },
     methods: {
-        async confirmDelete(index) {
-            const loading = Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#dc3545",
-                cancelButtonColor: "#6c757d",
-                confirmButtonText: "Yes, delete it!",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // delete action
-                    const loading = Swal.fire({
-                        title: "Deleting...",
-                        allowOutsideClick: false,
-                        didOpen: async () => {
-                            // Perform a long-running
-                            axios
-                                .delete(
-                                    `/user/${this.users.data[index].id}`
-                                )
-                                .then((response) => {
-                                    if (response.data.success) {
-                                        toast.success(response.data.message)
-                                        this.users.data.splice(index, 1);
-                                    }
-                                    else {
-                                        toast.error(response.data.message)
-                                    }
-                                })
-                                .finally(() => loading.close());
-                        },
-                    });
-
-                    Swal.showLoading();
-                }
-            });
+        async confirmDelete(id, index) {
+            this.isLoading = true;
+            await utils.deleteIndexDialog(route('user.destroy', id), this.users.data, index);
+            this.isLoading = false;
         },
         search() {
             Inertia.get(
@@ -138,7 +103,10 @@ export default defineComponent({
                         </thead>
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(user, index) in users.data" :key="index">
-                                <td><Link class="text-black" :href="`user/${user.id}`">{{ user.first_name + " " + user.last_name }}</Link></td>
+                                <td>
+                                    <Link class="text-black" :href="`user/${user.id}`">{{ user.first_name + " " +
+                                        user.last_name }}</Link>
+                                </td>
                                 <td>{{ user.email }}</td>
                                 <td>{{ user.role?.name }}</td>
                                 <td> <span :class="`badge bg-${user.status == 1
@@ -172,7 +140,7 @@ export default defineComponent({
                                             </Link>
                                         </div>
                                         <div class="menu-item px-3">
-                                            <span @click="confirmDelete(index)" class="menu-link"><i
+                                            <span @click="confirmDelete(user.id, index)" class="menu-link"><i
                                                     class="bi bi-trash3 me-2"></i>Delete</span>
                                         </div>
                                     </div>
@@ -184,7 +152,8 @@ export default defineComponent({
                     </table>
 
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end mb-10" v-if="users.meta">
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end mb-10"
+                    v-if="users.meta">
                     <Pagination :links="users.meta.links" />
                 </div>
             </div>

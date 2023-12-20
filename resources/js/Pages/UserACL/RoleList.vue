@@ -48,8 +48,7 @@ export default defineComponent({
 <template>
     <Head title="User Role" />
     <AppLayout>
-        <UserRoleForm v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)"
-            :role="role_id" />
+        <UserRoleForm v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)" :role="role_id" />
         <template #breadcrumb>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>

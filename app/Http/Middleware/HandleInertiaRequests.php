@@ -53,13 +53,7 @@ class HandleInertiaRequests extends Middleware
                     ],
                 ]);
             },
-            'user.user' => $this->user,
-            'user.permissions' => function () use ($request) {
-                return ($request->user() ? $request->user()->getAllPermissions()->pluck('name') : null);
-            },
-            'user.roles' => function () use ($request) {
-                return ($request->user() ? $request->user()->roles()->pluck('name') : null);
-            },
+
         ]);
     }
 }

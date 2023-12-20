@@ -7,18 +7,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Cashier\Billable;
-// use App\Permissions\HasPermissionsTrait;
+use App\Traits\HasPermissionsTrait;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Permission\Traits\HasRoles;
-use Spatie\Permission\Traits\HasPermissions;
 
 class User extends Authenticatable
 {
     use Billable;
-    use HasApiTokens, HasFactory, Notifiable;
-    use HasRoles;
-    use HasPermissions;
+    use HasApiTokens, HasFactory, Notifiable, HasPermissionsTrait;
     use HasFactory;
     protected $primaryKey = 'id';
     protected $keyType = 'string';
@@ -62,19 +58,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
     public function role()
     {
         return $this->hasOne(UsersRole::class, 'user_id', 'id');
     }
-    public function roles()
-    {
-        return $this->hasMany(UsersRole::class , 'user_id' , 'id');
-    }
-    public function hasRole($role)
-    {
-        return $this->roles->contains('name' , $role);
-    }
-
     public function completes()
     {
         return $this->HasMany(Respondent::class, 'user_id', 'id')->where('status', 'complete');

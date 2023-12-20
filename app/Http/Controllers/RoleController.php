@@ -3,16 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PermissionResource;
-use App\Http\Resources\PermissionMenuResource;
 use App\Http\Resources\RoleResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use App\Traits\HasPermissionsTrait;
+use App\Models\{
+    Role,
+    Permission,
+    UsersRole,
+    User
+};
+
 use Illuminate\Support\Facades\Auth;
-use App\Models\PermissionMenu;
 
 class RoleController extends Controller
 {
@@ -26,6 +30,7 @@ class RoleController extends Controller
     }
     public function index()
     {
+
         $roles = Role::all();
         return Inertia::render('UserACL/RoleList', [
             'roles' => RoleResource::collection($roles),
@@ -33,6 +38,8 @@ class RoleController extends Controller
     }
     public function store(Request $request)
     {
+
+
         $validator = Validator::make($request->all(), [
             'role' => 'required|unique:roles,name',
         ]);
@@ -45,8 +52,10 @@ class RoleController extends Controller
             'guard_name' => 'sanctum',
         ]);
         $permissions = $request->input('permissions');
+
         if (!empty($permissions)) {
-            $role->givePermissionTo($permissions);
+            $permissionIds = Permission::whereIn('name', $permissions)->pluck('id');
+            $role->permissions()->attach($permissionIds);
         }
         if ($role) {
             return response()->json(createMessage('Role'));
@@ -72,12 +81,21 @@ class RoleController extends Controller
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
         }
-        $permission = Role::where('id', $id)->update([
-            'name' => $request->role,
-            'slug' => Str::slug($request->role),
+        $role  = Role::find($id);
 
-        ]);
-        if ($permission) {
+        if ($role) {
+            $role->update([
+                'name' => $request->role,
+                'slug' => Str::slug($request->role),
+            ]);
+            $permissions = $request->input('permissions');
+            if (!empty($permissions)) {
+                $permissionIds = Permission::whereIn('name', $permissions)->pluck('id');
+                if (count($role->permissions) > 0) {
+                    $role->permissions()->sync($permissionIds);
+                }
+                $role->permissions()->attach($permissionIds);
+            }
             return response()->json(updateMessage('Role'));
         }
         return response()->json([

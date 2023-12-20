@@ -6,7 +6,7 @@ use App\Exports\UserProjectReports;
 use App\Http\Resources\RespondentResource;
 use App\Http\Resources\UserResource;
 use App\Models\Respondent;
-use App\Models\Role as OriginalRole;
+use App\Models\Role;
 use App\Models\Survey;
 use App\Models\User;
 use App\Models\UsersRole;
@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
-use Spatie\Permission\Models\Role ;
 
 class UserController extends Controller
 {
@@ -27,6 +26,8 @@ class UserController extends Controller
     }
     public function index(Request $request)
     {
+
+
 
         $users = User::orderBy('first_name', 'asc');
         if ($request->q) {
@@ -74,8 +75,8 @@ class UserController extends Controller
             'password' => Hash::make($request->password)
         ])) {
 
-            $user->assignRole($request->role);
-
+            $role = Role::where('slug', $request->role)->first();
+            $user->roles()->attach($role);
             // UsersRole::create(['role_id' => $request->role, 'user_id' => $user->id]);
             return redirect('/users')->with('flash', ['message' => 'User added successfully.']);
         }
@@ -84,9 +85,9 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        $user = User::find($id);        
+        $user = User::find($id);
         $userHasRoles = array_column(json_decode($user->roles, true), 'id');
-        
+
         return Inertia::render('User/Form', [
             'user' => new UserResource($user),
             'role' => $this->role,
@@ -114,9 +115,6 @@ class UserController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
         }
-        // if (!Hash::check($request->password, auth()->user()->password)) {
-        //     return back()->withErrors(["message" => "Password Doesn't match!"]);
-        // }
 
         $user = User::where('id', $id)->first();
         if ($id != 1) {
@@ -127,11 +125,13 @@ class UserController extends Controller
                 'password' => Hash::make($request->password),
                 'status' => $request->status,
             ])) {
-                    $user->syncRoles($request->role);
+                // assignRole
+                $role = Role::find($request->role);
+                if (count($user->roles) > 0) {
+                    $user->roles()->sync($role); // Update the role
+                }
+                $user->roles()->attach($role);
 
-                    // assignRole
-
-                // UsersRole::where('user_id', $id)->update(['role_id' => $request->role]);
                 if ($request->action == "user.overview") {
                     return redirect('/user/' . $id)->with('flash', ['message' => 'User updated successfully.']);
                 } else {
@@ -144,17 +144,16 @@ class UserController extends Controller
     }
     public function destroy($id)
     {
-        if (User::find($id) && Auth::user()->role->role->slug == 'admin') {
+        if (User::find($id) && implode('.', Auth::user()->roles->pluck('slug')->toArray()) == 'admin') {
             if (User::where('id', $id)->delete()) {
                 return response()->json(['message' => 'Project link deleted successfully.', 'success' => true]);
             }
         }
-        return response()->json(['message' => 'Opps! something went wrong.', 'success' => false], 400);
+        return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
     }
 
     public function projects(Request $request, $id)
     {
-
         $surveys = Respondent::where('user_id', $id)->orderBy('created_at', 'desc');
         $user = User::find($id);
         if ($request->q) {
