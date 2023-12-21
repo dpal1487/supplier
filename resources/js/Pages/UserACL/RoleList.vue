@@ -3,7 +3,7 @@
 import { defineComponent } from 'vue';
 
 import AppLayout from '@/Layouts/AppLayout.vue'
-import { Head } from '@inertiajs/inertia-vue3';
+import { Head, Link } from '@inertiajs/inertia-vue3';
 import UserRoleForm from './Components/UserRoleForm.vue';
 import utils from '../../utils.js';
 export default defineComponent({
@@ -13,12 +13,14 @@ export default defineComponent({
             isEdit: false,
             role_id: '',
             showModal: false,
+            title: "User Role"
         }
     },
     components: {
         AppLayout,
         Head,
         UserRoleForm,
+        Link
     },
     methods: {
         toggleModal(value, role) {
@@ -46,9 +48,10 @@ export default defineComponent({
 })
 </script>
 <template>
-    <Head title="User Role" />
-    <AppLayout>
-        <UserRoleForm v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)" :role="role_id" />
+    <Head :title="title" />
+    <AppLayout :title="title">
+        <UserRoleForm v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)" :role="role_id"
+            page="role_list" />
         <template #breadcrumb>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
@@ -66,23 +69,11 @@ export default defineComponent({
                         </div>
                     </div>
                     <div class="card-body pt-1">
-                        <div class="fw-bold text-gray-600 mb-5">Total users with this role: 5</div>
+                        <div class="fw-bold text-gray-600 mb-5">Total users with this role: {{ role.users.length }}</div>
                         <div class="d-flex flex-column text-gray-600">
-                            <div class="d-flex align-items-center py-2">
-                                <span class="bullet bg-primary me-3"></span>All Admin Controls
-                            </div>
-                            <div class="d-flex align-items-center py-2">
-                                <span class="bullet bg-primary me-3"></span>View and Edit Financial
-                                Summaries
-                            </div>
-                            <div class="d-flex align-items-center py-2">
-                                <span class="bullet bg-primary me-3"></span>Enabled Bulk Reports
-                            </div>
-                            <div class="d-flex align-items-center py-2">
-                                <span class="bullet bg-primary me-3"></span>View and Edit Payouts
-                            </div>
-                            <div class="d-flex align-items-center py-2">
-                                <span class="bullet bg-primary me-3"></span>View and Edit Disputes
+                            <div class="d-flex align-items-center py-2" v-for="permission in role.permissions">
+                                <span class="bullet bg-primary me-3"></span>
+                                {{ permission?.description }}
                             </div>
                             <div class='d-flex align-items-center py-2'>
                                 <span class='bullet bg-primary me-3'></span>
@@ -91,7 +82,7 @@ export default defineComponent({
                         </div>
                     </div>
                     <div class="card-footer flex-wrap pt-0">
-                        <a href="/roles/user/view" class="btn btn-light btn-active-primary my-1 me-2">View Role</a>
+                        <Link :href="`role/${role.id}`" class="btn btn-light btn-active-primary my-1 me-2">View Role</Link>
                         <button type="button" class="btn btn-light btn-active-light-primary my-1 me-2"
                             @click="toggleModal(true, role.id)">Edit Role</button>
                         <button type="button" class="btn btn-light btn-active-danger my-1"

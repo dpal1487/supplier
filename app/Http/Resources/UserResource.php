@@ -21,6 +21,7 @@ class UserResource extends JsonResource
             'last_name' => $this->last_name,
             'email' => $this->email,
             'date_of_birth' => date('m/d/Y', strtotime($this->date_of_birth)),
+            'join_date' => date('m D Y h:i a', strtotime($this->created_at)),
             'gender' => ucfirst($this->gender),
             'status' => $this->status,
             'role' => $this->role?->role,

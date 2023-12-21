@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PermissionResource;
-use App\Models\PermissionMenu;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use App\Models\Permission;
+use App\Models\Role;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -21,24 +20,19 @@ class PermissionController extends Controller
             $permissions = $permissions->where('name', 'like', "%$request->q");
             // return $permissions->get();
         }
+        // return PermissionResource::collection($permissions->get());
         // return $permissions->roles()->get();
         return Inertia::render('UserACL/Permissions/Index', [
             'permissions' => PermissionResource::collection($permissions->paginate(10)->appends($request->all())),
         ]);
     }
 
-
-    public function create()
-    {
-        //
-    }
-
     public function store(Request $request)
     {
 
         $validator = Validator::make($request->all(), [
-            // 'name' => 'required|unique:permissions,name',
             'name' => 'required|string|max:255|unique:permissions,name',
+            'description' => 'required|string',
 
         ]);
         if ($validator->fails()) {
@@ -51,9 +45,9 @@ class PermissionController extends Controller
         if ($existingPermission) {
             $existingPermission->delete();
         }
-        Permission::create(['name' => $request->name . ' read']);
-        Permission::create(['name' => $request->name . ' write']);
-        Permission::create(['name' => $request->name . ' delete']);
+        Permission::create(['name' => $request->name . ' read', 'description' =>  $request->description . ' access.']);
+        Permission::create(['name' => $request->name . ' write', 'description' => $request->description . ' modify.']);
+        Permission::create(['name' => $request->name . ' delete', 'description' => $request->description . ' remove.']);
         return response()->json(createMessage('Permission'));
     }
     public function show($id)
@@ -79,6 +73,7 @@ class PermissionController extends Controller
         }
         $permission = Permission::where('id', $id)->update([
             'name' => $request->name,
+            'description' =>  $request->description
         ]);
         if ($permission) {
             return response()->json([

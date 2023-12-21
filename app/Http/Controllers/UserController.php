@@ -127,6 +127,7 @@ class UserController extends Controller
             ])) {
                 // assignRole
                 $role = Role::find($request->role);
+
                 if (count($user->roles) > 0) {
                     $user->roles()->sync($role); // Update the role
                 }
@@ -140,7 +141,7 @@ class UserController extends Controller
             }
             return redirect('/users')->with('flash', ['message' => 'Opps! something went wrong.']);
         }
-        return redirect('users')->with('error', "Your can't be edit super admin.");
+        return redirect('users')->withErrors(['message' => "Your can't be edit super admin."]);
     }
     public function destroy($id)
     {

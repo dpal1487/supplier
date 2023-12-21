@@ -12,7 +12,7 @@ import { Inertia } from '@inertiajs/inertia';
 
 export default defineComponent({
 
-    props: ['isEdit', 'show', 'role'],
+    props: ['isEdit', 'show', 'role', 'page'],
     emits: ['hidemodal'],
 
     setup() {
@@ -86,7 +86,13 @@ export default defineComponent({
                         if (response?.data?.success) {
                             toast.success(response?.data?.message)
                             this.processing = false;
-                            Inertia.get('role')
+
+                            if (this.page == 'role_list') {
+                                Inertia.get('role')
+                            }
+                            if (this.page == 'role_view') {
+                                Inertia.get('/role/' + this.role)
+                            }
                         }
                         else {
                             toast.error(response?.data?.message)
@@ -106,7 +112,7 @@ export default defineComponent({
         if (this.role !== '') {
             this.isLoading = true;
             const response = await axios.get(`/role/${this.role}/edit`);
-            const fetched_permissions = response?.data?.permissions;
+            const fetched_permissions = response?.data?.role?.permissions;
             const finalMutated_permissions = [];
             this.permissions?.forEach(m => {
                 const sets = fetched_permissions.filter(p => p.name?.startsWith(m));

@@ -155,7 +155,7 @@ export default defineComponent({
             <!--begin::Menu wrapper-->
             <div class="app-sidebar-wrapper">
                 <!--begin::Menu-->
-                <div class="scroll m-0" style="height: 594px;">
+                <div class="scroll customscrollbar m-0 h-600px">
                     <!--begin::Menu-->
                     <div class="menu menu-column menu-rounded menu-sub-indention px-3">
                         <!--begin:Menu item-->

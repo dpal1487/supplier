@@ -63,6 +63,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(UsersRole::class, 'user_id', 'id');
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'users_roles');
+    }
     public function completes()
     {
         return $this->HasMany(Respondent::class, 'user_id', 'id')->where('status', 'complete');

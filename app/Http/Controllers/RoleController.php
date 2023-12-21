@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\PermissionResource;
 use App\Http\Resources\RoleResource;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -38,8 +39,6 @@ class RoleController extends Controller
     }
     public function store(Request $request)
     {
-
-
         $validator = Validator::make($request->all(), [
             'role' => 'required|unique:roles,name',
         ]);
@@ -63,6 +62,31 @@ class RoleController extends Controller
         return response()->json(errorMessage());
     }
 
+    public function show(Request $request, int $id)
+    {
+
+        $role = Role::find($id);
+        $users = User::whereHas('roles', function ($query) use ($role) {
+            $query->where('slug', $role->slug);
+        })->where(function ($query) use ($request) {
+            $query->where('first_name', 'like', '%' . $request->q . '%')
+                ->orWhere('last_name', 'like', '%' . $request->q . '%')
+                ->orWhere('email', 'like', '%' . $request->q . '%');
+        })->with('roles');
+
+        return Inertia::render(
+            'UserACL/RoleView',
+            [
+                'role' => new RoleResource($role),
+                'users' => UserResource::collection($users->paginate(5)),
+            ]
+        );
+
+        // return response()->json([
+        //     'role' => new RoleResource($role),
+        //     'permissions' => PermissionResource::collection(Permission::all())
+        // ]);
+    }
     public function edit(int $id)
     {
         $role = Role::find($id);
@@ -72,7 +96,6 @@ class RoleController extends Controller
             'permissions' => PermissionResource::collection(Permission::all())
         ]);
     }
-
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -91,10 +114,13 @@ class RoleController extends Controller
             $permissions = $request->input('permissions');
             if (!empty($permissions)) {
                 $permissionIds = Permission::whereIn('name', $permissions)->pluck('id');
-                if (count($role->permissions) > 0) {
-                    $role->permissions()->sync($permissionIds);
+
+                // return (count($role->permissions) != 0);
+                if (count($role->permissions) == 0) {
+                    // return $role->permissions;
+                    $role->permissions()->attach($permissionIds);
                 }
-                $role->permissions()->attach($permissionIds);
+                $role->permissions()->sync($permissionIds);
             }
             return response()->json(updateMessage('Role'));
         }

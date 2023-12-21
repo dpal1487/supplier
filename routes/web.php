@@ -238,6 +238,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::group(['prefix' => 'role'], function () {
                 Route::get('/', 'index')->name('role.index');
                 Route::post('/store', 'store')->name('role.store');
+                Route::get('{id}', 'show')->name('role.show');
                 Route::get('{id}/edit', 'edit')->name('role.edit');
                 Route::post('{id}/update', 'update')->name('role.update');
                 Route::delete('delete/{id}', 'destroy')->name('role.destroy');
@@ -260,19 +261,19 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
 
     // Route::group(['middleware' => 'role:admin,account'], function () {
-        Route::get('invoice/download/{id}', [InvoiceController::class, 'downloadInvoice']);
+    Route::get('invoice/download/{id}', [InvoiceController::class, 'downloadInvoice']);
 
-        Route::controller(InvoiceController::class)->group(function () {
-            Route::get('/invoices', 'index')->name('invoice.index');
-            Route::group(['prefix' => 'invoice'], function () {
-                Route::get('create', 'create')->name('invoice.create');
-                Route::post('/store', 'store')->name('invoice.store');
-                Route::get('/{id}', 'show')->name('invoice.show');
-                Route::get('{id}/edit', 'edit')->name('invoice.edit');
-                Route::post('{id}/update', 'update')->name('invoice.update');
-            });
+    Route::controller(InvoiceController::class)->group(function () {
+        Route::get('/invoices', 'index')->name('invoice.index');
+        Route::group(['prefix' => 'invoice'], function () {
+            Route::get('create', 'create')->name('invoice.create');
+            Route::post('/store', 'store')->name('invoice.store');
+            Route::get('/{id}', 'show')->name('invoice.show');
+            Route::get('{id}/edit', 'edit')->name('invoice.edit');
+            Route::post('{id}/update', 'update')->name('invoice.update');
         });
-        Route::get('invoice/{id}/currency-value', [CurrencyController::class, 'currenctValue'])->name('invoice.currency-value');
+    });
+    Route::get('invoice/{id}/currency-value', [CurrencyController::class, 'currenctValue'])->name('invoice.currency-value');
     // });
     Route::controller(ExportExcelController::class)->group(function () {
         Route::get('export/excel', 'exportExcelFile')->name('export.excel');

@@ -107,7 +107,8 @@ export default defineComponent({
 						<tbody class="fw-semibold text-gray-600">
 							<tr v-for="(permission, index) in permissions.data" :key="index">
 								<td>{{ permission.name }}</td>
-								<td v-if="permission.role == []">{{ permission.role }}</td>
+								<td>{{ permission.description }}</td>
+								<td v-if="permission.role">{{ permission.role?.map(r => r.name).join(' , ') }}</td>
 								<td v-else>non</td>
 								<td>{{ permission.created_at }}</td>
 								<td class="">

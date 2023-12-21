@@ -26,6 +26,9 @@ export default defineComponent({
                 name: {
                     required,
                 },
+                description: {
+                    required,
+                }
             }
         }
     },
@@ -37,6 +40,7 @@ export default defineComponent({
             form: this.$inertia.form({
                 name: '',
                 id: '',
+                description: '',
             }),
         }
     },
@@ -73,6 +77,7 @@ export default defineComponent({
             this.isLoading = true;
             const response = await axios.get(`/permission/${this.id}/edit`);
             this.form.name = response?.data?.permission.name;
+            this.form.description = response?.data?.permission.description
             this.form.id = this.id;
             this.isLoading = false;
         }
@@ -85,7 +90,7 @@ export default defineComponent({
         <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
             <SectionLoader v-if="isLoading" :width="40" :height="40" />
             <form @submit.prevent="submit()" class="form">
-                <div class="fv-row mb-7">
+                <div class="fv-row mb-5">
                     <jet-label for="permission-name" value="Permission Name" />
                     <jet-input v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
                         ? 'is-invalid'
@@ -93,6 +98,17 @@ export default defineComponent({
                         " placeholder="Enter a permission name" />
 
                     <div v-for="(error, index) of v$.form.name.$errors" :key="index">
+                        <input-error :message="error.$message" />
+                    </div>
+                </div>
+                <div class="fv-row mb-5">
+                    <jet-label for="permission-description" value="Permission description" />
+                    <jet-input v-model="v$.form.description.$model" :class="v$.form.description.$errors.length > 0
+                        ? 'is-invalid'
+                        : ''
+                        " placeholder="Enter a permission description" />
+
+                    <div v-for="(error, index) of v$.form.description.$errors" :key="index">
                         <input-error :message="error.$message" />
                     </div>
                 </div>
@@ -106,8 +122,7 @@ export default defineComponent({
                 </div>
             </form>
         </div>
-        <div v-if="id">
-
+        <div v-if="form.id">
             <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
                 <div class="notice d-flex bg-light-warning rounded border-warning border border-dashed mb-9 p-6">
                     <span class="svg-icon svg-icon-2tx svg-icon-warning me-4">

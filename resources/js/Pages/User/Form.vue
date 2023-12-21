@@ -8,10 +8,10 @@ import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
-import { required} from "@vuelidate/validators";
+import { required } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
 export default defineComponent({
-    props: ["user", "role" , "userHasRoles"],
+    props: ["user", "role", "userHasRoles"],
     setup() {
         return { v$: useVuelidate() };
     },
