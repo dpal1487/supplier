@@ -28,7 +28,6 @@ export default defineComponent({
                     required
                 },
                 password: {
-                    required,
                 },
                 email: {
                     required,

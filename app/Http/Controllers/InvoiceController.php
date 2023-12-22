@@ -6,15 +6,12 @@ use App\Http\Resources\ClientListResource;
 use App\Models\Invoice;
 use App\Models\Client;
 use App\Models\InvoiceItem;
-
-use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\ClientResource;
 use App\Http\Resources\CurrencyResource;
 use App\Http\Resources\InvoiceListResource;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Currency;
 use Inertia\Inertia;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -79,7 +76,6 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
 
-        // return $request;
         $request->validate([
             'issue_date' => 'required',
             'due_date' => 'required',

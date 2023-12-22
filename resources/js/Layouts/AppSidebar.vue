@@ -156,7 +156,7 @@ export default defineComponent({
                                 $page?.props?.ziggy?.user?.role?.role?.slug
                             )
                                 " :href="navigation.link">
-                            <i :class="`${navigation.icon}  mx-2 fs-2`"></i>
+                            <i :class="`${navigation.icon} mx-2 fs-2`"></i>
                             {{ navigation.title }}
                             </Link>
                         </div>

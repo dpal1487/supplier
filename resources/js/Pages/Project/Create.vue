@@ -178,9 +178,9 @@ export default defineComponent({
             </li>
         </template>
         <JetValidationErrors />
-        <form @submit.prevent="submit" autocomplete="off" class="form d-flex flex-column flex-lg-row">
-            <div class="d-flex flex-column gap-7 gap-lg-10 w-lg-300px mb-7 me-lg-10">
-                <div class="card card-flush py-4">
+        <form @submit.prevent="submit" autocomplete="off" class="row">
+            <div class="col-12 com-md-4 col-lg-4 gap-5">
+                <div class="card mb-5 py-4 gap-5">
                     <div class="card-header">
                         <div class="card-title">
                             <h2>Status</h2>
@@ -202,7 +202,7 @@ export default defineComponent({
                         <div class="text-muted fs-7">Set the project status.</div>
                     </div>
                 </div>
-                <div class="card card-flush py-4">
+                <div class="card mb-5 py-4 gap-5">
                     <div class="card-header">
                         <div class="card-title">
                             <h2>Device Type</h2>
@@ -227,7 +227,7 @@ export default defineComponent({
                     </div>
                 </div>
 
-                <div class="card card-flush py-4">
+                <div class="card mb-5 py-4 gap-5">
                     <div class="card-header">
                         <div class="card-title">
                             <h2>Project Link Type</h2>
@@ -260,8 +260,8 @@ export default defineComponent({
                     </div>
                 </div>
             </div>
-            <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                <div class="card">
+            <div class="col-12 col-md-8 col-lg-8 ">
+                <div class="card mb-5">
                     <div class="card-header">
                         <div class="card-title">
                             <h2>General</h2>
@@ -349,7 +349,7 @@ export default defineComponent({
                         </div>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card mb-5">
                     <div class="card-header">
                         <div class="card-title">
                             <h2>Pricing</h2>
@@ -435,7 +435,7 @@ export default defineComponent({
                         </div>
                     </div>
                 </div>
-                <div class="d-flex justify-content-end">
+                <div class="d-flex justify-content-end ">
                     <Link href="/projects" class="btn btn-secondary me-5">
                     Discard
                     </Link>

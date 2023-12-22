@@ -127,11 +127,11 @@ class UserController extends Controller
             ])) {
                 // assignRole
                 $role = Role::find($request->role);
-
                 if (count($user->roles) > 0) {
                     $user->roles()->sync($role); // Update the role
+                } else {
+                    $user->roles()->attach($role);
                 }
-                $user->roles()->attach($role);
 
                 if ($request->action == "user.overview") {
                     return redirect('/user/' . $id)->with('flash', ['message' => 'User updated successfully.']);

@@ -15,9 +15,13 @@ class PermissionController extends Controller
     public function index(Request $request)
     {
         $permissions = new Permission();
+
         if (!empty($request->q)) {
             $permissions = $permissions->where('name', 'like', "%$request->q");
+            // return $permissions->get();
         }
+        // return PermissionResource::collection($permissions->get());
+        // return $permissions->roles()->get();
         return Inertia::render('UserACL/Permissions/Index', [
             'permissions' => PermissionResource::collection($permissions->paginate(10)->appends($request->all())),
         ]);
@@ -25,14 +29,19 @@ class PermissionController extends Controller
 
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:permissions,name',
             'description' => 'required|string',
+
         ]);
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first(), 'success' => false]);
         }
         $existingPermission = Permission::where('name', 'like', "%$request->name")->first();
+
+        // return $existingPermission;
+
         if ($existingPermission) {
             $existingPermission->delete();
         }
@@ -41,9 +50,14 @@ class PermissionController extends Controller
         Permission::create(['name' => $request->name . ' delete', 'description' => $request->description . ' remove.']);
         return response()->json(createMessage('Permission'));
     }
+    public function show($id)
+    {
+        //
+    }
     public function edit($id)
     {
         $permission = Permission::find($id);
+
         return response()->json([
             'success' => true,
             'permission' => new PermissionResource($permission)
@@ -74,6 +88,7 @@ class PermissionController extends Controller
     }
     public function destroy(Request $request)
     {
+
         if (Permission::where('id', $request->id)->delete()) {
             return response()->json(['success' => true, 'message' => 'Permission has been deleted successfully.']);
         }
@@ -84,9 +99,11 @@ class PermissionController extends Controller
         if ($permission->hasRole($request->role)) {
             return back()->with('message', 'Role exists.');
         }
+
         $permission->assignRole($request->role);
         return back()->with('message', 'Role assigned.');
     }
+
     public function removeRole(Permission $permission, Role $role)
     {
         if ($permission->hasRole($role)) {

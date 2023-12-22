@@ -76,6 +76,7 @@ export default defineComponent({
         window.Echo.channel('send-message').listen('SendMessage', (event) => {
             console.log("This is event message", event.title.project_name)
         });
+        console.log("This is event message", this.notifications)
     },
     computed: {
         notificationCount() {

@@ -147,21 +147,14 @@ export default defineComponent({
         </template>
         <JetValidationErrors />
         <form @submit.prevent="submit" autocomplete="off"
-            class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework">
-            <!--begin::Aside column-->
-            <div class="d-flex flex-column gap-7 gap-lg-10 w-xl-300px w-lg-300px mb-7 me-lg-10">
-                <!--begin::Status-->
-                <div class="card card-flush py-4">
-                    <!--begin::Card header-->
+            class="row">
+            <div class="col-12 col-lg-4 ">
+                <div class="card mb-5  gap-5">
                     <div class="card-header">
-                        <!--begin::Card title-->
                         <div class="card-title">
                             <h2>Status</h2>
                         </div>
-                        <!--end::Card title-->
                     </div>
-                    <!--end::Card header-->
-                    <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <div class="fv-row mb-2">
                             <Multiselect :can-clear="false" :options="status.data" label="label" valueProp="value"
@@ -176,24 +169,15 @@ export default defineComponent({
                         </div>
                         <div class="text-muted fs-7">Set the project status.</div>
                     </div>
-                    <!--end::Card body-->
                 </div>
-                <!--end::Status-->
-                <div class="card card-flush py-4">
-                    <!--begin::Card header-->
+                <div class="card mb-5 gap-5">
                     <div class="card-header">
-                        <!--begin::Card title-->
                         <div class="card-title">
                             <h2>Device Type</h2>
                         </div>
-                        <!--end::Card title-->
                     </div>
-                    <!--end::Card header-->
-
-                    <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <div class="fv-row mb-2">
-
                             <Multiselect :canClear="false" id="device-type" :options="devices" label="label"
                                 valueProp="value" class="form-control form-control-solid" placeholder="Select device"
                                 mode="tags" :close-on-select="false" :create-option="true" :class="v$.form.device_type.$errors.length > 0
@@ -209,21 +193,13 @@ export default defineComponent({
                             Set the project device type.
                         </div>
                     </div>
-                    <!--end::Card body-->
                 </div>
-
-                <div class="card card-flush py-4">
-                    <!--begin::Card header-->
+                <div class="card gap-5">
                     <div class="card-header">
-                        <!--begin::Card title-->
                         <div class="card-title">
                             <h2>Project Link Type</h2>
                         </div>
-                        <!--end::Card title-->
                     </div>
-                    <!--end::Card header-->
-
-                    <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <div class="fv-row mb-2">
                             <Multiselect :can-clear="false" :options="[
@@ -249,27 +225,18 @@ export default defineComponent({
                             Set the project link type.
                         </div>
                     </div>
-                    <!--end::Card body-->
                 </div>
             </div>
-            <!--end::Aside column-->
-
-            <!--begin::Main column-->
-            <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                <!--begin::General options-->
-                <div class="card card-flush py-4">
-                    <!--begin::Card header-->
+            <div class="col-12  col-lg-8">
+                <div class="card gap-5 mb-5">
                     <div class="card-header">
                         <div class="card-title">
                             <h2>General</h2>
                         </div>
                     </div>
-                    <!--end::Card header-->
-                    <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <div class="row mb-3">
                             <div class="col-6">
-                                <!--begin::Input group-->
                                 <div class="fv-row mb-3">
                                     <jet-label for="project-name" value="Project Name" />
                                     <jet-input id="project-name" type="text" placeholder="Enter project Name / ID"
@@ -282,9 +249,7 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
-                                <!--end::Input group-->
                             </div>
-                            <!--begin::Input group-->
                             <div class="col-6">
                                 <div class="fv-row">
                                     <jet-label for="project-client" value="Project Client" />
@@ -345,29 +310,19 @@ export default defineComponent({
                             </div>
                         </div>
                     </div>
-                    <!--end::Card header-->
                 </div>
-                <!--end::Automation-->
                 <div class="d-flex justify-content-end">
-                    <!--begin::Button-->
-
                     <Link :href="`/projects`" class="btn btn-light me-5">
                     Discard
                     </Link>
-                    <!--end::Button-->
-
-                    <!--begin::Button-->
                     <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
                         <div v-show="form.processing" class="spinner-border spinner-border-sm">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                         Save Changes
                     </button>
-
-                    <!--end::Button-->
                 </div>
             </div>
-            <!--end::Main column-->
         </form>
     </app-layout>
 </template>
