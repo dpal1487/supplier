@@ -26,7 +26,6 @@ class AccountController extends Controller
     public function index()
     {
         $user = Auth::user();
-
         return Inertia::render('Account/Overview', [
             'role' => $this->role,
             'user' => new UserResource($user),

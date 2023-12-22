@@ -6,6 +6,7 @@ import AppLayout from '@/Layouts/AppLayout.vue'
 import { Head, Link } from '@inertiajs/inertia-vue3';
 import UserRoleForm from './Components/UserRoleForm.vue';
 import utils from '../../utils.js';
+import ListPermissions from './Permissions/ListPermissions.vue';
 export default defineComponent({
     props: ['roles'],
     data() {
@@ -13,15 +14,16 @@ export default defineComponent({
             isEdit: false,
             role_id: '',
             showModal: false,
-            title: "User Role"
+            title: "User Role",
         }
     },
     components: {
-        AppLayout,
-        Head,
-        UserRoleForm,
-        Link
-    },
+    AppLayout,
+    Head,
+    UserRoleForm,
+    Link,
+    ListPermissions
+},
     methods: {
         toggleModal(value, role) {
             if (value, role) {
@@ -44,7 +46,8 @@ export default defineComponent({
             await utils.deleteIndexDialog(route('role.destroy', id), this.roles.data, index);
             this.isLoading = false;
         },
-    }
+    },
+
 })
 </script>
 <template>
@@ -70,16 +73,7 @@ export default defineComponent({
                     </div>
                     <div class="card-body pt-1">
                         <div class="fw-bold text-gray-600 mb-5">Total users with this role: {{ role.users.length }}</div>
-                        <div class="d-flex flex-column text-gray-600">
-                            <div class="d-flex align-items-center py-2" v-for="permission in role.permissions">
-                                <span class="bullet bg-primary me-3"></span>
-                                {{ permission?.description }}
-                            </div>
-                            <div class='d-flex align-items-center py-2'>
-                                <span class='bullet bg-primary me-3'></span>
-                                <em>and 7 more...</em>
-                            </div>
-                        </div>
+                        <ListPermissions :permissions="role.permissions" />
                     </div>
                     <div class="card-footer flex-wrap pt-0">
                         <Link :href="`role/${role.id}`" class="btn btn-light btn-active-primary my-1 me-2">View Role</Link>

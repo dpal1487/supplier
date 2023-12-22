@@ -2,7 +2,6 @@
 import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 import { Inertia } from "@inertiajs/inertia";
-
 export default defineComponent({
     props: ["projects", "status", "sidebar"],
     emits: ['check', 'toggleSidebar'],
@@ -147,20 +146,12 @@ export default defineComponent({
                     </svg>
                 </span>
             </button>
-            <!--end::Sidebar toggle-->
         </div>
-        <!--end::Logo-->
-        <!--begin::sidebar menu-->
         <div class="app-sidebar-menu overflow-hidden flex-column-fluid">
-            <!--begin::Menu wrapper-->
             <div class="app-sidebar-wrapper">
-                <!--begin::Menu-->
                 <div class="scroll customscrollbar m-0 h-600px">
-                    <!--begin::Menu-->
                     <div class="menu menu-column menu-rounded menu-sub-indention px-3">
-                        <!--begin:Menu item-->
                         <div class="menu-item m-0" v-for="(navigation, index) in navigations" :key="index">
-                            <!--begin:Menu link-->
                             <Link class="menu-link m-0" v-if="navigation?.role?.includes(
                                 $page?.props?.ziggy?.user?.role?.role?.slug
                             )
@@ -168,27 +159,17 @@ export default defineComponent({
                             <i :class="`${navigation.icon}  mx-2 fs-2`"></i>
                             {{ navigation.title }}
                             </Link>
-                            <!--end:Menu link-->
                         </div>
-                        <!--end:Menu item-->
                     </div>
-                    <!--end::Menu-->
-
                 </div>
-
-                <!--end::Menu-->
             </div>
-            <!--end::Menu wrapper-->
         </div>
-        <!--end::sidebar menu-->
-        <!--begin::Footer-->
         <div class="app-sidebar-footer flex-column-auto m-0 pb-6 px-6">
             <form method="post" @submit.prevent="logout">
                 <button type="submit"
                     class="btn btn-flex flex-center btn-custom btn-primary overflow-hidden text-nowrap px-0 h-40px w-100"
                     style="background-color: rgb(173 56 97);">
                     <span class="btn-label">Logout</span>
-                    <!--begin::Svg Icon | path: icons/duotune/general/gen005.svg-->
                     <span class="svg-icon btn-icon svg-icon-2 m-0">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path opacity="0.3"
@@ -200,10 +181,8 @@ export default defineComponent({
                             <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
                         </svg>
                     </span>
-                    <!--end::Svg Icon-->
                 </button>
             </form>
         </div>
-        <!--end::Footer-->
     </div>
 </template>

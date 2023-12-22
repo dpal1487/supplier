@@ -81,11 +81,6 @@ class RoleController extends Controller
                 'users' => UserResource::collection($users->paginate(5)),
             ]
         );
-
-        // return response()->json([
-        //     'role' => new RoleResource($role),
-        //     'permissions' => PermissionResource::collection(Permission::all())
-        // ]);
     }
     public function edit(int $id)
     {
