@@ -29,6 +29,18 @@ class MasterController extends Controller
             $surveys = $surveys->where('status', $request->status);
         }
         if (!empty($request->from_date)) {
+
+            if (empty($request->to_date)) {
+                $surveys = $surveys->whereDate('created_at', '>=', $request->from_date)
+                    ->whereDate('created_at', '<=', date(now()));
+            } else {
+                $surveys = $surveys->whereDate('created_at', '>=', $request->from_date)
+                    ->whereDate('created_at', '<=', $request->to_date);
+            }
+        }
+        if (!empty($request->to_date)) {
+
+            return date(now());
             $surveys = $surveys->whereDate('created_at', '>=', $request->from_date)
                 ->whereDate('created_at', '<=', $request->to_date);
         }
