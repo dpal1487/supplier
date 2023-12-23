@@ -113,18 +113,12 @@ export default defineComponent({
                 {{ question?.data?.question_key }}
             </li>
         </template>
-
-        <!--begin::Navbar-->
         <Header :question="question?.data" :answers="answers" />
-        <!-- {{ $page }} -->
-        <!--begin::details View-->
         <div class="card mb-5 mb-xl-10">
-            <!--begin::Card header-->
             <div class="card-header cursor-pointer">
-                <!--begin::Card title-->
                 <div class="card-title m-0">
                     <h3 class="fw-bold m-0">Manage Question </h3>
-                    <!-- {{ question }} -->
+
                 </div>
                 <!--end::Card title-->
                 <button class="btn btn-primary btn-sm align-self-center" v-if="!isEdit"
@@ -179,8 +173,8 @@ export default defineComponent({
                             <tbody class="fw-semibold text-gray-600">
                                 <tr v-for="(answer, index) in answers.data" :key="index">
 
-                                    <td class="text-gray-800 fs-5 fw-bold mb-1">
-                                        {{ answer.question?.question_key }}
+                                    <td class="text-gray-800 fs-5 fw-bold mb-1 text-capitalize">
+                                        {{ answer.question_key?.question_key }}
                                     </td>
                                     <td>{{ answer.answer }}</td>
                                     <td v-if="(answer.order_by == 1)">Ascending</td>

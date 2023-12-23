@@ -20,3 +20,8 @@ Broadcast::channel('create-project', function ($project) {
 Broadcast::channel('send-message', function ($project) {
     return true;
 });
+
+
+Broadcast::channel('notifications', function ($notifications) {
+    return true;
+});

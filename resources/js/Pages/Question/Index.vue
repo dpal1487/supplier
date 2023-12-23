@@ -7,13 +7,16 @@ import Multiselect from "@vueform/multiselect";
 import { Inertia } from "@inertiajs/inertia";
 import Loading from "vue-loading-overlay";
 import utils from "../../utils";
+import QuestionForm from "./Components/QuestionForm.vue";
 export default defineComponent({
-    props: ["questions"],
+    props: ["questions", "industries"],
 
     data() {
         return {
             form: {},
             title: "Question",
+            isModalOpen: false,
+            activeId: '',
             tbody: [
                 "Indusctry Name",
                 "Question",
@@ -31,6 +34,7 @@ export default defineComponent({
         Pagination,
         Multiselect,
         Loading,
+        QuestionForm
     },
     methods: {
         async confirmDelete(id, index) {
@@ -42,11 +46,24 @@ export default defineComponent({
             Inertia.get("/question", this.form);
         },
 
+        showQuestionForm(id) {
+            if (id) {
+                this.isModalOpen = true;
+                this.activeId = id;
+            }
+            this.isModalOpen = true;
+        },
+        hideQuestionForm() {
+            this.isModalOpen = false;
+        },
+
     },
 });
 </script>
 <template>
     <app-layout :title="title">
+        <QuestionForm :show="isModalOpen" @hidemodal="hideQuestionForm" :id="activeId" :questions="questions"
+            :industries="industries" />
         <template #breadcrumb>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
@@ -57,8 +74,11 @@ export default defineComponent({
         </template>
         <template #toolbar>
             <div class="d-flex align-items-center gap-2 gap-lg-3">
-                <Link href="/question/create" class="btn btn-sm fw-bold btn-primary">
-                <i class="bi bi-plus-circle"></i>Add New Question</Link>
+                <button class="btn btn-sm fw-bold btn-primary" @click="showQuestionForm()">
+                    <i class="bi bi-plus-circle"></i>Add New Question
+                </button>
+                <!-- <Link href="/question/create" class="btn btn-sm fw-bold btn-primary">
+                <i class="bi bi-plus-circle"></i>Add New Question</Link> -->
             </div>
         </template>
 
@@ -124,15 +144,20 @@ export default defineComponent({
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
                                             :aria-labelled:by="`dropdown-${question.id}`">
                                             <li class="menu-item px-3">
-                                                <Link
+                                                <!-- <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
                                                     :href="`/question/${question.id}/edit`">Edit
-                                                </Link>
+                                                </Link> -->
+                                                <button
+                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
+                                                    @click="showQuestionForm(question?.id)">
+                                                    <i class="bi bi-pencil"></i>Edit
+                                                </button>
                                             </li>
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/question/${question.id}`">View
+                                                    :href="`/question/${question.id}`"><i class="bi bi-eye"></i>View
                                                 </Link>
                                             </li>
                                             <li class="menu-item px-3">
@@ -141,7 +166,7 @@ export default defineComponent({
                                                 )
                                                     "
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
-                                                    Delete
+                                                   <i class="bi bi-trash"></i> Delete
                                                 </button>
                                             </li>
                                         </ul>

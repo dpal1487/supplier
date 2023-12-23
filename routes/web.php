@@ -215,6 +215,16 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::resource('question', QuestionController::class);
         Route::post('questions/delete', [QuestionController::class, 'selectDelete'])->name('questions.delete');
         // Route::resource('answer', AnswerController::class);
+        Route::controller(QuestionController::class)->group(function () {
+            Route::get('question', 'index')->name('question.index');
+            Route::group(['prefix' => 'question'], function () {
+                Route::post('create', 'store')->name('question.create');
+                Route::get('{id}/edit', 'edit')->name('question.edit');
+                Route::post('update', 'update')->name('question.update');
+                Route::delete('delete', 'destroy')->name('question.delete');
+            });
+        });
+
         Route::controller(AnswerController::class)->group(function () {
             Route::get('answers', 'index')->name('answers.index');
             Route::group(['prefix' => 'answer'], function () {

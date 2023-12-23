@@ -9,6 +9,7 @@ import { toast } from 'vue3-toastify';
 import axios from 'axios';
 import useVuelidate from '@vuelidate/core';
 import { Inertia } from '@inertiajs/inertia';
+import SectionLoader from '@/Components/SectionLoader.vue';
 
 export default defineComponent({
 
@@ -34,6 +35,7 @@ export default defineComponent({
             read: '',
             showModal: false,
             processing: false,
+            isLoading: false,
             admin_access: false,
             form: this.$inertia.form({
                 role: '',
@@ -64,6 +66,7 @@ export default defineComponent({
         JetLabel,
         JetInput,
         InputError,
+        SectionLoader
     },
     methods: {
         submit() {
@@ -154,87 +157,84 @@ export default defineComponent({
 
 <template>
     <Modal :show="show" :title="isEdit ? 'Edit Role' : 'Add Role'" @onhide="$emit('hidemodal', false)">
-        <div class="modal-body scroll-y mx-lg-5">
-            <form @submit.prevent="submit()" class="form">
-                <div class="d-flex flex-column scroll-y" data-kt-scroll="true"
-                    data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
-                    data-kt-scroll-offset="300px">
-                    <div class="fv-row mb-10">
-                        <jet-label value="Role Name" class="required" />
-                        <jet-input id="name" type="text" v-model="form.role" :class="v$.form.role.$errors.length > 0
-                            ? 'is-invalid'
-                            : ''
-                            " placeholder="Enter a role name" />
-                        <div v-for="(error, index) of v$.form.role.$errors" :key="index">
-                            <input-error :message="error.$message" />
-                        </div>
+        <SectionLoader v-if="isLoading" :width="40" :height="40" />
+        <form @submit.prevent="submit()" class="form" v-else>
+            <div class="d-flex flex-column mx-5">
+                <div class="fv-row mb-10">
+                    <jet-label value="Role Name" class="required" />
+                    <jet-input id="name" type="text" v-model="form.role" :class="v$.form.role.$errors.length > 0
+                        ? 'is-invalid'
+                        : ''
+                        " placeholder="Enter a role name" />
+                    <div v-for="(error, index) of v$.form.role.$errors" :key="index">
+                        <input-error :message="error.$message" />
                     </div>
-                    <div class="fv-row">
-                        <label class="fs-5 fw-bold form-label mb-2">Role Permissions</label>
-                        <div class="table-responsive">
-                            <table class="table align-middle table-row-dashed fs-6 gy-5">
-                                <tbody class="text-gray-600 fw-semibold">
-                                    <tr>
-                                        <td class="text-gray-800">Administrator Access
-                                            <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
-                                                title="Allows a full access to the system"></i>
-                                        </td>
-                                        <td>
-                                            <label class="form-check form-check-custom form-check-solid me-9"
-                                                style="width: fit-content;">
-                                                <input class="form-check-input" type="checkbox" v-model="admin_access"
-                                                    id="roles_select_all" />
-                                                <span class="form-check-label" for="roles_select_all">Select
-                                                    all</span>
+                </div>
+                <div class="fv-row">
+                    <label class="fs-5 fw-bold form-label mb-2">Role Permissions</label>
+                    <div class="table-responsive">
+                        <table class="table align-middle table-row-dashed fs-6 gy-5">
+                            <tbody class="text-gray-600 fw-semibold">
+                                <tr>
+                                    <td class="text-gray-800">Administrator Access
+                                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
+                                            title="Allows a full access to the system"></i>
+                                    </td>
+                                    <td>
+                                        <label class="form-check form-check-custom form-check-solid me-9"
+                                            style="width: fit-content;">
+                                            <input class="form-check-input" type="checkbox" v-model="admin_access"
+                                                id="roles_select_all" />
+                                            <span class="form-check-label" for="roles_select_all">Select
+                                                all</span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr v-for="(permission, index) in permissions" :key="index">
+                                    <td class="text-red-800 text-uppercase">{{ permission }} </td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <label
+                                                class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-8">
+                                                <input id="read" class="form-check-input" type="checkbox"
+                                                    :v-model="form.permissions[index]?.read"
+                                                    :checked="form.permissions[index]?.read || admin_access"
+                                                    @change="(event) => handleCheckChange(event, index, 'read')" />
+                                                <span class="form-check-label">Read</span>
                                             </label>
-                                        </td>
-                                    </tr>
-                                    <tr v-for="(permission, index) in permissions" :key="index">
-                                        <td class="text-red-800 text-uppercase">{{ permission }} </td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <label
-                                                    class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-8">
-                                                    <input id="read" class="form-check-input" type="checkbox"
-                                                        :v-model="form.permissions[index]?.read"
-                                                        :checked="form.permissions[index]?.read || admin_access"
-                                                        @change="(event) => handleCheckChange(event, index, 'read')" />
-                                                    <span class="form-check-label">Read</span>
-                                                </label>
-                                                <label
-                                                    class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-8">
-                                                    <input class="form-check-input" type="checkbox"
-                                                        :v-model="form.permissions[index]?.write"
-                                                        :disabled="!form.permissions[index]?.read"
-                                                        :checked="form.permissions[index]?.write"
-                                                        @change="(event) => handleCheckChange(event, index, 'write')" />
-                                                    <span class="form-check-label">Write</span>
-                                                </label>
-                                                <label class="form-check form-check-sm form-check-custom form-check-solid">
-                                                    <input class="form-check-input" type="checkbox"
-                                                        :v-model="form.permissions[index]?.delete"
-                                                        :disabled="!form.permissions[index]?.read"
-                                                        :checked="form.permissions[index]?.delete"
-                                                        @change="(event) => handleCheckChange(event, index, 'delete')" />
-                                                    <span class="form-check-label">Delete</span>
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                            <label
+                                                class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-8">
+                                                <input class="form-check-input" type="checkbox"
+                                                    :v-model="form.permissions[index]?.write"
+                                                    :disabled="!form.permissions[index]?.read"
+                                                    :checked="form.permissions[index]?.write"
+                                                    @change="(event) => handleCheckChange(event, index, 'write')" />
+                                                <span class="form-check-label">Write</span>
+                                            </label>
+                                            <label class="form-check form-check-sm form-check-custom form-check-solid">
+                                                <input class="form-check-input" type="checkbox"
+                                                    :v-model="form.permissions[index]?.delete"
+                                                    :disabled="!form.permissions[index]?.read"
+                                                    :checked="form.permissions[index]?.delete"
+                                                    @change="(event) => handleCheckChange(event, index, 'delete')" />
+                                                <span class="form-check-label">Delete</span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="text-center pt-15">
-                    <button type="reset" class="btn btn-light me-3" @onhide="$emit('hidemodal', false)">Discard</button>
-                    <button type="submit" class="btn btn-primary" :data-kt-indicator="processing ? 'on' : 'off'">
-                        <span class="indicator-label">Submit</span>
-                        <span class="indicator-progress">Please wait...
-                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                    </button>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div class="text-center pt-15">
+                <button type="reset" class="btn btn-light me-3" @onhide="$emit('hidemodal', false)">Discard</button>
+                <button type="submit" class="btn btn-primary" :data-kt-indicator="processing ? 'on' : 'off'">
+                    <span class="indicator-label">Submit</span>
+                    <span class="indicator-progress">Please wait...
+                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                </button>
+            </div>
+        </form>
     </Modal>
 </template>

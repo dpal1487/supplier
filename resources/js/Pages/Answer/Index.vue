@@ -74,7 +74,7 @@ export default defineComponent({
         </template>
 
         <Head :title="title" />
-        <AnswerForm :show="isModalOpen" @hidemodal="hideAnswerForm" :id="activeId" :questions="questions"/>
+        <AnswerForm :show="isModalOpen" @hidemodal="hideAnswerForm" :id="activeId" :questions="questions" />
         <div class="card">
             <div>
                 <form class="card-header justify-content-start p-5 gap-3" @submit.prevent="search()">

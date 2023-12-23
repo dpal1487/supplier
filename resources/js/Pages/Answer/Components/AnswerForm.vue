@@ -83,27 +83,6 @@ export default defineComponent({
                             toast.error(response.data.error)
                         }
                     })
-                // } else {
-                //     axios.post(this.route('answer.store'), this.form)
-                //         .then((response) => {
-                //             if (response.data.success) {
-                //                 toast.success(response.data.message)
-                //                 this.processing = false;
-                //                 if (this.form.add_more != true) {
-                //                     this.$emit('hidemodal')
-                //                     Inertia.get('/answer')
-                //                 }
-                //                 this.form.question = ''
-                //                 this.form.answer = ''
-                //                 this.form.order_by = ''
-                //             } else {
-                //                 toast.info(response.data.message)
-                //             }
-                //             if (response.data.error) {
-                //                 toast.error(response.data.error)
-                //             }
-                //         })
-                // }
             }
         },
     },
@@ -123,15 +102,15 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Modal :show="show" @onhide="$emit('hidemodal')" :title="id ? 'Edit Link Form' : 'Add New Answer'" page="Answer">
+    <Modal :show="show" @onhide="$emit('hidemodal')" :title="id ? 'Edit Answer Form' : 'Add New Answer'">
         <SectionLoader v-if="isLoading == true" :width="40" :height="40" />
         <div v-else>
             <JetValidationErrors />
             <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid">
                 <div class="card ">
                     <div class="card-body p-0">
-                        <div class="row col-md-12">
-                            <div class="fv-row col-6">
+                        <div class="row col-md-12 ">
+                            <div class="fv-row col-6 mb-5">
                                 <jet-label for="question" value="Question" />
                                 <Multiselect :canClear="false" :options="questions" label="question_key" valueProp="id"
                                     class="form-control form-control-lg form-control-solid" placeholder="Select One"
@@ -153,7 +132,7 @@ export default defineComponent({
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
-                            <div class="fv-row col-6">
+                            <div class="fv-row col-6 mb-5">
                                 <jet-label for="order_by" value="Order By" />
                                 <Multiselect :canClear="false" :options="order_by" label="name" valueProp="id"
                                     class="form-control form-control-lg form-control-solid" placeholder="Select One"

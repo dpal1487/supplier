@@ -476,7 +476,16 @@ export default defineComponent({
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
-
+                            <div class="mb-5">
+                                <label class="form-label fw-bold fs-6 text-gray-700" for="daysDropdown">Choose days:</label>
+                                <select class="form-control form-control-solid" v-model="form.selectedDays"
+                                    @change="updateDate">
+                                    <option value="0">0 days</option>
+                                    <option value="15">15 days</option>
+                                    <option value="30">30 days</option>
+                                    <option value="45">45 days</option>
+                                </select>
+                            </div>
                             <div class="mb-5">
                                 <label class="form-label fw-bold fs-6 text-gray-700">Due Date</label>
                                 <input type="date" v-model="v$.form.due_date.$model" class="form-control form-control-solid"
@@ -489,16 +498,7 @@ export default defineComponent({
                                 </div>
                             </div>
 
-                            <div class="mb-5">
-                                <label class="form-label fw-bold fs-6 text-gray-700" for="daysDropdown">Choose days:</label>
-                                <select class="form-control form-control-solid" v-model="form.selectedDays"
-                                    @change="updateDate">
-                                    <option value="0">0 days</option>
-                                    <option value="15">15 days</option>
-                                    <option value="30">30 days</option>
-                                    <option value="45">45 days</option>
-                                </select>
-                            </div>
+
                             <div class="separator separator-dashed mb-8"></div>
                             <div class="mb-0">
                                 <button type="submit" href="#" class="btn btn-primary w-100" id="kt_invoice_submit_button">

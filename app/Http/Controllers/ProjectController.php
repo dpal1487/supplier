@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationEvent;
 use App\Events\SendMessage;
 use Inertia\Inertia;
 use App\Models\Client;
@@ -159,12 +160,12 @@ class ProjectController extends Controller
                 $activity = ProjectActivity::create([
                     "project_id" => $project->project_id,
                     "type_id" => "status",
-                    "text" => $request->project_name .' was created',
+                    "text" => $request->project_name . ' was created',
                     "user_id"   => Auth::user()->id,
 
                 ]);
                 broadcast(new SendMessage($project));
-                auth()->user()->notify(new ActionNotification($project, auth()->user(),$request->project_name .' was created'));
+                auth()->user()->notify(new ActionNotification($project, auth()->user(), $request->project_name . ' was created'));
 
                 if (!empty($request->add_more)) {
                     return redirect("/project/create")->with('flash', createMessage('Project'));
@@ -237,12 +238,12 @@ class ProjectController extends Controller
             $activity = ProjectActivity::create([
                 "project_id" => $project->project_id,
                 "type_id" => "status",
-                "text" => $request->project_name .' was clone',
+                "text" => $request->project_name . ' was clone',
                 "user_id"   => Auth::user()->id,
 
             ]);
             broadcast(new SendMessage($project));
-            auth()->user()->notify(new ActionNotification($project, auth()->user(),$request->project_name .' was clone'));
+            auth()->user()->notify(new ActionNotification($project, auth()->user(), $request->project_name . ' was clone'));
             return response()->json(createMessage('Project Clone'));
         }
         return redirect()->back()->withErrors(errorMessage());
@@ -272,6 +273,7 @@ class ProjectController extends Controller
     {
         $project = Project::find($id);
 
+
         return Inertia::render('Project/Edit', [
             'project' => new ProjectResource($project),
             'clients' => $this->clients,
@@ -282,6 +284,8 @@ class ProjectController extends Controller
     public function update(Request $request, $id)
     {
         $project = Project::find($id);
+
+
         $request->validate([
             'project_name' => 'required',
             'client' => 'required',
@@ -305,12 +309,15 @@ class ProjectController extends Controller
             $activity = ProjectActivity::create([
                 "project_id" => $id,
                 "type_id" => "status",
-                "text" => $request->project_name ." was updated",
+                "text" => $request->project_name . " was updated",
                 "user_id"   => Auth::user()->id,
 
             ]);
+            $user_name =  auth()->user()->first_name . " " . auth()->user()->last_name;
+
             broadcast(new SendMessage($project));
-            auth()->user()->notify(new ActionNotification($project, auth()->user(),$request->project_name .' was updated'));
+            event(new NotificationEvent(['data' => 'Project - ' . $project->project_name . ' with id - ' . $project->project_id . ' was updated by ' . $user_name . '.', 'type' => 'notification', 'message' => 'Project - ' . $project->project_id]));
+            auth()->user()->notify(new ActionNotification($project, auth()->user(), $request->project_name . ' was updated'));
             if ($request->action == 'project_show') {
                 return redirect('project/' . $id)->with('flash', updateMessage('Project'));
             }
@@ -326,12 +333,12 @@ class ProjectController extends Controller
             $activity = ProjectActivity::create([
                 "project_id" => $project->project_id,
                 "type_id" => "status",
-                "text" => $project->project_name .' was deleted',
+                "text" => $project->project_name . ' was deleted',
                 "user_id"   => Auth::user()->id,
 
             ]);
             broadcast(new SendMessage($this->project($id)));
-            auth()->user()->notify(new ActionNotification($this->project($id), Auth::user() , $project->project_name .' was deleted'));
+            auth()->user()->notify(new ActionNotification($this->project($id), Auth::user(), $project->project_name . ' was deleted'));
 
             ProjectLink::where('project_id', $id)->delete();
             return response()->json(deleteMessage('Project'));
@@ -341,7 +348,7 @@ class ProjectController extends Controller
 
     public function status(Request $request)
     {
-        $notification = $this->project($request->id)->project_name." has been " . $request->status ;
+        $notification = $this->project($request->id)->project_name . " has been " . $request->status;
 
         if ($request->status == 'close') {
             $respondents = Respondent::where('project_id', '=', $request->id)->get();
@@ -371,7 +378,7 @@ class ProjectController extends Controller
 
             ]);
             broadcast(new SendMessage($this->project($request->id)));
-            auth()->user()->notify(new ActionNotification($this->project($request->id), Auth::user() , $notification));
+            auth()->user()->notify(new ActionNotification($this->project($request->id), Auth::user(), $notification));
             if (Project::where(['id' => $request->id])->update(['status' => $request->status])) {
                 return response()->json(updateMessage('Project status'));
             }
@@ -385,7 +392,7 @@ class ProjectController extends Controller
             ]);
 
             broadcast(new SendMessage($this->project($request->id)));
-            auth()->user()->notify(new ActionNotification($this->project($request->id), Auth::user() , $notification));
+            auth()->user()->notify(new ActionNotification($this->project($request->id), Auth::user(), $notification));
             if (Project::where(['id' => $request->id])->update(['status' => $request->status])) {
                 return response()->json(updateMessage('Project status'));
             }
@@ -443,7 +450,7 @@ class ProjectController extends Controller
                     "user_id"   => Auth::user()->id,
                 ]);
                 broadcast(new SendMessage($this->project($request->id)));
-                auth()->user()->notify(new ActionNotification($this->project($request->id), Auth::user() , "Project " . $this->project($request->id)->project_name . " import",));
+                auth()->user()->notify(new ActionNotification($this->project($request->id), Auth::user(), "Project " . $this->project($request->id)->project_name . " import",));
 
                 return response()->json(['success' => true, 'message' => 'Import file successfully']);
             }
@@ -461,7 +468,7 @@ class ProjectController extends Controller
                 "user_id"   => Auth::user()->id,
             ]);
             broadcast(new SendMessage($this->project($id)));
-            auth()->user()->notify(new ActionNotification($this->project($id), Auth::user() , $this->project($id)->project_name . " export",));
+            auth()->user()->notify(new ActionNotification($this->project($id), Auth::user(), $this->project($id)->project_name . " export",));
 
             return Excel::download(new ExportIdExport($project->id), $project->project_id . '.xlsx');
         }
@@ -477,7 +484,7 @@ class ProjectController extends Controller
                 "user_id"   => Auth::user()->id,
             ]);
             broadcast(new SendMessage($this->project($id)));
-            auth()->user()->notify(new ActionNotification($this->project($id), Auth::user() , $this->project($id)->project_name . " report download",));
+            auth()->user()->notify(new ActionNotification($this->project($id), Auth::user(), $this->project($id)->project_name . " report download",));
 
             return Excel::download(new ProjectReport($id), $project->project_name . '.xlsx');
         }

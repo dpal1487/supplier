@@ -19,6 +19,7 @@ class AnswerResources extends JsonResource
             'answer' => $this->answer,
             'order_by' => $this->order_by,
             'question' => $this->question?->id,
+            'question_key' => $this->question,
         ];
     }
 }

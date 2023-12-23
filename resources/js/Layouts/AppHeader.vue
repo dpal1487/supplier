@@ -3,6 +3,7 @@ import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 import axios from "axios";
 import { Inertia } from "@inertiajs/inertia";
+import { toast } from "vue3-toastify";
 
 // const html = document.getElementsByTagName('html')[0];
 // const theme = window.localStorage.getItem('theme');
@@ -70,13 +71,44 @@ export default defineComponent({
         handleThemeChange(theme) {
             this.theme = theme;
             window.localStorage.setItem("theme", theme);
-        }
+        },
+        showWebNotification(message) {
+            if ('Notification' in window) {
+                Notification.requestPermission().then((permission) => {
+                    if (permission === 'granted') {
+                        const options = {
+                            body: message.data,
+                            icon: '/assets/images/logo-light.png', // Replace with the path to your icon
+                            // Other options as needed
+                        };
+                        new Notification(message.message, options);
+                    }
+                });
+            }
+        },
     },
     mounted() {
         window.Echo.channel('send-message').listen('SendMessage', (event) => {
-            console.log("This is event message", event.title.project_name)
+            // console.log("This is event send message message", event.title.project_name)
         });
-        console.log("This is event message", this.notifications)
+
+
+        window.Echo.channel('notifications')
+            .listen('NotificationEvent', (data) => {
+                if (data.type == 'notification') {
+                    // window notification
+                    this.showWebNotification(data);
+                    // in app notification
+                    toast.success(data.data, {
+                        position: 'bottom-right', // Specify the position (top-left, top-center, top-right, etc.)
+                        duration: 5000, // Set the duration in milliseconds
+                        // color: '#42b983', // Specify the background color
+                        iconColor: '#ffffff', // Specify the icon color
+                        iconSize: '504px', // Specify the icon size
+                        padding: '100px', // Specify the padding
+                    });
+                }
+            });
     },
     computed: {
         notificationCount() {

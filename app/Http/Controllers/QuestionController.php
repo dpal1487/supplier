@@ -16,7 +16,7 @@ class QuestionController extends Controller
     public function index(Request $request)
     {
         $questions = new Question();
-
+        $industries = Industry::get();
         if (!empty($request->q)) {
             $questions = $questions
                 ->whereHas('industry', function ($query) use ($request) {
@@ -30,6 +30,7 @@ class QuestionController extends Controller
         // return QuestionResources::collection($questions->paginate(10));
         return Inertia::render('Question/Index', [
             'questions' => QuestionResources::collection($questions->paginate(10)->appends($request->all())),
+            'industries' => $industries
         ]);
     }
 
@@ -62,9 +63,13 @@ class QuestionController extends Controller
             'language' => $request->language,
         ]);
         if ($question) {
-            return redirect('question')->with('flash', createMessage('Question'));
+
+            return response()->json(createMessage('Question'));
+            // return redirect('question')->with('flash', createMessage('Question'));
         }
-        return redirect('question')->with('flash', errorMessage());
+        return response()->json(errorMessage());
+
+        // return redirect('question')->with('flash', errorMessage());
     }
 
     /**
@@ -92,10 +97,15 @@ class QuestionController extends Controller
     {
         $industries = Industry::get();
 
-        return Inertia::render('Question/Form', [
+        return response()->json([
             'question' => new questionResources($question),
             'industries' => $industries,
         ]);
+
+        // return Inertia::render('Question/Form', [
+        //     'question' => new questionResources($question),
+        //     'industries' => $industries,
+        // ]);
     }
 
     /**
@@ -105,7 +115,7 @@ class QuestionController extends Controller
      * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Question $question)
+    public function update(Request $request)
     {
         $request->validate([
             'question_key' => 'required',
@@ -114,18 +124,25 @@ class QuestionController extends Controller
             'industry' => 'required',
             'language' => 'required',
         ]);
-        $question = question::where(['id' => $question->id])->update([
-            'question_key' => $request->question_key,
-            'text' => $request->text,
-            'type' => $request->type,
-            'industry_id' => $request->industry,
-            'language' => $request->language,
-        ]);
-        if ($question) {
-            return redirect('question')->with('flash', updateMessage('Question'));
-        } else {
-            return redirect('question')->with('flash', errorMessage());
+
+        $data = Question::where(['id' => $request->id])->first();
+        if ($data) {
+
+
+            $question = $data->update([
+                'question_key' => $request->question_key,
+                'text' => $request->text,
+                'type' => $request->type,
+                'industry_id' => $request->industry,
+                'language' => $request->language,
+            ]);
+            if ($question > 0) {
+                return response()->json(updateMessage('Question'));
+            } else {
+                return response()->json(errorMessage());
+            }
         }
+        return redirect()->back();
     }
 
     /**
