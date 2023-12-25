@@ -51,6 +51,10 @@ class ProjectController extends Controller
 
         return $project;
     }
+    public function user_details()
+    {
+        return  auth()->user()->first_name . " " . auth()->user()->last_name;
+    }
     public function index(Request $request)
     {
         if (!empty($request->order_by)) {
@@ -165,6 +169,12 @@ class ProjectController extends Controller
 
                 ]);
                 broadcast(new SendMessage($project));
+                broadcast(new NotificationEvent([
+                    'user_id' => auth()->user()->id,
+                    'message' => 'Project - ' . $project->project_name . ' with id - ' . $project->project_id . ' was created by ' . $this->user_details() . '.',
+                    'type' => 'notification',
+                    'title' => 'Project - ' . $project->project_id
+                ]));
                 auth()->user()->notify(new ActionNotification($project, auth()->user(), $request->project_name . ' was created'));
 
                 if (!empty($request->add_more)) {
@@ -195,9 +205,7 @@ class ProjectController extends Controller
                 ];
             }
         }
-
         $project = Project::where('id', $request->id)->first();
-
         $projectLinks = ProjectLink::where('project_id', $project->id)->get();
         $id = IdGenerator::generate(['table' => 'projects', 'field' => 'project_id', 'length' => 10, 'prefix' => 'ARS' . date('ym')]);
         $autoNumber =  time();
@@ -240,9 +248,14 @@ class ProjectController extends Controller
                 "type_id" => "status",
                 "text" => $request->project_name . ' was clone',
                 "user_id"   => Auth::user()->id,
-
             ]);
             broadcast(new SendMessage($project));
+            broadcast(new NotificationEvent([
+                'user_id' => auth()->user()->id,
+                'message' => 'Project - ' . $project->project_name . ' with id - ' . $project->project_id . ' was clone by ' . $this->user_details() . '.',
+                'type' => 'notification',
+                'title' => 'Project - ' . $project->project_id
+            ]));
             auth()->user()->notify(new ActionNotification($project, auth()->user(), $request->project_name . ' was clone'));
             return response()->json(createMessage('Project Clone'));
         }
@@ -273,7 +286,6 @@ class ProjectController extends Controller
     {
         $project = Project::find($id);
 
-
         return Inertia::render('Project/Edit', [
             'project' => new ProjectResource($project),
             'clients' => $this->clients,
@@ -284,8 +296,6 @@ class ProjectController extends Controller
     public function update(Request $request, $id)
     {
         $project = Project::find($id);
-
-
         $request->validate([
             'project_name' => 'required',
             'client' => 'required',
@@ -313,10 +323,13 @@ class ProjectController extends Controller
                 "user_id"   => Auth::user()->id,
 
             ]);
-            $user_name =  auth()->user()->first_name . " " . auth()->user()->last_name;
-
-            broadcast(new SendMessage($project));
-            event(new NotificationEvent(['data' => 'Project - ' . $project->project_name . ' with id - ' . $project->project_id . ' was updated by ' . $user_name . '.', 'type' => 'notification', 'message' => 'Project - ' . $project->project_id]));
+            broadcast(new SendMessage($this->project($id)));
+            broadcast(new NotificationEvent([
+                'user_id' => auth()->user()->id,
+                'message' => 'Project - ' . $this->project($id)->project_name . ' with id - ' . $this->project($id)->project_id . ' was updated by ' . $this->user_details() . '.',
+                'type' => 'notification',
+                'title' => 'Project - ' . $this->project($id)->project_id
+            ]));
             auth()->user()->notify(new ActionNotification($project, auth()->user(), $request->project_name . ' was updated'));
             if ($request->action == 'project_show') {
                 return redirect('project/' . $id)->with('flash', updateMessage('Project'));
@@ -338,7 +351,14 @@ class ProjectController extends Controller
 
             ]);
             broadcast(new SendMessage($this->project($id)));
-            auth()->user()->notify(new ActionNotification($this->project($id), Auth::user(), $project->project_name . ' was deleted'));
+
+            broadcast(new NotificationEvent([
+                'user_id' => auth()->user()->id,
+                'message' => 'Project - ' . $this->project($id)->project_name . ' with id - ' . $this->project($id)->project_id . ' was deleted by ' . $this->user_details() . '.',
+                'type' => 'notification',
+                'title' => 'Project - ' . $this->project($id)->project_id
+            ]));
+            auth()->user()->notify(new ActionNotification($this->project($id), Auth::user(), $this->project($id)->project_name . ' was deleted'));
 
             ProjectLink::where('project_id', $id)->delete();
             return response()->json(deleteMessage('Project'));
@@ -349,7 +369,6 @@ class ProjectController extends Controller
     public function status(Request $request)
     {
         $notification = $this->project($request->id)->project_name . " has been " . $request->status;
-
         if ($request->status == 'close') {
             $respondents = Respondent::where('project_id', '=', $request->id)->get();
             if (count($respondents) > 0) {
@@ -378,6 +397,12 @@ class ProjectController extends Controller
 
             ]);
             broadcast(new SendMessage($this->project($request->id)));
+            broadcast(new NotificationEvent([
+                'user_id' => auth()->user()->id,
+                'message' => 'Project - ' . $this->project($request->id)->project_name . ' with id - ' . $this->project($request->id)->project_id . ' has been ' . $request->status . ' ' . $this->user_details() . '.',
+                'type' => 'notification',
+                'title' => 'Project - ' . $this->project($request->id)->project_id
+            ]));
             auth()->user()->notify(new ActionNotification($this->project($request->id), Auth::user(), $notification));
             if (Project::where(['id' => $request->id])->update(['status' => $request->status])) {
                 return response()->json(updateMessage('Project status'));
@@ -392,6 +417,12 @@ class ProjectController extends Controller
             ]);
 
             broadcast(new SendMessage($this->project($request->id)));
+            broadcast(new NotificationEvent([
+                'user_id' => auth()->user()->id,
+                'message' => 'Project - ' . $this->project($request->id)->project_name . ' with id - ' . $this->project($request->id)->project_id . ' has been ' . $request->status . ' ' . $this->user_details() . '.',
+                'type' => 'notification',
+                'title' => 'Project - ' . $this->project($request->id)->project_id
+            ]));
             auth()->user()->notify(new ActionNotification($this->project($request->id), Auth::user(), $notification));
             if (Project::where(['id' => $request->id])->update(['status' => $request->status])) {
                 return response()->json(updateMessage('Project status'));
@@ -450,6 +481,12 @@ class ProjectController extends Controller
                     "user_id"   => Auth::user()->id,
                 ]);
                 broadcast(new SendMessage($this->project($request->id)));
+                broadcast(new NotificationEvent([
+                    'user_id' => auth()->user()->id,
+                    'message' => 'Project - ' . $this->project($request->id)->project_name . ' with id - ' . $this->project($request->id)->project_id . ' was imported by ' . $this->user_details() . '.',
+                    'type' => 'notification',
+                    'title' => 'Project - ' . $this->project($request->id)->project_id
+                ]));
                 auth()->user()->notify(new ActionNotification($this->project($request->id), Auth::user(), "Project " . $this->project($request->id)->project_name . " import",));
 
                 return response()->json(['success' => true, 'message' => 'Import file successfully']);
@@ -468,6 +505,12 @@ class ProjectController extends Controller
                 "user_id"   => Auth::user()->id,
             ]);
             broadcast(new SendMessage($this->project($id)));
+            broadcast(new NotificationEvent([
+                'user_id' => auth()->user()->id,
+                'message' => 'Project - ' . $this->project($id)->project_name . ' with id - ' . $this->project($id)->project_id . ' was exported by ' . $this->user_details() . '.',
+                'type' => 'notification',
+                'title' => 'Project - ' . $this->project($id)->project_id
+            ]));
             auth()->user()->notify(new ActionNotification($this->project($id), Auth::user(), $this->project($id)->project_name . " export",));
 
             return Excel::download(new ExportIdExport($project->id), $project->project_id . '.xlsx');
@@ -484,6 +527,12 @@ class ProjectController extends Controller
                 "user_id"   => Auth::user()->id,
             ]);
             broadcast(new SendMessage($this->project($id)));
+            broadcast(new NotificationEvent([
+                'user_id' => auth()->user()->id,
+                'message' => 'Project - ' . $this->project($id)->project_name . ' with id - ' . $this->project($id)->project_id . ' was reported by ' . $this->user_details() . '.',
+                'type' => 'notification',
+                'title' => 'Project - ' . $this->project($id)->project_id
+            ]));
             auth()->user()->notify(new ActionNotification($this->project($id), Auth::user(), $this->project($id)->project_name . " report download",));
 
             return Excel::download(new ProjectReport($id), $project->project_name . '.xlsx');

@@ -48,7 +48,7 @@ export default {
             this.isMobile = false;
             this.sidebar = true;
         }
-        
+
         const handleWindowResize = () => {
             resolution = window.innerWidth;
             let mobile = resolution <= 768;
@@ -66,10 +66,11 @@ export default {
 
         <Head :title="title" />
         <AppSidebar v-if="true" :sidebar="sidebar" @toggleSidebar="toggleSidebar" />
-
-        <AppHeader :sidebar="sidebar" :isMobile="isMobile" />
+        <keep-alive>
+            <AppHeader :sidebar="sidebar" :isMobile="isMobile" />
+        </keep-alive>
         <main :style="`margin-left: ${(sidebar && !isMobile) ? 'var(--kt-app-sidebar-width)' : ''}`"
-            
+
             class="app-wrapper flex-column flex-row-fluid">
             <div class="app-main flex-column flex-row-fluid">
                 <div class="d-flex flex-column flex-column-fluid">

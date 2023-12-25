@@ -4,15 +4,7 @@ import { Link } from "@inertiajs/inertia-vue3";
 import axios from "axios";
 import { Inertia } from "@inertiajs/inertia";
 import { toast } from "vue3-toastify";
-
-// const html = document.getElementsByTagName('html')[0];
-// const theme = window.localStorage.getItem('theme');
-// if (!theme || theme === 'light') {
-//     html.setAttribute("data-theme", "light")
-// } else {
-//     html.setAttribute("data-theme", theme)
-// }
-
+import _debounce from "lodash/debounce";
 export default defineComponent({
     props: ["sidebar", "isMobile"],
     data() {
@@ -22,7 +14,8 @@ export default defineComponent({
             isNotifLoading: false,
             notificationDrop: false,
             themeModeDrop: false,
-            form: {}
+            form: {},
+            notificationQueue: []
         };
     },
     components: {
@@ -37,6 +30,27 @@ export default defineComponent({
             } else {
                 html.setAttribute("data-theme", theme)
             }
+        },
+        notificationQueue: {
+            handler(value, oldValue) {
+                if (this.notificationQueue?.[0]) {
+                    const data = this.notificationQueue?.[0];
+                    if (this.$page.props.user.id !== data.user_id) {
+                        this.showWebNotification(data);
+                        toast.success(data.message, {
+                            position: 'bottom-right',
+                            duration: 5000,
+                            iconColor: '#ffffff',
+                            iconSize: '504px',
+                            padding: '100px',
+                            onClose: () => {
+                                this.dequeueNotification()
+                            },
+                        });
+                    }
+                }
+            },
+            deep: true
         }
     },
 
@@ -72,19 +86,25 @@ export default defineComponent({
             this.theme = theme;
             window.localStorage.setItem("theme", theme);
         },
-        showWebNotification(message) {
+        showWebNotification(data) {
             if ('Notification' in window) {
                 Notification.requestPermission().then((permission) => {
                     if (permission === 'granted') {
                         const options = {
-                            body: message.data,
-                            icon: '/assets/images/logo-light.png', // Replace with the path to your icon
-                            // Other options as needed
+                            body: data.message,
+                            icon: '/assets/images/logo-light.png',
                         };
-                        new Notification(message.message, options);
+                        new Notification(data.title, options);
                     }
                 });
             }
+        },
+
+        enqueueNotification(notification) {
+            this.notificationQueue.push(notification);
+        },
+        dequeueNotification() {
+            this.notificationQueue.shift();
         },
     },
     mounted() {
@@ -92,29 +112,23 @@ export default defineComponent({
             // console.log("This is event send message message", event.title.project_name)
         });
 
-
         window.Echo.channel('notifications')
             .listen('NotificationEvent', (data) => {
                 if (data.type == 'notification') {
-                    // window notification
-                    this.showWebNotification(data);
-                    // in app notification
-                    toast.success(data.data, {
-                        position: 'bottom-right', // Specify the position (top-left, top-center, top-right, etc.)
-                        duration: 5000, // Set the duration in milliseconds
-                        // color: '#42b983', // Specify the background color
-                        iconColor: '#ffffff', // Specify the icon color
-                        iconSize: '504px', // Specify the icon size
-                        padding: '100px', // Specify the padding
-                    });
+                    this.enqueueNotification(data);
                 }
             });
     },
+
     computed: {
         notificationCount() {
             return this.notifications.length;
         },
+        currentNotification() {
+            return this.notificationQueue[0];
+        },
     },
+
 });
 </script>
 <template>
@@ -129,6 +143,7 @@ export default defineComponent({
                     </div>
                 </div>
                 <div class="app-navbar flex-shrink-0">
+                    {{ JSON.stringify(notificationQueue) }}
                     <div class="app-navbar-item ms-1 ms-md-3">
                         <form @submit.prevent="search" class="card-header justify-content-start py-4 px-4 gap-2 gap-md-5">
                             <div class="d-flex align-items-center position-relative">
