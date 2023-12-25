@@ -143,7 +143,6 @@ export default defineComponent({
                     </div>
                 </div>
                 <div class="app-navbar flex-shrink-0">
-                    {{ JSON.stringify(notificationQueue) }}
                     <div class="app-navbar-item ms-1 ms-md-3">
                         <form @submit.prevent="search" class="card-header justify-content-start py-4 px-4 gap-2 gap-md-5">
                             <div class="d-flex align-items-center position-relative">
