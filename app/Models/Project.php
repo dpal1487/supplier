@@ -50,10 +50,7 @@ class Project extends Model
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
-    public function country()
-    {
-        return $this->hasOne(Country::class, 'id', 'country_id');
-    }
+   
     public function total()
     {
         return $this->hasMany(Respondent::class, 'project_id', 'id');

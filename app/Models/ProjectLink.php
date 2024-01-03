@@ -17,9 +17,12 @@ class ProjectLink extends Model
         'ir',
         'sample_size',
         'status',
-        'country_id',
         'target',
-        'project_link'
+        'project_link',
+        'country_id',
+        'state',
+        'city',
+        'zipcode',
     ];
     use HasFactory;
     protected $primaryKey = 'id';

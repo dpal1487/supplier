@@ -67,6 +67,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
         Route::get('project/create', 'create')->name('project.create');
 
+        //project state city
+
+        Route::get('project/state', 'getState')->name('project.state');
+
+        Route::get('project/city', 'getCity')->name('project.city');
+
         Route::post('project/store', 'store')->name('project.store');
 
         Route::get('/project/{id}',  'show')->name('project.show');
@@ -74,6 +80,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('project/{id}/edit', 'edit')->name('project.edit');
 
         Route::post('project/{id}/update', 'update')->name('project.update');
+
         //Project Suppliers
         Route::get('project/{id}/suppliers', 'suppliers')->name('project.suppliers');
 
@@ -83,7 +90,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::delete('project/{id}', 'destroy')->name('project.destroy');
 
         Route::post('project/status', 'status')->name('project.status');
-
 
         // Clone Project
         Route::post('project/clone', 'projectClone')->name('project.clone');

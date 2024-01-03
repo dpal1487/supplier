@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\SupplierSurvey;
-use App\Models\Survey;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 

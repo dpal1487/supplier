@@ -23,7 +23,6 @@ class ProjectResource extends JsonResource
             'start_date' =>  $this->start_date,
             'end_date' => $this->end_date,
             'target' => $this->target,
-            'country' => new CountryResource($this->country),
             'project_name' => $this->project_name,
             'client' => new ClientListResource($this->client),
             'status' => $this->status,

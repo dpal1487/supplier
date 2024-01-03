@@ -17,6 +17,7 @@ use App\Models\ProjectStatus;
 use App\Exports\ProjectReport;
 use App\Exports\ExportIdExport;
 use App\Http\Resources\ActivityProjectResource;
+use App\Http\Resources\CityResource;
 use App\Models\CloseRespondent;
 use App\Models\SupplierProject;
 use App\Models\ProjectActivity;
@@ -30,7 +31,10 @@ use App\Http\Resources\ProjectListResource;
 use App\Http\Resources\SupplierListResource;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use App\Http\Resources\ProjectStatusResource;
+use App\Http\Resources\StateResource;
 use App\Http\Resources\SupplierProjectResource;
+use App\Models\City;
+use App\Models\State;
 use App\Notifications\ActionNotification;
 
 class ProjectController extends Controller
@@ -112,9 +116,29 @@ class ProjectController extends Controller
         ]);
         return redirect('/');
     }
+
+    public function getState(Request $request)
+    {
+        $states = State::where('country_id', $request->country_id)->get();
+
+        return response()->json([
+            'data' => StateResource::collection($states),
+            'success' => true,
+        ]);
+    }
+
+    public function getCity(Request $request)
+    {
+        $cities = City::where('state_id', $request->state_id)->get();
+
+        return response()->json([
+            'data' => CityResource::collection($cities),
+            'success' => true,
+        ]);
+    }
+
     public function store(Request $request)
     {
-
         $id = IdGenerator::generate(['table' => 'projects', 'field' => 'project_id', 'length' => 10, 'prefix' => 'ARS' . date('ym')]);
         $request->validate([
             'project_name' => 'required|unique:projects,project_name',
@@ -159,6 +183,9 @@ class ProjectController extends Controller
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'country_id' => $request->project_country,
+                'state' => $request->project_state,
+                'city' => $request->project_city,
+                'zipcode' => $request->project_zipcode,
                 'status' => $request->project_status,
             ])) {
                 $activity = ProjectActivity::create([
@@ -277,7 +304,7 @@ class ProjectController extends Controller
                 'project_links' => ProjectLinkResource::collection($links->get()),
                 'clients' => $this->clients,
                 'status' => $this->status,
-                'countries' => $this->countries
+                // 'countries' => $this->countries
             ]);
         }
         return redirect(route('projects'));

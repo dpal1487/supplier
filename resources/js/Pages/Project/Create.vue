@@ -14,6 +14,7 @@ import { required, numeric, url } from "@vuelidate/validators";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { toast } from "vue3-toastify";
+import axios from "axios";
 export default defineComponent({
     props: ["clients", "countries", 'status'],
 
@@ -68,8 +69,6 @@ export default defineComponent({
                     required, url
                 },
                 project_country: {
-                    required,
-                    numeric,
                 },
                 project_status: {
                     required,
@@ -97,12 +96,14 @@ export default defineComponent({
                 sample_size: "",
                 project_link: "",
                 project_country: '',
+                project_state: '',
+                project_city: '',
+                project_zipcode: '',
                 project_status: '',
                 target: '',
                 device_type: [],
                 project_type: '',
                 add_more: '',
-
             }),
             devices: [
                 {
@@ -118,10 +119,15 @@ export default defineComponent({
                     value: "tablet",
                 },
             ],
-            title: 'Project Create'
+            title: 'Project Create',
+            state: 0,
+            states: [],
+            city: 0,
+            cities: [],
         };
     },
     methods: {
+
         submit() {
             this.v$.$touch();
             this.processing = true;
@@ -134,7 +140,6 @@ export default defineComponent({
                         onSuccess: (data) => {
                             toast.success(this.$page.props.jetstream.flash.message);
                             this.processing = false
-
                         },
                         onError: (data) => {
                             if (data.message) {
@@ -152,8 +157,37 @@ export default defineComponent({
             let segments = path.split("/");
             return segments[numberSegment];
         },
+        getStates(id) {
+            axios.get('/project/state', {
+                params: {
+                    country_id: id
+                }
+            }).then((response) => {
+                if (response.data?.data?.length > 0) {
+                    this.states = response.data;
+                }
+                else {
+                    this.states = []
+                }
+            });
+        },
+        getCity(id) {
+            const state = this.states?.data?.find(state => state.id == id);
+            this.form.project_state = state.name;
+            axios.get('/project/city', {
+                params: {
+                    state_id: id
+                }
+            }).then((response) => {
+                if (response.data?.data?.length > 0) {
+                    this.cities = response.data;
+                }
+                else {
+                    this.cities = []
+                }
 
-
+            });
+        }
 
     },
     created() {
@@ -179,8 +213,8 @@ export default defineComponent({
         </template>
         <JetValidationErrors />
         <form @submit.prevent="submit" autocomplete="off" class="row">
-            <div class="col-12 com-md-4 col-lg-4 gap-5">
-                <div class="card mb-5 py-4 gap-5">
+            <div class="col-12 col-md-4 col-lg-4">
+                <div class="card mb-5 gap-5">
                     <div class="card-header">
                         <div class="card-title">
                             <h2>Status</h2>
@@ -202,7 +236,7 @@ export default defineComponent({
                         <div class="text-muted fs-7">Set the project status.</div>
                     </div>
                 </div>
-                <div class="card mb-5 py-4 gap-5">
+                <div class="card mb-5 gap-5">
                     <div class="card-header">
                         <div class="card-title">
                             <h2>Device Type</h2>
@@ -227,7 +261,7 @@ export default defineComponent({
                     </div>
                 </div>
 
-                <div class="card mb-5 py-4 gap-5">
+                <div class="card mb-5 gap-5">
                     <div class="card-header">
                         <div class="card-title">
                             <h2>Project Link Type</h2>
@@ -260,7 +294,7 @@ export default defineComponent({
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-8 col-lg-8 ">
+            <div class="col-12 col-md-8 col-lg-8">
                 <div class="card mb-5">
                     <div class="card-header">
                         <div class="card-title">
@@ -268,19 +302,20 @@ export default defineComponent({
                         </div>
                     </div>
                     <div class="card-body pt-2">
-                        <div class="fv-row mb-3">
-                            <jet-label for="project-name" value="Project Name" />
-                            <jet-input id="project-name" type="text" placeholder="Enter project Name / ID"
-                                v-model="v$.form.project_name.$model" :class="v$.form.project_name.$errors.length > 0
-                                    ? 'is-invalid'
-                                    : ''
-                                    " />
-                            <div v-for="(error, index) of v$.form.project_name
-                                .$errors" :key="index">
-                                <input-error :message="error.$message" />
-                            </div>
-                        </div>
                         <div class="row mb-3">
+                            <div class="col-md-6 col-sm-12">
+
+                                <jet-label for="project-name" value="Project Name" />
+                                <jet-input id="project-name" type="text" placeholder="Enter project Name / ID"
+                                    v-model="v$.form.project_name.$model" :class="v$.form.project_name.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " />
+                                <div v-for="(error, index) of v$.form.project_name
+                                    .$errors" :key="index">
+                                    <input-error :message="error.$message" />
+                                </div>
+                            </div>
                             <div class="col-md-6 col-sm-12">
                                 <jet-label for="project-client" value="Project Client" />
                                 <Multiselect :can-clear="false" id="project-client" :options="clients.data"
@@ -294,21 +329,43 @@ export default defineComponent({
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
+                        </div>
+                        <div class="row mb-3">
+
 
                             <div class="col-md-6 col-sm-12">
                                 <jet-label for="project-country" value="Project Country" />
-                                <Multiselect :can-clear="false" :options="countries.data" label="label" valueProp="id"
-                                    class="form-control form-control-solid" placeholder="Select country" :searchable="true"
-                                    v-model="form.project_country" :class="v$.form.project_country.$errors.length > 0
-                                        ? 'is-invalid'
-                                        : ''
-                                        " />
-                                <div v-for="(error, index) of v$.form
-                                    .project_country.$errors" :key="index">
-                                    <input-error :message="error.$message" />
-                                </div>
+                                <Multiselect :can-clear="false" @change='(value) => getStates(value)'
+                                    :options="countries.data" label="label" valueProp="id"
+                                    class="form-control form-control-solid" placeholder="Select country"
+                                    :searchable="true" />
+
 
                             </div>
+
+                            <div class="col-md-6 col-sm-12">
+                                <jet-label for="project-state" value="Project State" />
+                                <Multiselect :can-clear="false" @change='getCity' id="project-state" :options="states.data"
+                                    label="name" valueProp="id" class="form-control form-control-solid"
+                                    placeholder="Select state" :searchable="true" />
+
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+
+                            <div class="col-md-6 col-sm-12">
+                                <jet-label for="project-city" value="Project city" />
+                                <Multiselect :can-clear="false" :options="cities.data" label="name" valueProp="name"
+                                    class="form-control form-control-solid" placeholder="Select city" :searchable="true"
+                                    v-model="form.project_city" />
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <jet-label for="project-zipcode" value="Project zipcode" />
+                                <jet-input id="project-zipcode" type="text" placeholder="Project zipcode"
+                                    v-model="form.project_zipcode" />
+
+                            </div>
+
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6 col-sm-12">
@@ -435,7 +492,7 @@ export default defineComponent({
                         </div>
                     </div>
                 </div>
-                <div class="d-flex justify-content-end ">
+                <div class="d-flex justify-content-end">
                     <Link href="/projects" class="btn btn-secondary me-5">
                     Discard
                     </Link>
