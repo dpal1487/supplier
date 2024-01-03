@@ -132,7 +132,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <div id="kt_app_header" class="app-header"
+    <div class="app-header"
         :style="`margin-left: ${(sidebar && !isMobile) ? 'var(--kt-app-sidebar-width)' : ''}`">
         <div class="app-container container-fluid d-flex align-items-stretch justify-content-between"
             id="kt_app_header_container">
