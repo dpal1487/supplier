@@ -140,6 +140,8 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $id = IdGenerator::generate(['table' => 'projects', 'field' => 'project_id', 'length' => 10, 'prefix' => 'ARS' . date('ym')]);
+        $zipcode = preg_replace('/\s+/', ' , ',  $request->project_zipcode);
+
         $request->validate([
             'project_name' => 'required|unique:projects,project_name',
             'client' => 'required',
@@ -185,7 +187,7 @@ class ProjectController extends Controller
                 'country_id' => $request->project_country,
                 'state' => $request->project_state,
                 'city' => $request->project_city,
-                'zipcode' => $request->project_zipcode,
+                'zipcode' => $zipcode,
                 'status' => $request->project_status,
             ])) {
                 $activity = ProjectActivity::create([
