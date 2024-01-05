@@ -20,8 +20,8 @@ class ProjectLink extends Model
         'target',
         'project_link',
         'country_id',
-        'state_id',
-        'city_id',
+        'state',
+        'city',
         'zipcode',
     ];
     use HasFactory;

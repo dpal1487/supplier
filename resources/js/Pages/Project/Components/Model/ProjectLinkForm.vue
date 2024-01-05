@@ -221,9 +221,10 @@ export default defineComponent({
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <jet-label for="project-state" value="Project State" />
-                        <Multiselect :can-clear="false" @change='getCity' id="project-state" :options="states" label="name"
-                            valueProp="id" class="form-control form-control-solid" placeholder="Select state"
-                            :searchable="true" v-model="form.project_state" :disabled="!form.project_country" />
+                        <Multiselect :close-on-select="false" :create-option="true" mode="tags" :can-clear="false" @change='getCity' id="project-state"
+                            :options="states" label="name" valueProp="name" class="form-control form-control-solid"
+                            placeholder="Select state" :searchable="true" v-model="form.project_state"
+                            :disabled="!form.project_country" />
 
                     </div>
                     <div class="col-md-6 col-sm-12">

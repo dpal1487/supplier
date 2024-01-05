@@ -97,8 +97,8 @@ export default defineComponent({
                 sample_size: "",
                 project_link: "",
                 project_country: '',
-                project_state: '',
-                project_city: '',
+                project_state: [],
+                project_city: [],
                 project_zipcode: '',
                 project_status: 'live',
                 target: '',
@@ -159,13 +159,19 @@ export default defineComponent({
             return segments[numberSegment];
         },
         getStates(id) {
+            console.log("see this", id);
+            const state = this.states?.data?.find(state => state.id == id);
+
+            console.log("SEE THIS", state)
+            this.form.project_state = state?.name;
             axios.get('/project/state', {
                 params: {
                     country_id: id
                 }
             }).then((response) => {
-                if (response.data?.data?.length > 0) {
-                    this.states = response.data;
+                if (response.data?.states?.length > 0) {
+                    this.states = response.data.states;
+                    this.cities = response.data?.cities;
                 }
                 else {
                     this.states = []
@@ -173,6 +179,7 @@ export default defineComponent({
             });
         },
         getCity(id) {
+            console.log("getCity", id);
             axios.get('/project/city', {
                 params: {
                     state_id: id
@@ -342,17 +349,17 @@ export default defineComponent({
                         <div class="row mb-3">
                             <div class="col-md-6 col-sm-12">
                                 <jet-label for="project-state" value="Project State" />
-                                <Multiselect :can-clear="false" @change='getCity' id="project-state" :options="states.data"
-                                    label="name" valueProp="id" class="form-control form-control-solid"
-                                    placeholder="Select state" :searchable="true" v-model="form.project_state"
-                                    :disabled="!form.project_country" />
-
+                                <Multiselect :can-clear="false" id="project-state" :options="states" label="name"
+                                    valueProp="name" :close-on-select="false" mode="tags"
+                                    class="form-control form-control-solid" placeholder="Select state" :searchable="true"
+                                    v-model="form.project_state" :disabled="!form.project_country" />
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <jet-label for="project-city" value="Project city" />
-                                <Multiselect :can-clear="false" :options="cities.data" label="name" valueProp="id"
-                                    class="form-control form-control-solid" placeholder="Select city" :searchable="true"
-                                    v-model="form.project_city" :disabled="!form.project_state" />
+                                <Multiselect :can-clear="false" :close-on-select="false" mode="tags" :create-option="true"
+                                    :options="cities" label="name" valueProp="name" class="form-control form-control-solid"
+                                    placeholder="Select city" :searchable="true" v-model="form.project_city"
+                                    :disabled="!form.project_country" />
                             </div>
                         </div>
                         <div class="row mb-3">

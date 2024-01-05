@@ -22,12 +22,12 @@ class SurveyInitController extends Controller
 
         $agent = new Agent();
         $project = SupplierProject::where(['id' => $pid])->first();
-
+        $redirect;
         // return $project;
 
         $projectLink = ProjectLink::where(['id' => $project->project_link_id])->first();
 
-        return $projectLink;
+        // return $projectLink;
 
 
         if (count($projectLink->completes) < $projectLink->sample_size) {
@@ -46,6 +46,9 @@ class SurveyInitController extends Controller
                             'device' => $agent->device(),
                             'client_browser' => $agent->device(),
                         ]);
+
+                        
+
                         return Redirect::to(str_replace('RespondentID', $respondent->id, $projectLink->project_link));
                     }
 
@@ -56,7 +59,13 @@ class SurveyInitController extends Controller
                         if (in_array("251452", $projectZipcodeArray)) {
                             return "sdsad";
                         }
-                    } else {
+                    }
+                    if(!empty($project->state)){
+                        if(false){
+                            $redirect =
+                        }
+                    }
+                    else {
                         // Handle the case where $project->zipcode is not an array
                         return "Invalid zipcode data"; // Or take appropriate action
                     }

@@ -120,9 +120,11 @@ class ProjectController extends Controller
     public function getState(Request $request)
     {
         $states = State::where('country_id', $request->country_id)->get();
+        $cities = City::where('country_id', $request->country_id)->get();
 
         return response()->json([
-            'data' => StateResource::collection($states),
+            'states' => StateResource::collection($states),
+            'cities' => CityResource::collection($cities),
             'success' => true,
         ]);
     }
@@ -141,7 +143,6 @@ class ProjectController extends Controller
     {
         $id = IdGenerator::generate(['table' => 'projects', 'field' => 'project_id', 'length' => 10, 'prefix' => 'ARS' . date('ym')]);
         $zipcode = preg_replace('/\s+/', ' , ',  $request->project_zipcode);
-
         $request->validate([
             'project_name' => 'required|unique:projects,project_name',
             'client' => 'required',
@@ -185,8 +186,8 @@ class ProjectController extends Controller
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'country_id' => $request->project_country,
-                'state_id' => $request->project_state,
-                'city_id' => $request->project_city,
+                'state' => implode(' , ',$request->project_state),
+                'city' => implode(' , ' ,$request->project_city),
                 'zipcode' => $zipcode,
                 'status' => 1,
             ])) {

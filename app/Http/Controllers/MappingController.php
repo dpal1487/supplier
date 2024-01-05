@@ -74,8 +74,9 @@ class MappingController extends Controller
             'sample_size' => $request->sample_size,
             'notes' => $request->notes,
             'country_id' => $request->project_country,
-            'state_id' => $request->project_state,
-            'city_id' => $request->project_city,
+            'state' => implode(' , ', $request->project_state),
+            'city' => implode(' , ', $request->project_city),
+            
             'status' => $request->status,
         ])) {
             return response()->json([
@@ -148,8 +149,8 @@ class MappingController extends Controller
                 'sample_size' => $request->sample_size,
                 'notes' => $request->notes,
                 'country_id' => $request->project_country,
-                'state_id' => $request->project_state,
-                'city_id' => $request->project_city,
+                'state' => implode(' , ', $request->project_state),
+                'city' => implode(' , ', $request->project_city),
                 'status' => $request->status,
             ]);
             return response()->json(updateMessage('Project Link'));
