@@ -9,7 +9,7 @@ import CopyLinkButton from "../../../Components/CopyLinkButton.vue";
 export default defineComponent({
 
     props: ["project_link", "index"],
-    emits: ['onSupplier', 'onDelete'],
+    emits: ['onSupplier', 'onDelete', 'editProjectLink'],
     data() {
         return {
             isLoading: false,
@@ -68,7 +68,8 @@ export default defineComponent({
                     {{ project_link.project_name }}
                 </div>
                 <span class="text-muted fw-semibold d-block fs-7"><i class="bi bi-geo-alt-fill me-2"></i>{{
-                    project_link.country.display_name }}</span>
+                    project_link?.country?.display_name }} {{ project_link?.state?.name }} {{ project_link?.city?.name }}{{ project_link?.zipcode }}</span>
+
             </div>
             <div class="flex-1 fw-bold" v-if="$page.props.user.role.role.slug != 'user'">
                 <span>${{ project_link.cpi }}/-CPI</span>
@@ -119,9 +120,13 @@ export default defineComponent({
                 <div class="text-left dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
                     :aria-labelled:by="`dropdown-${project_link.id}`">
                     <div class="menu-item px-3">
-                        <Link :href="`/mapping/${project_link.id}/edit`" class="menu-link"><i
+                        <!-- <Link :href="`/mapping/${project_link.id}/edit`" class="menu-link"><i
                             class="bi bi-pencil me-2"></i>Edit
-                        </Link>
+                        </Link> -->
+                        <span type="button" class="menu-link"
+                            @click="$emit('editProjectLink', { id: project_link?.id, pageName: 'editPage' })"><i
+                                class="bi bi-pencil me-2"></i>Edit
+                        </span>
                     </div>
                     <div class="menu-item px-3">
                         <Link title="Add Supplier" :href="`/sampling/${project_link.id}/create`" class="menu-link"><i

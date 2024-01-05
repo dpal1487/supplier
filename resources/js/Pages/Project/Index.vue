@@ -48,7 +48,6 @@ export default defineComponent({
         },
         orderBy() {
             this.isLoading = true;
-            console.log("Order By", this.selectOrderBy)
             Inertia.get(route('projects', { order_by: this.selectOrderBy }),
                 {
                     onFinish(response) {

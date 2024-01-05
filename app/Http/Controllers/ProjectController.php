@@ -185,10 +185,10 @@ class ProjectController extends Controller
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'country_id' => $request->project_country,
-                'state' => $request->project_state,
-                'city' => $request->project_city,
+                'state_id' => $request->project_state,
+                'city_id' => $request->project_city,
                 'zipcode' => $zipcode,
-                'status' => $request->project_status,
+                'status' => 1,
             ])) {
                 $activity = ProjectActivity::create([
                     "project_id" => $project->project_id,
@@ -306,7 +306,7 @@ class ProjectController extends Controller
                 'project_links' => ProjectLinkResource::collection($links->get()),
                 'clients' => $this->clients,
                 'status' => $this->status,
-                // 'countries' => $this->countries
+                'countries' => $this->countries
             ]);
         }
         return redirect(route('projects'));

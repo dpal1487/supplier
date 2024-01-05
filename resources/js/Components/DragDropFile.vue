@@ -48,7 +48,6 @@ export default defineComponent({
         },
         removeImage(file) {
 
-            console.log("Removing")
             this.files = this.files.filter(f => f !== file);
         },
         removeDefaultImage() {

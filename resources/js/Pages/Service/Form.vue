@@ -114,7 +114,6 @@ export default defineComponent({
             this.thumbnail.isLoading = true;
             const data = await utils.imageUpload(route("image.store", 'service'), e, this.image?.data?.entity_id);
             if (data.response) {
-                console.log(data.response)
                 this.form.image = data.response.data;
             } else {
                 toast.error(data.response);

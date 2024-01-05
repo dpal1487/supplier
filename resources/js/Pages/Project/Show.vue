@@ -8,15 +8,17 @@ import Pagination from "../../Jetstream/Pagination.vue";
 import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/css/index.css';
 import { Inertia } from "@inertiajs/inertia";
+import ProjectLinkForm from "./Components/Model/ProjectLinkForm.vue"
 
 export default defineComponent({
-    props: ["project", "project_links", "clients", "status", 'suppliers'],
+    props: ["project", "project_links", "clients", "status", 'suppliers' , 'countries'],
     data() {
         return {
             title: "Project Overview",
             isLoading: false,
             isFullPage: true,
-
+            isModalOpen: false,
+            activeId: null,
             form: {}
         };
     },
@@ -27,7 +29,8 @@ export default defineComponent({
         ProjectLinkList,
         TopCard,
         Pagination,
-        Loading
+        Loading,
+        ProjectLinkForm,
     },
     methods: {
         search() {
@@ -40,7 +43,14 @@ export default defineComponent({
                         this.isLoading = false;
                     },
                 })
-        }
+        },
+        showSupplierListModal(id) {
+            this.isModalOpen = true;
+            this.activeId = id;
+        },
+        hideSupplierListModal() {
+            this.isModalOpen = false;
+        },
     },
     created() {
         var url = new URL(window.location.href);
@@ -72,6 +82,8 @@ export default defineComponent({
             </div>
         </template>
         <TopCard :project="project.data" :clients="clients.data" :status="status" />
+        <ProjectLinkForm :show="isModalOpen" @hidemodal="hideSupplierListModal" :project="project?.data"
+            :countries="countries?.data" />
         <div class="card card-flush mb-5">
             <div class="card-header align-items-center px-5">
                 <form @submit.prevent="search" class="card-title">
@@ -84,10 +96,14 @@ export default defineComponent({
                     </select>
                     <button class="btn btn-primary btn-sm ms-3"><i class="bi bi-search"></i></button>
                 </form>
-                <Link v-if="$page.props.user.role.role.slug != 'user'" :href="`/mapping/${project.data.id}/create`"
-                    class="btn btn-primary btn-sm"><i class="bi bi-plus-circle"></i>Add New Link</Link>
+                <!-- <Link v-if="$page.props.user.role.role.slug != 'user'" :href="`/mapping/${project.data.id}/create`"
+                    class="btn btn-primary btn-sm"><i class="bi bi-plus-circle"></i>Add New Link</Link> -->
+
+                <button type="button" v-if="$page.props.user.role.role.slug != 'user'" class="btn btn-primary btn-sm"
+                    @click="showSupplierListModal(project?.data?.id)"><i class="bi bi-plus-circle"></i>Add New
+                    Link </button>
             </div>
         </div>
-        <ProjectLinkList :links="project_links.data" />
+        <ProjectLinkList :links="project_links.data" :countries="countries?.data"/>
     </app-layout>
 </template>

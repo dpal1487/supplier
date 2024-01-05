@@ -15,8 +15,6 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { toast } from "vue3-toastify";
 import axios from "axios";
-import Loading from "vue-loading-overlay";
-import 'vue-loading-overlay/dist/css/index.css';
 export default defineComponent({
     props: ["clients", "countries", 'status'],
 
@@ -34,7 +32,6 @@ export default defineComponent({
         JetValidationErrors,
         InputError,
         VueDatePicker,
-        Loading
     },
     validations() {
         return {
@@ -162,8 +159,6 @@ export default defineComponent({
             return segments[numberSegment];
         },
         getStates(id) {
-            this.isLoading = true;
-
             axios.get('/project/state', {
                 params: {
                     country_id: id
@@ -171,8 +166,6 @@ export default defineComponent({
             }).then((response) => {
                 if (response.data?.data?.length > 0) {
                     this.states = response.data;
-                    this.isLoading = false;
-
                 }
                 else {
                     this.states = []
@@ -180,10 +173,6 @@ export default defineComponent({
             });
         },
         getCity(id) {
-            this.isLoading = true;
-
-            const state = this.states?.data?.find(state => state.id == id);
-            this.form.project_state = state.name;
             axios.get('/project/city', {
                 params: {
                     state_id: id
@@ -191,8 +180,6 @@ export default defineComponent({
             }).then((response) => {
                 if (response.data?.data?.length > 0) {
                     this.cities = response.data;
-                    this.isLoading = false;
-
                 }
                 else {
                     this.cities = []
@@ -208,8 +195,6 @@ export default defineComponent({
 </script>
 <template>
     <Head title="Add New Project" />
-    <loading :active="isLoading" :can-cancel="true" :is-full-page="isFullPage"></loading>
-
     <app-layout :title="title">
         <template #breadcrumb>
             <li class="breadcrumb-item">
@@ -334,16 +319,6 @@ export default defineComponent({
                         </div>
                         <div class="row mb-3">
 
-
-                            <div class="col-md-6 col-sm-12">
-                                <jet-label for="project-country" value="Project Country" />
-                                <Multiselect :can-clear="false" @change='(value) => getStates(value)'
-                                    :options="countries.data" label="label" valueProp="id"
-                                    class="form-control form-control-solid" placeholder="Select country" :searchable="true"
-                                    v-model="form.project_country" />
-
-
-                            </div>
                             <div class="col-md-6 col-sm-12">
                                 <jet-label for="project-client" value="Project Client" />
                                 <Multiselect :can-clear="false" id="project-client" :options="clients.data"
@@ -357,34 +332,35 @@ export default defineComponent({
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
-
-
+                            <div class="col-md-6 col-sm-12">
+                                <jet-label for="project-country" value="Project Country" />
+                                <Multiselect :can-clear="false" @change='getStates' :options="countries.data" label="label"
+                                    valueProp="id" class="form-control form-control-solid" placeholder="Select country"
+                                    :searchable="true" v-model="form.project_country" />
+                            </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6 col-sm-12">
                                 <jet-label for="project-state" value="Project State" />
                                 <Multiselect :can-clear="false" @change='getCity' id="project-state" :options="states.data"
                                     label="name" valueProp="id" class="form-control form-control-solid"
-                                    placeholder="Select state" :searchable="true" />
+                                    placeholder="Select state" :searchable="true" v-model="form.project_state"
+                                    :disabled="!form.project_country" />
 
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <jet-label for="project-city" value="Project city" />
-                                <Multiselect :can-clear="false" :options="cities.data" label="name" valueProp="name"
+                                <Multiselect :can-clear="false" :options="cities.data" label="name" valueProp="id"
                                     class="form-control form-control-solid" placeholder="Select city" :searchable="true"
-                                    v-model="form.project_city" />
+                                    v-model="form.project_city" :disabled="!form.project_state" />
                             </div>
-
-
                         </div>
                         <div class="row mb-3">
                             <div class="col-12">
                                 <jet-label for="project-zipcode" value="Project zipcode" />
                                 <textarea id="project-zipcode" class="form-control form-control-solid" type="text"
                                     placeholder="Project zipcode .." v-model="form.project_zipcode" />
-
                             </div>
-
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6 col-sm-12">

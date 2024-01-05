@@ -26,6 +26,8 @@ class ProjectResource extends JsonResource
             'project_name' => $this->project_name,
             'client' => new ClientListResource($this->client),
             'status' => $this->status,
+            'project_links' => $this->project
+
         ];
     }
 }

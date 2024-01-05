@@ -62,7 +62,6 @@ export default defineComponent({
                 confirmButtonText: "Yes, delete it!",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    console.log(id)
                     axios
                         .delete("/permission/" + id)
                         .then((response) => {

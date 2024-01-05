@@ -218,8 +218,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::post('blog/status', [BlogController::class, 'statusUpdate'])->name('blog.status');
         Route::resource('testimonial', TestimonialController::class);
         Route::post('testimonial/status', [TestimonialController::class, 'statusUpdate'])->name('testimonial.status');
-        Route::resource('question', QuestionController::class);
-        Route::post('questions/delete', [QuestionController::class, 'selectDelete'])->name('questions.delete');
+        // Route::resource('question', QuestionController::class);
         // Route::resource('answer', AnswerController::class);
         Route::controller(QuestionController::class)->group(function () {
             Route::get('question', 'index')->name('question.index');

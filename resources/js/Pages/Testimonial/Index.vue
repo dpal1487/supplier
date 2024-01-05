@@ -33,7 +33,6 @@ export default defineComponent({
 
         async confirmDelete(id, index) {
 
-            console.log("delete", id, index)
             this.isLoading = true;
             await utils.deleteIndexDialog(route('testimonial.destroy', id), this.testimonials.data, index);
             this.isLoading = false;

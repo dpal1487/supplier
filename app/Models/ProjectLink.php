@@ -20,8 +20,8 @@ class ProjectLink extends Model
         'target',
         'project_link',
         'country_id',
-        'state',
-        'city',
+        'state_id',
+        'city_id',
         'zipcode',
     ];
     use HasFactory;
@@ -38,6 +38,14 @@ class ProjectLink extends Model
     public function country()
     {
         return $this->hasOne(Country::class, 'id', 'country_id');
+    }
+    public function state()
+    {
+        return $this->hasOne(State::class, 'id', 'state_id');
+    }
+    public function city()
+    {
+        return $this->hasOne(City::class, 'id', 'city_id');
     }
     public function project()
     {

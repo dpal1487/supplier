@@ -15,14 +15,23 @@ use Inertia\Inertia;
 
 class SurveyInitController extends Controller
 {
+
     public $data;
     public function supplier(Request $request, $pid)
     {
+
         $agent = new Agent();
         $project = SupplierProject::where(['id' => $pid])->first();
+
+        // return $project;
+
         $projectLink = ProjectLink::where(['id' => $project->project_link_id])->first();
 
+        return $projectLink;
+
+
         if (count($projectLink->completes) < $projectLink->sample_size) {
+            return $projectLink->status;
             if ($projectLink->project->status == 'live' && $projectLink->status == 1) {
                 if (!Respondent::where(['supplier_project_id' => $pid, 'user_id' => $request->uid])->first()) {
                     if (!Respondent::where(['supplier_project_id' => $pid, 'starting_ip' => $request->ip()])->first()) {
@@ -40,8 +49,17 @@ class SurveyInitController extends Controller
                         return Redirect::to(str_replace('RespondentID', $respondent->id, $projectLink->project_link));
                     }
 
-                    // if (in_array($ip->zipcode, $array)) {
-                    // }
+                    $projectZipcodeArray = explode(' , ', $projectLink->zipcode);
+
+                    if (is_array($projectZipcodeArray)) {
+                        // Check if the value exists in the array
+                        if (in_array("251452", $projectZipcodeArray)) {
+                            return "sdsad";
+                        }
+                    } else {
+                        // Handle the case where $project->zipcode is not an array
+                        return "Invalid zipcode data"; // Or take appropriate action
+                    }
 
                     $this->data = ['message' => "We're sorry, Duplicate IP Address Detected.", 'title' => 'IP Error'];
                 } else {

@@ -6,16 +6,20 @@ import "vue-loading-overlay/dist/css/index.css";
 import ProjectLinkListItem from "./ProjectLinkListItem.vue";
 import SupplierListModel from "./Modal/SupplierListModel.vue";
 import CopyLinkButton from "../../../Components/CopyLinkButton.vue";
+import ProjectLinkForm from "../../Project/Components/Model/ProjectLinkForm.vue";
 import utils from "../../../utils";
 export default defineComponent({
 
-    props: ["links"],
+    props: ["links", "countries", "project"],
     data() {
         return {
             isLoading: false,
             isFullPage: true,
             isModalOpen: false,
+            isFormModalOpen: false,
             activeId: null,
+            projectId: null,
+            pageName: null
         };
     },
     components: {
@@ -24,6 +28,7 @@ export default defineComponent({
         SupplierListModel,
         CopyLinkButton,
         ProjectLinkListItem,
+        ProjectLinkForm
     },
     methods: {
         async confirmDelete(index) {
@@ -41,6 +46,15 @@ export default defineComponent({
             this.isModalOpen = false;
         },
 
+        showProjectLinkForm(value) {
+            this.isFormModalOpen = true;
+            this.projectId = value.id;
+            this.pageName = value.pageName;
+        },
+        hideProjectLinkForm() {
+            this.isFormModalOpen = false;
+        },
+
 
     },
     created() { },
@@ -49,7 +63,10 @@ export default defineComponent({
 <template>
     <loading :active="isLoading" :can-cancel="true" :is-full-page="isFullPage"></loading>
     <SupplierListModel :show="isModalOpen" @hidemodal="hideSupplierListModal" :id="activeId" />
+    <ProjectLinkForm :show="isFormModalOpen" @hidemodal="hideProjectLinkForm" :id="projectId" :countries="countries"
+        :pageName="pageName" />
     <div class="card mb-5" v-for="(project_link, index) in links" :key="index">
-        <ProjectLinkListItem :index="index" :project_link="project_link" @onSupplier="showSupplierListModal" @onDelete="confirmDelete" />
+        <ProjectLinkListItem :index="index" :project_link="project_link" @onSupplier="showSupplierListModal"
+            @editProjectLink="showProjectLinkForm" @onDelete="confirmDelete" />
     </div>
 </template>
