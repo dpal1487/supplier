@@ -17,14 +17,17 @@ class ProjectLinkResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'state' => explode(' , ', $this->state),
+            'city' => explode(' , ', $this->city),
             'project_uid' => $this->project->project_id,
             'project_name' => $this->project_name,
             'project_id' => $this->project_id,
             'user' => $this->user ?  $this->user?->first_name . ' ' . $this->user?->last_name : '',
             'project' => $this->project,
             'country' => new CountryResource($this->country),
-            'state' => new StateResource($this->state),
-            'city' => new CityResource($this->city),
+
+            // 'state' => new StateResource($this->state),
+            // 'city' => new CityResource($this->city),
             'project_country' => $this->country?->id,
             'project_zipcode' => $this->zipcode,
             'sample_size' => $this->sample_size,

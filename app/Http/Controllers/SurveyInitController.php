@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Jenssegers\Agent\Agent;
 use Inertia\Inertia;
+use Stevebauman\Location\Facades\Location;
 
 class SurveyInitController extends Controller
 {
@@ -20,18 +21,20 @@ class SurveyInitController extends Controller
     public function supplier(Request $request, $pid)
     {
 
+        $ip = '162.159.24.227';
+        $data = Location::get($ip);
+
         $agent = new Agent();
         $project = SupplierProject::where(['id' => $pid])->first();
-        $redirect;
-        // return $project;
 
         $projectLink = ProjectLink::where(['id' => $project->project_link_id])->first();
 
-        // return $projectLink;
+        $projectZipcodeArray = explode(' , ', $projectLink->zipcode);
+        $projectStateArray = explode(' , ', $projectLink->state);
+        $projectCityArray = explode(' , ', $projectLink->city);
 
-
+        return $project;
         if (count($projectLink->completes) < $projectLink->sample_size) {
-            return $projectLink->status;
             if ($projectLink->project->status == 'live' && $projectLink->status == 1) {
                 if (!Respondent::where(['supplier_project_id' => $pid, 'user_id' => $request->uid])->first()) {
                     if (!Respondent::where(['supplier_project_id' => $pid, 'starting_ip' => $request->ip()])->first()) {
@@ -46,30 +49,32 @@ class SurveyInitController extends Controller
                             'device' => $agent->device(),
                             'client_browser' => $agent->device(),
                         ]);
-
-                        
-
+                        if (!empty($projectLink->city)) {
+                            if (in_array($data->cityName, $projectCityArray)) {
+                                return "city found in project";
+                                return Redirect::to(str_replace('RespondentID', $respondent->id, $project->security_terminate_url));
+                            } else {
+                                return "city not found in project";
+                            }
+                        }
+                        // if (!empty($projectLink->state)) {
+                        //     // return $data->regionName
+                        //     if (in_array($data->regionName, $projectStateArray)) {
+                        //         return "state found in project";
+                        // return Redirect::to(str_replace('RespondentID', $respondent->id, $project->security_terminate_url));
+                        //     }
+                        //     if (false) {
+                        //         return "state not found in project";
+                        //     }
+                        // }
+                        // if (is_array($projectZipcodeArray)) {
+                        //     if (in_array($data->zipCode, $projectZipcodeArray)) {
+                        //         return "sdsad";
+                        // return Redirect::to(str_replace('RespondentID', $respondent->id, $project->security_terminate_url));
+                        //     }
+                        // }
                         return Redirect::to(str_replace('RespondentID', $respondent->id, $projectLink->project_link));
                     }
-
-                    $projectZipcodeArray = explode(' , ', $projectLink->zipcode);
-
-                    if (is_array($projectZipcodeArray)) {
-                        // Check if the value exists in the array
-                        if (in_array("251452", $projectZipcodeArray)) {
-                            return "sdsad";
-                        }
-                    }
-                    if(!empty($project->state)){
-                        if(false){
-                            $redirect =
-                        }
-                    }
-                    else {
-                        // Handle the case where $project->zipcode is not an array
-                        return "Invalid zipcode data"; // Or take appropriate action
-                    }
-
                     $this->data = ['message' => "We're sorry, Duplicate IP Address Detected.", 'title' => 'IP Error'];
                 } else {
                     $this->data = ['message' => 'You have already attempt this survey please try agian later.', 'title' => 'Already Attempt'];

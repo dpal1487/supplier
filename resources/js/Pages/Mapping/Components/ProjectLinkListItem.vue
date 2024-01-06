@@ -67,8 +67,10 @@ export default defineComponent({
                 <div class="text-gray-800 fs-6 fw-bold" v-else>
                     {{ project_link.project_name }}
                 </div>
+
                 <span class="text-muted fw-semibold d-block fs-7"><i class="bi bi-geo-alt-fill me-2"></i>{{
-                    project_link?.country?.display_name }} {{ project_link?.state?.name }} {{ project_link?.city?.name }}{{ project_link?.zipcode }}</span>
+                    project_link?.country?.display_name }} {{ project_link?.state?.name }} {{ project_link?.city?.name }}{{
+        project_link?.zipcode }}</span>
 
             </div>
             <div class="flex-1 fw-bold" v-if="$page.props.user.role.role.slug != 'user'">

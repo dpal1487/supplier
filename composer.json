@@ -31,6 +31,7 @@
         "santigarcor/laratrust": "^7.2",
         "spatie/image-optimizer": "^1.7",
         "spatie/laravel-permission": "^6.2",
+        "stevebauman/location": "^7.1",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {

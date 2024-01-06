@@ -10,8 +10,6 @@ import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import Modal from "@/Components/Modal.vue";
 import SectionLoader from "../../../../Components/SectionLoader.vue";
-import Loading from "vue-loading-overlay";
-import 'vue-loading-overlay/dist/css/index.css';
 import { Inertia } from "@inertiajs/inertia";
 import axios from "axios";
 import { toast } from "vue3-toastify";
@@ -31,7 +29,6 @@ export default defineComponent({
         JetValidationErrors,
         Modal,
         SectionLoader,
-        Loading
     },
     validations() {
         return {
@@ -85,8 +82,8 @@ export default defineComponent({
                 sample_size: this.project?.project_links?.sample_size || '',
                 project_link: '',
                 project_country: '',
-                project_state: '',
-                project_city: '',
+                project_state: [],
+                project_city: [],
                 project_zipcode: '',
                 notes: '',
                 status: '',
@@ -141,38 +138,26 @@ export default defineComponent({
             }
         },
         getStates(id) {
+            const state = this.states?.data?.find(state => state.id == id);
+            this.form.project_state = state?.name;
             axios.get('/project/state', {
                 params: {
                     country_id: id
                 }
             }).then((response) => {
-                this.form.project_state = '';
-                this.form.project_city = '';
-                if (response.data?.data?.length > 0) {
-                    this.states = response.data?.data;
-
-
+                this.form.project_state = [];
+                this.form.project_city = [];
+                if (response.data?.states?.length > 0) {
+                    this.states = response.data.states;
+                    this.cities = response.data?.cities;
                 }
                 else {
                     this.states = []
+                    this.cities = []
                 }
             });
         },
-        getCity(id) {
-            axios.get('/project/city', {
-                params: {
-                    state_id: id
-                }
-            }).then((response) => {
-                if (response.data?.data?.length > 0) {
-                    this.cities = response.data?.data;
-                }
-                else {
-                    this.cities = []
-                }
 
-            });
-        }
     },
     create() {
 
@@ -186,8 +171,8 @@ export default defineComponent({
                 this.states = response?.data?.states;
                 this.cities = response?.data?.city;
                 this.form.project_zipcode = response?.data?.project?.project_zipcode;
-                this.form.project_state = response?.data?.project?.state?.id;
-                this.form.project_city = response?.data?.project?.city?.id;
+                this.form.project_state = response?.data?.project?.state
+                this.form.project_city = response?.data?.project?.city;
                 this.isLoading = false;
             }
         }
@@ -197,7 +182,6 @@ export default defineComponent({
 <template>
     <Modal :show="show" @onhide="$emit('hidemodal')"
         :title="pageName == 'editPage' ? 'Edit Link Form' : 'Add New Link Form'">
-        <!-- <loading :active="isStateCityLoading" :can-cancel="true" :is-full-page="isFullPage"></loading> -->
         <SectionLoader v-if="isLoading" :width="40" :height="40" />
         <div v-else>
             <JetValidationErrors />
@@ -221,7 +205,7 @@ export default defineComponent({
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <jet-label for="project-state" value="Project State" />
-                        <Multiselect :close-on-select="false" :create-option="true" mode="tags" :can-clear="false" @change='getCity' id="project-state"
+                        <Multiselect :close-on-select="false" mode="tags" :can-clear="false" id="project-state"
                             :options="states" label="name" valueProp="name" class="form-control form-control-solid"
                             placeholder="Select state" :searchable="true" v-model="form.project_state"
                             :disabled="!form.project_country" />
@@ -229,9 +213,10 @@ export default defineComponent({
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <jet-label for="project-city" value="Project City" />
-                        <Multiselect :can-clear="false" :options="cities" label="name" valueProp="id"
-                            class="form-control form-control-solid" placeholder="Select city" :searchable="true"
-                            v-model="form.project_city" :disabled="!form.project_state" />
+                        <Multiselect :can-clear="false" :options="cities" label="name" valueProp="name"
+                            :create-option="true" mode="tags" class="form-control form-control-solid"
+                            placeholder="Select city" :searchable="true" v-model="form.project_city"
+                            :disabled="!form.project_state" />
                     </div>
 
                     <div class="fv-row col-12">

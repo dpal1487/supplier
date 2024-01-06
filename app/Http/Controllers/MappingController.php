@@ -76,7 +76,6 @@ class MappingController extends Controller
             'country_id' => $request->project_country,
             'state' => implode(' , ', $request->project_state),
             'city' => implode(' , ', $request->project_city),
-            
             'status' => $request->status,
         ])) {
             return response()->json([
@@ -115,7 +114,7 @@ class MappingController extends Controller
             return response()->json([
                 'project' => new ProjectLinkResource($project),
                 'states' => StateResource::collection(State::where('country_id', $project->country_id)->get()),
-                'city' => CityResource::collection(City::where('state_id', $project->state_id)->get()),
+                'city' => CityResource::collection(City::where('country_id', $project->country_id)->get()),
                 'countries' => $this->countries,
             ]);
             // return Inertia::render('Mapping/Edit', [

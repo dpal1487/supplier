@@ -159,10 +159,7 @@ export default defineComponent({
             return segments[numberSegment];
         },
         getStates(id) {
-            console.log("see this", id);
             const state = this.states?.data?.find(state => state.id == id);
-
-            console.log("SEE THIS", state)
             this.form.project_state = state?.name;
             axios.get('/project/state', {
                 params: {
@@ -174,27 +171,11 @@ export default defineComponent({
                     this.cities = response.data?.cities;
                 }
                 else {
-                    this.states = []
+                    this.states = [];
+                    this.cities = [];
                 }
             });
         },
-        getCity(id) {
-            console.log("getCity", id);
-            axios.get('/project/city', {
-                params: {
-                    state_id: id
-                }
-            }).then((response) => {
-                if (response.data?.data?.length > 0) {
-                    this.cities = response.data;
-                }
-                else {
-                    this.cities = []
-                }
-
-            });
-        }
-
     },
     created() {
     },
