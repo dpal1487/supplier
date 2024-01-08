@@ -169,7 +169,7 @@ export default defineComponent({
                 const response = await axios.get(`/mapping/${this.id}/edit`);
                 this.form = response?.data?.project;
                 this.states = response?.data?.states;
-                this.cities = response?.data?.city;
+                this.cities = response?.data?.cities;
                 this.form.project_zipcode = response?.data?.project?.project_zipcode;
                 this.form.project_state = response?.data?.project?.state
                 this.form.project_city = response?.data?.project?.city;

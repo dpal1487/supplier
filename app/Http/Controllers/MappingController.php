@@ -63,6 +63,8 @@ class MappingController extends Controller
             'project_link' => 'required|url',
             'sample_size' => 'required|numeric',
         ]);
+        $zipcode = preg_replace('/\s+/', ' , ',  $request->project_zipcode);
+
         if (ProjectLink::create([
             'project_id' => $id,
             'user_id' => Auth::user()->id,
@@ -76,6 +78,7 @@ class MappingController extends Controller
             'country_id' => $request->project_country,
             'state' => implode(' , ', $request->project_state),
             'city' => implode(' , ', $request->project_city),
+            'zipcode' => $zipcode,
             'status' => $request->status,
         ])) {
             return response()->json([
@@ -114,7 +117,7 @@ class MappingController extends Controller
             return response()->json([
                 'project' => new ProjectLinkResource($project),
                 'states' => StateResource::collection(State::where('country_id', $project->country_id)->get()),
-                'city' => CityResource::collection(City::where('country_id', $project->country_id)->get()),
+                'cities' => CityResource::collection(City::where('country_id', $project->country_id)->get()),
                 'countries' => $this->countries,
             ]);
             // return Inertia::render('Mapping/Edit', [
@@ -137,6 +140,8 @@ class MappingController extends Controller
             'sample_size' => 'required',
             'status' => 'required',
         ]);
+        $zipcode = preg_replace('/\s+/', ' , ',  $request->project_zipcode);
+
         if ($project = ProjectLink::find($id)) {
             ProjectLink::where('id', $id)->update([
                 // 'user_id' => Auth::user()->id,
@@ -150,6 +155,7 @@ class MappingController extends Controller
                 'country_id' => $request->project_country,
                 'state' => implode(' , ', $request->project_state),
                 'city' => implode(' , ', $request->project_city),
+                'zipcode' => $zipcode,
                 'status' => $request->status,
             ]);
             return response()->json(updateMessage('Project Link'));

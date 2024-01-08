@@ -25,11 +25,9 @@ class ProjectLinkResource extends JsonResource
             'user' => $this->user ?  $this->user?->first_name . ' ' . $this->user?->last_name : '',
             'project' => $this->project,
             'country' => new CountryResource($this->country),
-
-            // 'state' => new StateResource($this->state),
-            // 'city' => new CityResource($this->city),
             'project_country' => $this->country?->id,
-            'project_zipcode' => $this->zipcode,
+            $zipcode = str_replace(' , ', ' ', $this->zipcode),
+            'project_zipcode' => $zipcode,
             'sample_size' => $this->sample_size,
             'project_link' => $this->project_link,
             'cpi' => Auth::user()->role->role->slug != 'user' ? $this->cpi : '',
