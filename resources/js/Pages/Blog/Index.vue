@@ -7,6 +7,8 @@ import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
 import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
+import 'vue-loading-overlay/dist/css/index.css';
+
 import axios from "axios";
 import utils from "../../utils";
 export default defineComponent({
@@ -15,6 +17,8 @@ export default defineComponent({
         return {
             form: {},
             selectAll: false,
+            isFullPage: true,
+            isLoading: false,
             title: "Blog",
             tbody: [
                 "Image",
@@ -61,6 +65,8 @@ export default defineComponent({
 });
 </script>
 <template>
+    <loading :active="isLoading" :can-cancel="true" :is-full-page="isFullPage"></loading>
+
     <app-layout :title="title">
         <template #breadcrumb>
             <li class="breadcrumb-item">

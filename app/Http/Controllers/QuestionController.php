@@ -33,12 +33,6 @@ class QuestionController extends Controller
             'industries' => $industries
         ]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $industries = Industry::get();
@@ -72,14 +66,9 @@ class QuestionController extends Controller
         // return redirect('question')->with('flash', errorMessage());
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Question  $question
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Question $question)
+    public function show($id)
     {
+        $question = Question::find($id);
         $answers = Answer::where('question_id', $question->id)->get();
         return Inertia::render('Question/Overview', [
             'question' => new QuestionResources($question),

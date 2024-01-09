@@ -80,7 +80,7 @@ export default defineComponent({
                 <div class="row g-5 col-md-12">
 
                     <div class="fv-row col-6">
-                        <jet-label for="question" value="Question" />
+                        <jet-label for="question" value="Question"/>
                         <jet-input id="question" type="text" v-model="v$.form.question_name.$model" :class="v$.form.question_name.$errors.length > 0
                             ? 'is-invalid'
                             : ''

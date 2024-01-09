@@ -24,7 +24,7 @@ class CloseProjectController extends Controller
         $this->clients = ClientListResource::collection(Client::where(['status' => 1])->get());
         $this->status = ProjectStatus::orderBy('id', 'asc')->get();
     }
-
+    
     public function index(Request $request)
     {
         $projects = Project::orderBy('updated_at', 'desc')->groupBy('project_id')->where('status', 'close');
@@ -54,7 +54,7 @@ class CloseProjectController extends Controller
         if ($project) {
             //project update close to archived project
             $project->update(['status' => 'archived']);
-            
+
             $respondents = CloseRespondent::where('project_id', '=', $request->id)->get();
             if (count($respondents) > 0) {
                 foreach ($respondents as $respondent) {

@@ -50,36 +50,25 @@ export default defineComponent({
     methods: {
         submit(form) {
             this.form = form;
-            if (this.isAdd) {
-                this.form
-                    .transform((data) => ({
-                        ...data,
-                    }))
-                    .post(this.route("answer.store"), {
-                        onSuccess: (data) => {
-                            toast.success(this.$page.props.jetstream.flash.message);
+            this.form
+                .transform((data) => ({
+                    ...data,
+                }))
+                .post(this.isAdd ? this.route("answer.store") : this.route("answer.update", this.form.id), {
+                    onSuccess: (data) => {
+                        toast.success(this.$page.props.jetstream.flash.message);
+                        if (this.isAdd) {
                             this.isAdd = false;
-                        },
-                        onError: (data) => {
-                            toast.error(data.message);
-                        },
-                    });
-            }
-            else {
-                this.form
-                    .transform((data) => ({
-                        ...data,
-                    }))
-                    .put(this.route("answer.update", this.form.id), {
-                        onSuccess: (data) => {
-                            toast.success(this.$page.props.jetstream.flash.message);
+                        }
+                        else {
                             this.isEdit = false;
-                        },
-                        onError: (data) => {
-                            toast.error(data.message);
-                        },
-                    });
-            }
+                        }
+                    },
+                    onError: (data) => {
+                        toast.error(data.message);
+                    },
+                });
+
         },
         toggleModal(isEdit, answer) {
             this.isEdit = isEdit;
@@ -90,9 +79,7 @@ export default defineComponent({
             await utils.deleteIndexDialog(route('answer.destroy', id), this.answers.data, index);
             this.isLoading = false;
         },
-
     }
-
 });
 </script>
 <template>
@@ -133,7 +120,6 @@ export default defineComponent({
                 <div class="row" v-if="isEdit || isAdd">
                     <div class="col-12">
                         <!-- <JetValidationErrors /> -->
-
                         <AnswerForm @submitted="submit" :answer="form" :question="question.data">
                             <template #action>
                                 <div class="d-flex justify-content-end">

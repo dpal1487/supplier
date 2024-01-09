@@ -77,8 +77,6 @@ export default defineComponent({
                 <button class="btn btn-sm fw-bold btn-primary" @click="showQuestionForm()">
                     <i class="bi bi-plus-circle"></i>Add New Question
                 </button>
-                <!-- <Link href="/question/create" class="btn btn-sm fw-bold btn-primary">
-                <i class="bi bi-plus-circle"></i>Add New Question</Link> -->
             </div>
         </template>
 
@@ -166,7 +164,7 @@ export default defineComponent({
                                                 )
                                                     "
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
-                                                   <i class="bi bi-trash"></i> Delete
+                                                    <i class="bi bi-trash"></i> Delete
                                                 </button>
                                             </li>
                                         </ul>
