@@ -27,8 +27,8 @@ export default defineComponent({
         async restoreProject(id, index) {
             await utils.restoreProject(route('close-project.restore'), { id: id }, this.projects, index);
         },
-        async restoreProject(id, index) {
-            await utils.restoreProject(route('close-project.restore'), { id: id }, this.projects, index);
+        async downloadProject(id, index) {
+            await utils.downloadProject(route('close-project.download'), { id: id }, this.projects, index);
         }
     },
 });
@@ -85,10 +85,7 @@ export default defineComponent({
                     </button>
                     <div class="text-left dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
                         :aria-labelled:by="`dropdown-${project.id}`">
-                        <div class="menu-item px-3">
-                            <span @click="restoreProject(project.id)" class="menu-link"><i
-                                    class="bi bi-file-plus fs-5 me-2"></i>Restore</span>
-                        </div>
+
                         <div class="menu-item px-3">
                             <span @click="restoreProject(project.id)" class="menu-link"><i
                                     class="bi bi-file-plus fs-5 me-2"></i>Restore</span>
@@ -96,6 +93,10 @@ export default defineComponent({
                         <div class="menu-item px-3">
                             <span @click="confirmDelete(index)" class="menu-link"><i
                                     class="bi bi-trash3 me-2"></i>Delete</span>
+                        </div>
+                        <div class="menu-item px-3">
+                            <a :href="`close-project/download/${project.id}`" class="menu-link"><i
+                                    class="bi bi-file-earmark-arrow-down fs-5 me-2"></i>Download</a>
                         </div>
                     </div>
                 </div>

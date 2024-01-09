@@ -211,6 +211,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::controller(CloseProjectController::class)->group(function () {
             Route::get('/close-projects', 'index')->name('close-projects');
             Route::post('close-project/restore', 'restore')->name('close-project.restore');
+            Route::get('close-project/download/{id}', 'download')->name('close-project.download');
             Route::delete('close-project/destroy/{id}', 'destroy')->name('close-project.destroy');
         });
         Route::resource('service', ServiceController::class);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProjectReport;
 use App\Http\Resources\ClientListResource;
 use App\Http\Resources\CloseProjectListResource;
 use App\Http\Resources\ProjectStatusResource;
@@ -14,6 +15,8 @@ use App\Models\Respondent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class CloseProjectController extends Controller
 {
@@ -24,7 +27,7 @@ class CloseProjectController extends Controller
         $this->clients = ClientListResource::collection(Client::where(['status' => 1])->get());
         $this->status = ProjectStatus::orderBy('id', 'asc')->get();
     }
-    
+
     public function index(Request $request)
     {
         $projects = Project::orderBy('updated_at', 'desc')->groupBy('project_id')->where('status', 'close');
@@ -75,6 +78,15 @@ class CloseProjectController extends Controller
                 $respondents = CloseRespondent::where('project_id', '=', $request->id)->delete();
             }
             return response()->json(restoreMessage('Project'));
+        }
+        return response()->json(errorMessage());
+    }
+
+    public function download($id)
+    {
+        $project = Project::where('id', '=', $id)->first();
+        if ($project) {
+            return Excel::download(new ProjectReport($id), $project->project_id . '.xlsx');
         }
         return response()->json(errorMessage());
     }
