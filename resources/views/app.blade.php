@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Scripts -->
     <link rel="stylesheet" href="{{ url('assets/plugins/global/plugins.bundle.css') }}" />
+    <link rel='shortcut icon' type='image/x-icon' href="{{url('assets/images/ars.ico')}}" />
+
     @routes
     @vite(['resources/js/app.js', 'resources/sass/app.scss', "resources/js/Pages/{$page['component']}.vue"])
     @inertiaHead

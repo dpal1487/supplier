@@ -33,7 +33,7 @@ class SurveyInitController extends Controller
         $projectStateArray = explode(' , ', $projectLink->state);
         $projectCityArray = explode(' , ', $projectLink->city);
 
-        return $project;
+        return $projectLink;
         if (count($projectLink->completes) < $projectLink->sample_size) {
             if ($projectLink->project->status == 'live' && $projectLink->status == 1) {
                 if (!Respondent::where(['supplier_project_id' => $pid, 'user_id' => $request->uid])->first()) {

@@ -47,6 +47,7 @@ export default defineComponent({
         return {
             processing: false,
             form: this.$inertia.form({
+                id: this.company?.data?.id,
                 company_name: this.company?.data?.company_name || '',
                 tax_number: this.company?.data?.tax_number || '',
                 description: this.company?.data?.description || '',

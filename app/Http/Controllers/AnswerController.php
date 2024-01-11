@@ -104,9 +104,9 @@ class AnswerController extends Controller
         }
     }
 
-    public function destroy(Answer $answer)
+    public function destroy($id)
     {
-
+        $answer = Answer::find($id);
         if ($answer->delete()) {
             return response()->json(['success' => true, 'message' => 'Answer has been deleted successfully.']);
         }

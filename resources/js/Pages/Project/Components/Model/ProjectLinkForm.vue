@@ -61,7 +61,7 @@ export default defineComponent({
                     required
                 },
                 notes: {
-                    required
+
                 }
             },
         };

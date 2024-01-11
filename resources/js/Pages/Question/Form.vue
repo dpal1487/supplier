@@ -83,6 +83,7 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
+                console.log(!this.isEdit , "see this")
                 if (route().current() == 'question.create') {
                     this.form.transform((data) => ({
                         ...data,

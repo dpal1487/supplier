@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     AccountController,
+    ActivityTypeController,
     AnswerController,
     BlogController,
     ClientController,
@@ -219,10 +220,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::post('blog/status', [BlogController::class, 'statusUpdate'])->name('blog.status');
         Route::resource('testimonial', TestimonialController::class);
         Route::post('testimonial/status', [TestimonialController::class, 'statusUpdate'])->name('testimonial.status');
-        // Route::resource('question', QuestionController::class);
-        // Route::resource('answer', AnswerController::class);
         Route::controller(QuestionController::class)->group(function () {
-            Route::get('question', 'index')->name('question.index');
+            Route::get('questions', 'index')->name('questions.index');
             Route::group(['prefix' => 'question'], function () {
                 Route::post('create', 'store')->name('question.create');
                 Route::get('{id}/edit', 'edit')->name('question.edit');
@@ -238,10 +237,18 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 Route::post('store', 'store')->name('answer.store');
                 Route::get('{id}/edit', 'edit')->name('answer.edit');
                 Route::post('update', 'update')->name('answer.update');
-                Route::delete('delete', 'destroy')->name('answers.delete');
+                Route::delete('delete/{id}', 'destroy')->name('answer.delete');
             });
         });
-
+        Route::controller(ActivityTypeController::class)->group(function () {
+            Route::get('activity_types', 'index')->name('activity_types.index');
+            Route::group(['prefix' => 'activity_type'], function () {
+                Route::post('store', 'store')->name('activity_type.store');
+                Route::get('edit', 'edit')->name('activity_type.edit');
+                Route::post('update', 'update')->name('activity_type.update');
+                Route::delete('destroy/{id}', 'destroy')->name('activity_type.destroy');
+            });
+        });
         Route::controller(RoleController::class)->group(function () {
             Route::group(['prefix' => 'role'], function () {
                 Route::get('/', 'index')->name('role.index');

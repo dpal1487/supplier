@@ -385,11 +385,11 @@ class ProjectController extends Controller
 
             broadcast(new NotificationEvent([
                 'user_id' => auth()->user()->id,
-                'message' => 'Project - ' . $this->project($id)->project_name . ' with id - ' . $this->project($id)->project_id . ' was deleted by ' . $this->user_details() . '.',
+                'message' => 'Project - ' . $this->project($id)?->project_name . ' with id - ' . $this->project($id)?->project_id . ' was deleted by ' . $this->user_details() . '.',
                 'type' => 'notification',
-                'title' => 'Project - ' . $this->project($id)->project_id
+                'title' => 'Project - ' . $this->project($id)?->project_id
             ]));
-            auth()->user()->notify(new ActionNotification($this->project($id), Auth::user(), $this->project($id)->project_name . ' was deleted'));
+            auth()->user()->notify(new ActionNotification($project,  Auth::user(), $project?->project_name . ' was deleted'));
 
             ProjectLink::where('project_id', $id)->delete();
             return response()->json(deleteMessage('Project'));
@@ -544,7 +544,7 @@ class ProjectController extends Controller
             ]));
             auth()->user()->notify(new ActionNotification($this->project($id), Auth::user(), $this->project($id)->project_name . " export",));
 
-            return Excel::download(new ExportIdExport($project->id), $project->project_id . '.xlsx');
+            return Excel::download(new ExportIdExport($project->id), $project->project_id . '-' . $project->project_name . '.xlsx');
         }
     }
     public function report($id)
@@ -566,7 +566,7 @@ class ProjectController extends Controller
             ]));
             auth()->user()->notify(new ActionNotification($this->project($id), Auth::user(), $this->project($id)->project_name . " report download",));
 
-            return Excel::download(new ProjectReport($id), $project->project_name . '.xlsx');
+            return Excel::download(new ProjectReport($id), $project->project_id . '-' . $project->project_name . '.xlsx');
         }
     }
 }

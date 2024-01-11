@@ -88,6 +88,10 @@ export default defineComponent({
                         });
             }
         },
+
+        getStates(id) {
+
+        },
         changeStatus() {
 
         }

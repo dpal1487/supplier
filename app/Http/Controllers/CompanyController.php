@@ -45,12 +45,13 @@ class CompanyController extends Controller
             'tax_number' => 'required',
             'description' => 'required',
         ]);
-        $company = Company::where('id', 1)->update([
+        $company = Company::where('id', $request->id)->first();
+        $update = $company->update([
             'company_name' => $request->company_name,
             'tax_number' => $request->tax_number,
             'description' => $request->description,
         ]);
-        if ($company) {
+        if ($update) {
             return redirect("/company")->with('flash', ['message' => 'Company successfully updated.']);
         }
         return redirect()->back()->withErrors(['Opps something went wrong!']);
@@ -67,7 +68,6 @@ class CompanyController extends Controller
         } else {
             return Inertia::render('Company/Address', [
                 'company' => $this->company,
-
                 'countries' => $this->countries
             ]);
         }

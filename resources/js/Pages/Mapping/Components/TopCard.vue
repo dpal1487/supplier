@@ -10,9 +10,11 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/css/index.css";
 import MappingForm from "./MappingForm.vue";
 import { toast } from "vue3-toastify";
+import axios from "axios";
+import { Inertia } from "@inertiajs/inertia";
 
 export default defineComponent({
-    props: ["countries", "project"],
+    props: ["countries", "project", "states", "cities"],
     components: {
         Link,
         Multiselect,
@@ -36,16 +38,19 @@ export default defineComponent({
     methods: {
         submit(form) {
             this.form = form;
-            this.form
-                .transform((data) => ({
-                    ...data,
-                }))
-                .post(this.route("mapping.update", this.project.id), {
-                    onSuccess: (data) => {
-                        toast.success(this.$page.props.jetstream.flash.message);
-                        this.isEdit = false;
-                    },
-                    onError: (data) => { },
+            this.form.processing = true;
+            axios.post(this.route("mapping.update", this.project.id), this.form)
+                .then((response) => {
+                    toast.success(response.data.message)
+                }).finally(() => {
+                    this.isEdit = false;
+                    if (this.route().current() == "mapping.suppliers") {
+                        Inertia.get('/mapping/' + this.project.id + '/suppliers')
+                    }
+                    if (this.route().current() == "mapping.show") {
+                        Inertia.get('/mapping/' + this.project.id)
+                    }
+                    this.form.processing = false;
                 });
         },
     },
@@ -60,18 +65,19 @@ export default defineComponent({
                 <div class="card-title">
                     <h2>#{{ project.project_uid }} ({{ project.project_name }})</h2>
                 </div>
-                <div class="flex-shrink-0">
+                <div class="flex-shrink-0 d-flex">
                     <button v-if="!isEdit" @click="isEdit = true" class="btn btn-sm btn-primary me-2">
-                        <i class="bi bi-pencil me-2"></i>Edit
+                        <i class="bi bi-pencil me-1"></i>Edit
                     </button>
                     <Link :href="`/sampling/${project.id}/create`" class="btn btn-sm btn-primary"><i
-                        class="bi bi-plus-circle me-2"></i>Add Supplier
+                        class="bi bi-plus-circle me-1"></i>Add Supplier
                     </Link>
                 </div>
             </div>
             <div class="card-body p-0">
                 <div class="row p-5" v-if="isEdit">
-                    <mapping-form @submitted="submit" :project="project" :countries="countries">
+                    <mapping-form @submitted="submit" :project="project" :countries="countries" :states="states"
+                        :cities="cities">
                         <template #action>
                             <div class="d-flex align-items-center justify-content-end">
                                 <button @click="isEdit = false" type="button" class="btn btn-secondary me-5">
@@ -92,120 +98,71 @@ export default defineComponent({
                 </div>
                 <div class="row" v-else>
                     <div class="col-md-8">
-                        <table class="table table-bordered text-start align-middle mx-5 ">
-                            <tbody>
-                                <tr>
-                                    <th>
-                                        Project ID
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-800">
-                                        {{ project.project_uid }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th style="
-                                                white-space: nowrap;
-                                            ">
-                                        Project Name
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-800">
-                                        {{ project.project_name }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th style="
-                                                white-space: nowrap;
-                                            ">
-                                        Project Link
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-800">
-                                        {{ project.project_link }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th style="
-                                                white-space: nowrap;
-                                            ">
-                                        Client Name
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-800">
-                                        <Link :href="`/client/${project.client.id}`">{{ project.client.name }}</Link>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th style="
-                                                white-space: nowrap;
-                                            ">
-                                        Project Country
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-800">
-                                        {{ project.country.display_name }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th style="
-                                                white-space: nowrap;
-                                            ">
-                                        Sample Size
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-800">
-                                        {{ project.sample_size }}N
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th style="
-                                                white-space: nowrap;
-                                            ">
-                                        Project CPI
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-800">
-                                        ${{ project.cpi }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th style="
-                                                white-space: nowrap;
-                                            ">
-                                        Project LOI
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-800">
-                                        {{ project.loi }} Min
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th style="
-                                                white-space: nowrap;
-                                            ">
-                                        Incidence Ratio
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-800">
-                                        {{ project.ir }}%
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th style="
-                                                white-space: nowrap;
-                                                min-width: 150px;
-                                            ">
-                                        Project Status
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-800">
-                                        <span class="badge badge-success" v-if="project.status">Active</span>
-                                        <span class="badge badge-danger" v-else>Inactive</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th style="
-                                                white-space: nowrap;
-                                            ">
-                                        Target
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-800">
-                                        {{ project.target }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="d-flex flex-row px-5 my-5">
+                            <div class="flex-shrink-0" style="width: 200px;">Project ID</div>
+                            <div class="flex-root fs-6 fw-bold text-gray-800 mw-100" style="width: 120px;">{{
+                                project.project_uid }}</div>
+                        </div>
+                        <div class="d-flex flex-row  px-5 my-5">
+                            <div class="flex-shrink-0" style="width: 200px;">Project Name</div>
+                            <div class="flex-root fs-6 fw-bold text-gray-800 mw-100" style="width: 120px;">{{
+                                project.project_name }}</div>
+                        </div>
+                        <div class="d-flex flex-row  px-5 my-5">
+                            <div class="flex-shrink-0" style="width: 200px;">Project Link</div>
+                            <div class="flex-root fs-6 fw-bold text-gray-800 mw-100" style="width: 120px;">{{
+                                project.project_link }}</div>
+                        </div>
+                        <div class="d-flex flex-row  px-5 my-5">
+                            <div class="flex-shrink-0" style="width: 200px;">Project Country</div>
+                            <div class="flex-root fs-6 fw-bold text-gray-800 mw-100" style="width: 120px;">
+                                <Link :href="`/client/${project.client.id}`">{{ project.country.display_name }}</Link>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row  px-5 my-5">
+                            <div class="flex-shrink-0" style="width: 200px;">Client Name</div>
+                            <div class="flex-root fs-6 fw-bold text-gray-800 mw-100" style="width: 120px;">
+                                <Link :href="`/client/${project.client.id}`">{{ project.client.name }}</Link>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row  px-5 my-5">
+                            <div class="flex-shrink-0" style="width: 200px;">Sample Size</div>
+                            <div class="flex-root fs-6 fw-bold text-gray-800 mw-100" style="width: 120px;">
+                                {{ project.sample_size }}N
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row  px-5 my-5">
+                            <div class="" style="width: 200px;">Project CPI</div>
+                            <div class="flex-root fs-6 fw-bold text-gray-800">
+                                ${{ project.cpi }}
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row  px-5 my-5">
+                            <div class="" style="width: 200px;">Project LOI</div>
+                            <div class="flex-root fs-6 fw-bold text-gray-800">
+                                {{ project.loi }} Min
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row  px-5 my-5">
+                            <div class="" style="width: 200px;">Incidence Ratio</div>
+                            <div class="flex-root fs-6 fw-bold text-gray-800">
+                                {{ project.ir }}%
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row  px-5 my-5">
+                            <div class="" style="width: 200px;">Project Status</div>
+                            <div class="flex-root fs-6 fw-bold text-gray-800">
+                                <span class="badge badge-success" v-if="project.status">Active</span>
+                                <span class="badge badge-danger" v-else>Inactive</span>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row  px-5 my-5">
+                            <div class="" style="width: 200px;">Target </div>
+                            <div class="flex-root fs-6 fw-bold text-gray-800">
+                                {{ project.notes }}
+
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <div class="h-100 d-flex justify-content-center align-items-center bg-gray-100">

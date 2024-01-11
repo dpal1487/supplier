@@ -6,7 +6,7 @@ import SupplierList from "../Sampling/Components/SupplierList.vue";
 import TopCard from "./Components/TopCard.vue";
 import Pagination from "../../Jetstream/Pagination.vue";
 export default defineComponent({
-    props: ["project", "respondents", "countries"],
+    props: ["project", "respondents", "countries", "states", "cities"],
     data() {
         return {
             title: "Link Overview",
@@ -40,9 +40,8 @@ export default defineComponent({
 </script>
 <template>
     <app-layout :title="title">
-
         <Head :title="title" />
-        <TopCard :project="project.data" :countries="countries.data" />
+        <TopCard :project="project.data" :countries="countries.data" :states="states.data" :cities="cities.data" />
         <template #breadcrumb>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
@@ -72,21 +71,15 @@ export default defineComponent({
                     </div>
                 </div>
                 <div class="card-body">
-                    <!--begin::Table-->
                     <div class="table-responsive" v-if="respondents.data.length > 0">
                         <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
-                            <!--begin::Table head-->
                             <thead>
-                                <!--begin::Table row-->
                                 <tr class="text-gray-400 fw-bold fs-7 w-100 text-uppercase">
                                     <th class="min-w-120px" v-for="(th, index) in tbody" :key="index">
                                         {{ th }}
                                     </th>
                                 </tr>
-                                <!--end::Table row-->
                             </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
                             <tbody class="fw-semibold text-gray-600">
                                 <tr v-for="(
                                         respondent, index
@@ -124,7 +117,6 @@ export default defineComponent({
                                     </td>
                                 </tr>
                             </tbody>
-                            <!--end::Table body-->
                         </table>
                     </div>
                     <div class="d-flex justify-content-center align-content-center pt-10 pb-10" v-else>

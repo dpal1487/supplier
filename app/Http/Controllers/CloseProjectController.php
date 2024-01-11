@@ -27,7 +27,6 @@ class CloseProjectController extends Controller
         $this->clients = ClientListResource::collection(Client::where(['status' => 1])->get());
         $this->status = ProjectStatus::orderBy('id', 'asc')->get();
     }
-
     public function index(Request $request)
     {
         $projects = Project::orderBy('updated_at', 'desc')->groupBy('project_id')->where('status', 'close');
@@ -81,7 +80,6 @@ class CloseProjectController extends Controller
         }
         return response()->json(errorMessage());
     }
-
     public function download($id)
     {
         $project = Project::where('id', '=', $id)->first();
@@ -90,7 +88,6 @@ class CloseProjectController extends Controller
         }
         return response()->json(errorMessage());
     }
-
     public function destroy($id)
     {
         if (Project::where('id', $id)->delete()) {

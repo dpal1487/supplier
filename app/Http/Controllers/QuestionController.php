@@ -26,8 +26,6 @@ class QuestionController extends Controller
                 ->orWhere('text', 'like', "%$request->q%")
                 ->orWhere('language', 'like', "%$request->q%");
         }
-
-        // return QuestionResources::collection($questions->paginate(10));
         return Inertia::render('Question/Index', [
             'questions' => QuestionResources::collection($questions->paginate(10)->appends($request->all())),
             'industries' => $industries
@@ -41,7 +39,6 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-
             'question_key' => 'required',
             'text' => 'required',
             'type' => 'required',
@@ -82,10 +79,10 @@ class QuestionController extends Controller
      * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function edit(Question $question)
+    public function edit($id)
     {
         $industries = Industry::get();
-
+        $question = Question::find($id);
         return response()->json([
             'question' => new questionResources($question),
             'industries' => $industries,

@@ -84,14 +84,20 @@ export default defineComponent({
                     role: ["pm", "admin"],
                 },
                 {
-                    link: "/question",
-                    title: "Question",
+                    link: "/questions",
+                    title: "Questions",
                     icon: "bi bi-question-square",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/answers",
                     title: "Answers",
+                    icon: "bi bi-book",
+                    role: ["pm", "admin"],
+                },
+                {
+                    link: "/activity_types",
+                    title: "Activity Types",
                     icon: "bi bi-book",
                     role: ["pm", "admin"],
                 },

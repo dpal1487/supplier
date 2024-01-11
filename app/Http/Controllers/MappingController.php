@@ -96,13 +96,15 @@ class MappingController extends Controller
 
     public function show($id)
     {
-        $surveys = Respondent::orderBy('created_at', 'desc')->where('project_link_id', $id)->paginate(1000);
+        $surveys = Respondent::orderBy('created_at', 'desc')->where('project_link_id', $id)->paginate(10);
         $project = ProjectLink::find($id);
         if ($project) {
             return Inertia::render('Mapping/Show', [
                 'project' => new ProjectLinkResource($project),
                 'respondents' => RespondentResource::collection($surveys),
-                'countries' => $this->countries
+                'countries' => $this->countries,
+                'states' => StateResource::collection(State::where('country_id', $project->country_id)->get()),
+                'cities' => CityResource::collection(City::where('country_id', $project->country_id)->get()),
             ]);
         }
         return redirect()->back();
@@ -111,7 +113,6 @@ class MappingController extends Controller
 
     public function edit($id)
     {
-
         $project = ProjectLink::find($id);
         if ($project) {
             return response()->json([
@@ -179,10 +180,15 @@ class MappingController extends Controller
     public function suppliers($id)
     {
         $project = ProjectLink::find($id);
+
+        $states = State::where('country_id', $project->country_id)->get();
+        $cities = City::where('country_id', $project->country_id)->get();
         if ($project) {
             return Inertia::render('Mapping/Supplier', [
                 'project' => new ProjectLinkResource($project),
                 'suppliers' => SupplierProjectResource::collection(SupplierProject::where('project_link_id', $id)->get()),
+                'states' => StateResource::collection($states),
+                'cities' => CityResource::collection($cities),
                 'countries' => $this->countries,
             ]);
         }

@@ -7,8 +7,9 @@ import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
 import Loading from "vue-loading-overlay";
 import AnswerForm from "./Components/AnswerForm.vue";
+import utils from "../../utils";
 export default defineComponent({
-    props: ["answers", "message","questions"],
+    props: ["answers", "message", "questions"],
 
     data() {
         return {
@@ -36,7 +37,7 @@ export default defineComponent({
     methods: {
         async confirmDelete(id, index) {
             this.isLoading = true;
-            await utils.deleteIndexDialog(route('question.destroy', id), this.answers.data, index);
+            await utils.deleteIndexDialog(route('answer.delete', id), this.answers.data, index);
             this.isLoading = false;
         },
         search() {

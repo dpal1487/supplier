@@ -86,7 +86,7 @@ export default defineComponent({
                         if (response.data.success) {
                             this.processing = false;
                             toast.success(response.data.message)
-                            Inertia.get('/question')
+                            Inertia.get('/questions')
                             this.$emit('hidemodal')
                         } else {
                             toast.info(response.data.message)

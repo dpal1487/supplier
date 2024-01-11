@@ -17,7 +17,7 @@ class ProjectLink extends Model
         'ir',
         'sample_size',
         'status',
-        'target',
+        'notes',
         'project_link',
         'country_id',
         'state',
