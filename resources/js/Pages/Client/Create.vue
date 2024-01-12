@@ -29,7 +29,6 @@ export default defineComponent({
 
                 },
                 description: {
-                    required,
                 },
                 email_address: {
                     required,
@@ -187,7 +186,8 @@ export default defineComponent({
                                 </div>
                                 <div class="col-md-6 fv-row">
                                     <jet-label for="display-name" value="Tax number" />
-                                    <jet-input id="display-name" type="text" v-model="v$.form.tax_number.$model" placeholder="Enter Tax number" />
+                                    <jet-input id="display-name" type="text" v-model="v$.form.tax_number.$model"
+                                        placeholder="Enter Tax number" />
 
                                 </div>
                                 <div class="fv-row mb-3">

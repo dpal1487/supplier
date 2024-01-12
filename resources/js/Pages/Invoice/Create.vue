@@ -497,11 +497,9 @@ export default defineComponent({
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
-
-
                             <div class="separator separator-dashed mb-8"></div>
                             <div class="mb-0">
-                                <button type="submit" href="#" class="btn btn-primary w-100" id="kt_invoice_submit_button">
+                                <button type="submit" href="#" class="btn btn-primary w-100">
                                     <span class="svg-icon svg-icon-3">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">

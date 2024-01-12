@@ -41,7 +41,6 @@ export default defineComponent({
                 linkedin_profile: {
                 },
                 description: {
-                    required,
                 },
                 status: {
                     required,
@@ -65,7 +64,7 @@ export default defineComponent({
                 linkedin_profile: this.supplier?.data?.linkedin_profile || '',
                 description: this.supplier?.data?.description || '',
                 country: this.supplier?.data?.country?.id || '',
-                status: this.supplier?.data?.status || '',
+                status: this.supplier?.data?.status || 0,
                 action: "supplier.overview",
             }),
             status: [
@@ -117,7 +116,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                                <Link href="/suppliers" class="text-muted text-hover-primary">Suppliers</Link>
+                <Link href="/suppliers" class="text-muted text-hover-primary">Suppliers</Link>
 
             </li>
             <li class="breadcrumb-item">
@@ -127,7 +126,7 @@ export default defineComponent({
                 {{ title }}
             </li>
         </template>
-        <Header :supplier="supplier?.data"  />
+        <Header :supplier="supplier?.data" />
         <div class="card mb-5 mb-xl-10">
             <div class="card-header">
                 <div class="card-title m-0">
@@ -209,9 +208,10 @@ export default defineComponent({
                             </div>
                             <div class="fv-row col-6">
                                 <jet-label for="country" value="Country" />
-                                <Multiselect :can-clear="false" :options="countries.data" label="display_name" valueProp="id"
-                                    class="form-control form-control-lg form-control-solid" placeholder="Select Country"
-                                    v-model="form.country" track-by="display_name" :searchable="true" :class="v$.form.country.$errors.length > 0
+                                <Multiselect :can-clear="false" :options="countries.data" label="display_name"
+                                    valueProp="id" class="form-control form-control-lg form-control-solid"
+                                    placeholder="Select Country" v-model="form.country" track-by="display_name"
+                                    :searchable="true" :class="v$.form.country.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
                                         " />
@@ -234,8 +234,8 @@ export default defineComponent({
                             </div>
                             <div class="fv-row col-12">
                                 <jet-label for="description" value="Description" />
-                                <textarea id="description" class="form-control form-control-lg form-control-solid" type="text"
-                                    v-model="v$.form.description.$model" :class="v$.form.description.$errors.length > 0
+                                <textarea id="description" class="form-control form-control-lg form-control-solid"
+                                    type="text" v-model="v$.form.description.$model" :class="v$.form.description.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
                                         " placeholder="Type description here..." />
@@ -247,7 +247,7 @@ export default defineComponent({
                         <div class="row text-align-center p-3">
                             <div class="col-12">
                                 <div class="d-flex justify-content-end gap-5">
-                                    <button type="button" class="btn btn-secondary me-5"
+                                    <button type="button" class="btn btn-secondary"
                                         @click="this.isEdit = false">Discard</button>
                                     <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                         :data-kt-indicator="processing ? 'on' : 'off'">

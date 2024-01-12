@@ -6,7 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class SupplierResource extends JsonResource
 {
-   
+
     public function toArray($request)
     {
         return [
@@ -18,7 +18,7 @@ class SupplierResource extends JsonResource
             'website' => $this->website,
             'skype_profile' => $this->skype_profile,
             'linkedin_profile' => $this->linkedin_profile,
-            'description' => $this->description,
+            'description' => $this->notes,
             'country' => new CountryResource($this->country),
             'status' => $this->status,
             'created_at' => $this->created_at,

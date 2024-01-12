@@ -139,7 +139,7 @@ export default defineComponent({
                                     </div>
                                 </div>
                                 <div class="d-flex pt-10 pb-10">
-                                    <div class="col-6">
+                                    <div class="col-4">
                                         <div class="mb-0">
                                             <table class="table">
                                                 <tr class="fw-bold text-gray-700 fs-5">
@@ -190,37 +190,54 @@ export default defineComponent({
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-8">
                                         <div class="table-responsive mb-0">
                                             <table class="table">
                                                 <tr class="fw-bold text-gray-700 fs-5">
-                                                    <td class="col-6 text-end">
-                                                        <div class="fw-semibold pe-10 text-gray-600 fs-4">Subtotal</div>
+                                                    <td class=" text-start">
+                                                        <div class="fw-bold text-gray-800 fs-4">Net payable amount
+
+                                                            {{ invoice.data.currency.symbol }}
+                                                            {{ invoice.data.total_amount }} X {{
+                                                                invoice?.data?.conversion_rate }}
+                                                        </div>
                                                     </td>
-                                                    <td class="col-6 text-end border-bottom">
-                                                        <div class="text-dark fw-bolder">{{
-                                                            invoice.data.currency.symbol }}{{ invoice.data.total_amount }}
+                                                    <td class=" text-start border-bottom">
+                                                        <div class="text-dark fw-bolder">INR {{ (invoice.data.total_amount *
+                                                            invoice.data.conversion_rate).toFixed(2) }}
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                <tr class="fw-bold text-gray-700 fs-5"
-                                                    v-if="invoice.data?.client?.tax_number && invoice.data?.client?.tax_number != 'null'">
-                                                    <td class="col-6 text-end">
-                                                        <div class="fw-semibold pe-10 text-gray-600 fs-4">GSTIN
-                                                            {{ invoice.data.tax_rate }}%</div>
+                                                <tr class="fw-bold text-gray-800 fs-5">
+                                                    <td class=" text-start">
+                                                        <div class="fw-semibold text-gray-700 fs-4">Invoice value
+                                                            before GST :
+                                                        </div>
                                                     </td>
-                                                    <td class="col-6 text-end border-bottom">
+                                                    <td class=" text-start border-bottom">
                                                         <div class="text-dark fw-bolder">INR {{
                                                             parseFloat(invoice.data.total_amount * invoice.data.tax_rate /
                                                                 118).toFixed(2) }}</div>
                                                     </td>
                                                 </tr>
-                                                <tr class="fw-bold text-gray-700 fs-5">
-                                                    <td class="col-6 text-end">
-                                                        <div class="fw-semibold pe-10 text-gray-600 fs-4">Applied Exchange
-                                                            Rates</div>
+                                                <tr class="fw-bold text-gray-800 fs-5"
+                                                    v-if="invoice.data?.client?.tax_number && invoice.data?.client?.tax_number != 'null'">
+                                                    <td class=" text-start">
+                                                        <div class="fw-semibold text-gray-700 fs-4">GST value at
+                                                            {{ invoice.data.tax_rate }}% :</div>
                                                     </td>
-                                                    <td class="col-6 text-end border-bottom">
+                                                    <td class=" text-start border-bottom">
+                                                        <div class="text-dark fw-bolder">INR {{
+                                                            parseFloat(invoice.data.total_amount * invoice.data.tax_rate /
+                                                                118).toFixed(2) }}</div>
+                                                    </td>
+                                                </tr>
+                                                <tr class="fw-bold text-gray-800 fs-5">
+                                                    <td class=" text-start">
+                                                        <div class="fw-semibold text-gray-700 fs-4">Invoice value with
+                                                            GST</div>
+                                                    </td>
+                                                    <td class=" text-start border-bottom">
                                                         <div class="text-dark fw-bolder">
                                                             1 {{ invoice.data.currency.code }} = {{
                                                                 invoice.data.conversion_rate }}
@@ -228,10 +245,10 @@ export default defineComponent({
                                                     </td>
                                                 </tr>
                                                 <tr class="fw-bold text-gray-700 fs-5">
-                                                    <td class="col-6 text-end">
+                                                    <td class=" text-start">
                                                         <div class="fw-semibold pe-10 text-gray-600 fs-4">Total</div>
                                                     </td>
-                                                    <td class="col-6 text-end border-bottom"
+                                                    <td class=" text-start border-bottom"
                                                         v-if="invoice.data?.client?.tax_number && invoice.data?.client?.tax_number != 'null'">
                                                         <div class="text-dark fw-bolder">{{
                                                             invoice.data.currency.symbol }}{{ invoice.data.total_amount }}
@@ -244,7 +261,7 @@ export default defineComponent({
                                                                     invoice.data.tax_rate))).toFixed(2) }}
                                                         </div>
                                                     </td>
-                                                    <td class="col-6 text-end border-bottom" v-else>
+                                                    <td class=" text-end border-bottom" v-else>
                                                         <div class="text-dark fw-bolder">{{
                                                             invoice.data.currency.symbol }}{{ invoice.data.total_amount }}
                                                             X INR {{ invoice.data.conversion_rate }} =
@@ -254,6 +271,18 @@ export default defineComponent({
                                                         </div>
                                                     </td>
                                                 </tr>
+
+                                                <div class="text-dark fw-bolder border-top  fs-2 text-start ">
+                                                    <div class="my-5 mx-5">
+                                                        Notes / Terms
+                                                        <div class="text-gray-800 fw-semibold  fs-4 text-start">
+                                                            1 {{ invoice.data.currency.name }} to {{
+                                                                invoice.data.conversion_rate }} INR ({{ invoice.data.date }})
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
                                             </table>
                                         </div>
                                     </div>

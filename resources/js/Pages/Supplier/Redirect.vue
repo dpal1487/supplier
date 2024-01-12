@@ -165,7 +165,7 @@ export default defineComponent({
                         <div class="row text-align-center p-3">
                             <div class="col-12">
                                 <div class="d-flex justify-content-end gap-5">
-                                    <button type="button" class="btn btn-secondary me-5"
+                                    <button type="button" class="btn btn-secondary"
                                         @click="this.isEdit = false">Discard</button>
                                     <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                         :data-kt-indicator="processing ? 'on' : 'off'">

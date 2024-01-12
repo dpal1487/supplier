@@ -53,10 +53,10 @@ class ClientController extends Controller
         $request->validate([
             'client_name' => 'required',
             'display_name' => 'required',
-            'email_address' => 'required|email',
-            'account_email' => 'email',
+            'email_address' => 'required|email|unique:clients,email_address',
+            'account_email' => '',
             'mobile' => 'required|numeric|min:10',
-            'tax_number' => 'required',
+            'tax_number' => '',
             'description' => 'required',
         ]);
         $client = Client::create(
@@ -103,8 +103,7 @@ class ClientController extends Controller
             'email_address' => 'required|email|unique:clients,email_address,' . $request->id,
             'account_email' => '',
             'mobile' => 'required|numeric|min:10',
-            'tax_number' => 'required',
-            'description' => 'required',
+            'tax_number' => '',
         ]);
         $client = Client::where(['id' => $request->id])->update(
             [

@@ -38,7 +38,6 @@ export default defineComponent({
                 linkedin_profile: {
                 },
                 description: {
-                    required,
                 },
                 status: {
                     required,
@@ -72,7 +71,7 @@ export default defineComponent({
                 linkedin_profile: this.supplier?.data?.linkedin_profile || '',
                 description: this.supplier?.data?.description || '',
                 country: this.supplier?.data?.country?.id || '',
-                status: this.supplier?.data?.status || '',
+                status: this.supplier?.data?.status || 0,
                 complete_url: this.supplier?.data?.supplier_redirect?.complete_url || '',
                 terminate_url: this.supplier?.data?.supplier_redirect?.terminate_url || '',
                 quotafull_url: this.supplier?.data?.supplier_redirect?.quotafull_url || '',
@@ -142,6 +141,7 @@ export default defineComponent({
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
                 <JetValidationErrors />
+                {{ supplier }}
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
                     <div class="card">
                         <div class="card-header">

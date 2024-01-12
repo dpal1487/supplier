@@ -17,7 +17,6 @@ class MasterController extends Controller
 {
     public function index(Request $request)
     {
-
         $surveys = Respondent::orderBy('created_at', 'desc')->where(['supplier_id' => Null]);
         $users = User::where('status', 1)->orderBy('first_name', 'asc')->get();
         $projects = Project::where('project_name', 'like', '%' . $request->q . '%')->get()->pluck('id');

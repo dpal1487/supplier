@@ -81,7 +81,7 @@ class ProjectController extends Controller
             //     return $projects->get();
             // }
         } else {
-            $projects = Project::orderBy('updated_at', 'desc')->where('status', '!=', 'close');
+            $projects = Project::orderBy('updated_at', 'desc');
             if (Auth::user()->role->role->slug == 'user') {
                 $projects = $projects->where(['status' => 'live']);
             }
@@ -372,13 +372,11 @@ class ProjectController extends Controller
     {
         $project = Project::where('id', $id)->first();
         if (Project::where('id', $id)->delete()) {
-
             $activity = ProjectActivity::create([
                 "project_id" => $project->project_id,
                 "type_id" => "status",
                 "text" => $project->project_name . ' was deleted',
                 "user_id"   => Auth::user()->id,
-
             ]);
             broadcast(new SendMessage($this->project($id)));
 

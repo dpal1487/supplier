@@ -113,7 +113,6 @@ export default defineComponent({
                                         <th>PROJECT ID</th>
                                         <th>PROJECT NAME</th>
                                         <th>PROJECT TYPE</th>
-                                        <th>DEVICE TYPE</th>
                                         <th>CLIENT NAME</th>
                                         <th>STATUS</th>
                                     </tr>
@@ -126,11 +125,6 @@ export default defineComponent({
                                         </td>
                                         <td>
                                             <span class="text-gray-600 fw-semibold d-block fs-7">{{ project?.project_name
-                                            }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="text-gray-600 fw-semibold d-block fs-7 text-capitalize">{{
-                                                project?.project_type
                                             }}</span>
                                         </td>
                                         <td>
@@ -158,5 +152,6 @@ export default defineComponent({
                     </div>
                 </div>
             </div>
-    </div>
-</app-layout></template>
+        </div>
+    </app-layout>
+</template>

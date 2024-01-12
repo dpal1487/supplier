@@ -12,7 +12,7 @@ class Supplier extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'string';
     public $incrementing = false;
-    protected $fillable = ['supplier_name', 'country_id', 'description', 'display_name', 'country_id',  'status', 'email_address', 'website', 'skype_profile', 'linkedin_profile'];
+    protected $fillable = ['supplier_name', 'country_id', 'notes', 'display_name', 'country_id',  'status', 'email_address', 'website', 'skype_profile', 'linkedin_profile'];
 
     protected static function boot()
     {

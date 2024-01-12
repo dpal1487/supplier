@@ -65,9 +65,9 @@ class SupplierController extends Controller
             'display_name' => 'required',
             'email_address' => 'required',
             'website' => 'required',
-            'skype_profile' => 'required',
-            'linkedin_profile' => 'required',
-            'description' => 'required',
+            'skype_profile' => '',
+            'linkedin_profile' => '',
+            'description' => '',
             'status' => 'required',
             'complete_url' => 'required',
             'terminate_url' => 'required',
@@ -82,7 +82,7 @@ class SupplierController extends Controller
             'website' => $request->website,
             'skype_profile' => $request->skype_profile,
             'linkedin_profile' => $request->linkedin_profile,
-            'description' => $request->description,
+            'notes' => $request->description,
             'status' => $request->status,
         ]);
         if ($supplier) { {
@@ -113,7 +113,7 @@ class SupplierController extends Controller
 
     public function edit($id)
     {
-        return Inertia::render('Supplier/Form', [
+        return Inertia::render('Supplier/Create', [
             'supplier' => $this->getSupplier($id),
             'countries' => $this->countries
         ]);
@@ -127,8 +127,8 @@ class SupplierController extends Controller
             'email_address' => 'required',
             'website' => 'required',
             'skype_profile' => 'required',
-            'linkedin_profile' => 'required',
-            'description' => 'required',
+            'linkedin_profile' => '',
+            'description' => '',
             'status' => 'required',
         ]);
 
@@ -141,7 +141,7 @@ class SupplierController extends Controller
             'country_id' => $request->country,
             'skype_profile' => $request->skype_profile,
             'linkedin_profile' => $request->linkedin_profile,
-            'description' => $request->description,
+            'notes' => $request->description,
             'status' => $request->status,
         ]);
 

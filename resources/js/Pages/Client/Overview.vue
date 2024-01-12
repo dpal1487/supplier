@@ -45,16 +45,13 @@ export default defineComponent({
                     required,
                 },
                 account_email: {
-                    required,
                 },
                 mobile: {
                     required,
                 },
                 tax_number: {
-                    required,
                 },
                 description: {
-                    required,
                 },
                 status: {
                     required,
@@ -79,7 +76,7 @@ export default defineComponent({
             }),
             isEdit: false,
             title: "Client Overview",
-            isLoading : false,
+            isLoading: false,
             isFullPage: true,
 
 
@@ -142,7 +139,7 @@ export default defineComponent({
             </li>
         </template>
         <!--begin::Navbar-->
-        
+
         <Header :client="client.data" :address="address.data" />
         <!--begin::details View-->
         <div class="card mb-5 mb-xl-10">

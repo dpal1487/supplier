@@ -14,23 +14,6 @@ import utils from "../../utils";
 
 export default defineComponent({
     props: ["suppliers"],
-    // setup() {
-    //     const doCopy = (link) => {
-    //         copyText(link, undefined, (error, event) => {
-    //             if (error) {
-    //                 toast.info("Can not copy", {
-    //                     autoClose: 1000,
-    //                 });
-    //             } else {
-    //                 toast.success("Copied", {
-    //                     autoClose: 1000,
-    //                 });
-    //             }
-    //         });
-    //     };
-
-    //     return { doCopy };
-    // },
     data() {
         return {
             form: {},
@@ -128,14 +111,9 @@ export default defineComponent({
                                 <td>{{ supplier.country?.display_name }}</td>
 
                                 <td>
-                                    <span :class="`badge bg-${supplier?.status == 1
-                                        ? 'success'
-                                        : 'danger'
-                                        }`">{{
-        supplier?.status
-        ? "Active"
-        : "Inactive"
-    }}</span>
+                                    <span :class="`badge bg-${supplier?.status == 1 ? 'success' : 'danger'}`">{{
+                                        supplier?.status ?
+                                        "Active" : "Inactive" }}</span>
                                 </td>
                                 <td>
                                     <a href="#" class="btn btn-sm btn-light menu-dropdown" :id="`dropdown-${supplier.id}`"
