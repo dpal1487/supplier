@@ -8,7 +8,7 @@ import AnswerForm from "./Components/Answer/AnswerForm.vue";
 import { toast } from "vue3-toastify";
 import Pagination from "../../Jetstream/Pagination.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
-
+import utils from "../../utils";
 export default defineComponent({
     props: ['question', 'answers'],
     setup() {
@@ -76,7 +76,7 @@ export default defineComponent({
         },
         async confirmDelete(id, index) {
             this.isLoading = true;
-            await utils.deleteIndexDialog(route('answer.destroy', id), this.answers.data, index);
+            await utils.deleteIndexDialog(route('answer.delete', id), this.answers.data, index);
             this.isLoading = false;
         },
     }
@@ -91,7 +91,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/question" class="text-muted text-hover-primary">Question</Link>
+                <Link href="/questions" class="text-muted text-hover-primary">Questions</Link>
             </li>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
@@ -102,21 +102,16 @@ export default defineComponent({
         </template>
         <Header :question="question?.data" :answers="answers" />
         <div class="card mb-5 mb-xl-10">
-            <div class="card-header cursor-pointer">
+            <div class="card-header">
                 <div class="card-title m-0">
                     <h3 class="fw-bold m-0">Manage Question </h3>
 
                 </div>
-                <!--end::Card title-->
                 <button class="btn btn-primary btn-sm align-self-center" v-if="!isEdit"
                     @click="this.isAdd = true, this.form = {}"><i class="bi bi-plus-circle "></i>Add A New Answer
                 </button>
-                <!-- <a href="settings.html" class="btn btn-primary align-self-center">Edit Profile</a> -->
             </div>
-            <!--begin::Card header-->
-            <!--begin::Card body-->
             <div class="card-body">
-                <!--begin::Form-->
                 <div class="row" v-if="isEdit || isAdd">
                     <div class="col-12">
                         <!-- <JetValidationErrors /> -->
@@ -143,19 +138,14 @@ export default defineComponent({
                 <div class="row" v-else>
                     <div class="table-responsive">
                         <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
-                            <!--begin::Table head-->
                             <thead>
-                                <!--begin::Table row-->
                                 <tr class="text-gray-900 fw-bold fs-6 text-uppercase">
 
                                     <th v-for="(th, index) in tbody" :key="index">
                                         {{ th }}
                                     </th>
                                 </tr>
-                                <!--end::Table row-->
                             </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
                             <tbody class="fw-semibold text-gray-600">
                                 <tr v-for="(answer, index) in answers.data" :key="index">
 
@@ -171,7 +161,6 @@ export default defineComponent({
                                             <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
                                                 :id="`dropdown-${answer.id}`" data-bs-toggle="dropdown"
                                                 aria-expanded="false">Actions
-                                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                                 <span class="svg-icon svg-icon-5 m-0">
                                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
@@ -180,7 +169,6 @@ export default defineComponent({
                                                             fill="currentColor"></path>
                                                     </svg>
                                                 </span>
-                                                <!--end::Svg Icon-->
                                             </a>
 
                                             <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
@@ -203,7 +191,6 @@ export default defineComponent({
                                     </td>
                                 </tr>
                             </tbody>
-                            <!--end::Table body-->
                         </table>
                     </div>
                     <div class="d-flex align-items-center justify-content-center justify-content-md-end"
@@ -212,10 +199,6 @@ export default defineComponent({
                     </div>
                 </div>
             </div>
-
-            <!--end::Card body-->
         </div>
-
-        <!--end::details View-->
     </AppLayout>
 </template>

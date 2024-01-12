@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\RespondentReport;
 use App\Http\Resources\MasterResource;
 use App\Http\Resources\UserResource;
+use App\Models\CloseRespondent;
 use App\Models\Respondent;
 use App\Models\User;
 use App\Models\Project;
@@ -16,11 +17,21 @@ class MasterController extends Controller
 {
     public function index(Request $request)
     {
-        $surveys = Respondent::orderBy('created_at', 'desc')->where('supplier_id', "=", Null);
+
+        $surveys = Respondent::orderBy('created_at', 'desc')->where(['supplier_id' => Null]);
         $users = User::where('status', 1)->orderBy('first_name', 'asc')->get();
+        $projects = Project::where('project_name', 'like', '%' . $request->q . '%')->get()->pluck('id');
+        $closeSurveys = CloseRespondent::orderBy('created_at', 'desc')->where('supplier_id', "=", Null)->whereIn('project_id', $projects);
+
         if (!empty($request->q)) {
             $projects = Project::where('project_name', 'like', '%' . $request->q . '%')->get()->pluck('id');
             $surveys = $surveys->whereIn('project_id', $projects);
+            $closeSurveys = $closeSurveys->whereIn('project_id', $projects);
+            if ($closeSurveys->get()->isEmpty()) {
+                $surveys = $surveys;
+            } else {
+                $surveys = $closeSurveys;
+            }
         }
         if (!empty($request->user)) {
             $surveys = $surveys->where('user_id', $request->user);
@@ -39,8 +50,6 @@ class MasterController extends Controller
             }
         }
         if (!empty($request->to_date)) {
-
-            return date(now());
             $surveys = $surveys->whereDate('created_at', '>=', $request->from_date)
                 ->whereDate('created_at', '<=', $request->to_date);
         }
@@ -52,7 +61,6 @@ class MasterController extends Controller
     }
     public function exportReport(Request $request)
     {
-        // return $request;
         return Excel::download(new RespondentReport($request), "RespondentReport.xlsx");
     }
 }

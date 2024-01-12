@@ -26,7 +26,7 @@ class MasterResource extends JsonResource
             'status' => $this->status,
             'created_at' => date('d-m-Y H:i:s', strtotime($this->created_at)),
             'duration' => $this->created_at->diff($this->updated_at)->format('%H:%I:%S'),
-           
+
         ];
     }
 }

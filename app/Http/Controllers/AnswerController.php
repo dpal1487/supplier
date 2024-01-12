@@ -93,6 +93,7 @@ class AnswerController extends Controller
             'answer' => $request->answer,
             'order_by' => $request->order_by,
         ]);
+
         if ($answer) {
             if ($request->questionpage) {
                 return redirect('question/' . $request->question)->with('flash', updateMessage('Answer'));
@@ -100,7 +101,7 @@ class AnswerController extends Controller
             // return redirect('answers')->with('flash', updateMessage('Answer'));
             return response()->json(updateMessage('Answer'));
         } else {
-            return response()->json(['success' => true, 'message' => 'Answer not updated']);
+            return response()->json(['success' => false, 'message' => 'Answer not updated']);
         }
     }
 

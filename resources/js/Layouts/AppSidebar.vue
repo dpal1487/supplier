@@ -155,7 +155,7 @@ export default defineComponent({
         </div>
         <div class="app-sidebar-menu overflow-hidden flex-column-fluid">
             <div class="app-sidebar-wrapper">
-                <div class="scroll customscrollbar m-0 h-600px">
+                <div class="scroll customscrollbar my-5 h-600px">
                     <div class="menu menu-column menu-rounded menu-sub-indention px-3">
                         <div class="menu-item m-0" v-for="(navigation, index) in navigations" :key="index">
                             <Link class="menu-link m-0" v-if="navigation?.role?.includes(

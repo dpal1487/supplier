@@ -211,8 +211,8 @@ export default defineComponent({
                                                     </td>
                                                     <td class="col-6 text-end border-bottom">
                                                         <div class="text-dark fw-bolder">INR {{
-                                                            parseFloat(invoice.data.total_amount / 118 *
-                                                                invoice.data.tax_rate).toFixed(2) }}</div>
+                                                            parseFloat(invoice.data.total_amount * invoice.data.tax_rate /
+                                                                118).toFixed(2) }}</div>
                                                     </td>
                                                 </tr>
                                                 <tr class="fw-bold text-gray-700 fs-5">

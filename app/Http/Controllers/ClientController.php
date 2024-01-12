@@ -100,7 +100,7 @@ class ClientController extends Controller
         $request->validate([
             'client_name' => 'required',
             'display_name' => 'required',
-            'email_address' => 'required|email',
+            'email_address' => 'required|email|unique:clients,email_address,' . $request->id,
             'account_email' => '',
             'mobile' => 'required|numeric|min:10',
             'tax_number' => 'required',
@@ -157,7 +157,7 @@ class ClientController extends Controller
     public function address($id)
     {
         $address = Address::where(['entity_id' => $id, 'entity_type' => 'client'])->first();
-        if($address){
+        if ($address) {
             return response()->json(['success' => true, 'data' => new AddressResource($address)]);
         }
         return response()->json(['success' => false, 'message' => 'Address Not Found.']);
