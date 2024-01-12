@@ -132,9 +132,8 @@ class ProjectController extends Controller
     public function getCity(Request $request)
     {
         $cities = City::where('state_id', $request->state_id)->get();
-
         return response()->json([
-            'data' => CityResource::collection($cities),
+            'cities' => CityResource::collection($cities),
             'success' => true,
         ]);
     }

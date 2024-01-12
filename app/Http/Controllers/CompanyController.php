@@ -25,16 +25,15 @@ class CompanyController extends Controller
     public function __construct()
     {
         $this->countries = CountryResource::collection(Country::orderBy('name', 'asc')->get());
-        $this->address = new AddressResource(CompanyAddress::first());
+        $this->address = Address::where(['entity_id' => Company::first()->id, 'entity_type' => 'company'])->first();
         $this->company = new CompanyResource(Company::first());
     }
 
     public function show()
     {
-        $address = CompanyAddress::first();
         return Inertia::render('Company/Overview', [
             'company' => $this->company,
-            'address' => new AddressResource($address),
+            'address' => new AddressResource($this->address),
         ]);
     }
 
@@ -58,10 +57,9 @@ class CompanyController extends Controller
     }
     public function address()
     {
-        $address = CompanyAddress::first();
-        if ($address) {
+        if ($this->address) {
             return Inertia::render('Company/Address', [
-                'address' => new AddressResource($address),
+                'address' => new AddressResource($this->address),
                 'company' => $this->company,
                 'countries' => $this->countries
             ]);
@@ -76,39 +74,41 @@ class CompanyController extends Controller
     public function updateAddress(Request $request)
     {
         $request->validate([
-            'address_line_1' => 'required',
+            'address' => 'required',
             'city' => 'required',
             'state' => 'required',
             'country' => 'required',
             'pincode' => 'required',
         ]);
         if (Company::where(['id' => $request->company_id])->first()) {
-            if ($address = CompanyAddress::where(['company_id' => $request->company_id])->first()) {
-                $address = Address::where(['id' => $request->id])->update([
-                    'address_line_1' => $request->address_line_1,
-                    'address_line_2' => $request->address_line_2,
+            if ($address = Address::where(['entity_id' => $request->company_id, 'entity_type' => 'company'])->first()) {
+                $update = $address->update([
+                    'address' => $request->address,
+                    'entity_id' => $request->company_id,
+                    'entity_type' => 'company',
                     'city' => $request->city,
                     'state' => $request->state,
                     'country_id' => $request->country,
                     'pincode' => $request->pincode,
                 ]);
-                return redirect("/company/address")->with('flash', ['message' => 'Address successfully updated.']);
-            } else {
-                $address = Address::create([
-                    'address_line_1' => $request->address_line_1,
-                    'address_line_2' => $request->address_line_2,
-                    'city' => $request->city,
-                    'state' => $request->state,
-                    'country_id' => $request->country,
-                    'pincode' => $request->pincode,
-                ]);
-                if ($address) {
-                    $address = CompanyAddress::create([
-                        'address_id' => $address->id,
-                        'company_id' => $request->company_id,
-                    ]);
+                if ($update) {
+                    return redirect("/company/address")->with('flash', updateMessage('Address'));
                 }
-                return redirect("/company/address")->with('flash', ['message' => 'Address successfully created.']);
+                return redirect("/company/address")->with('flash', errorMessage());
+            } else {
+                $create = Address::create([
+                    'address' => $request->address,
+                    'entity_id' => $request->company_id,
+                    'entity_type' => 'company',
+                    'city' => $request->city,
+                    'state' => $request->state,
+                    'country_id' => $request->country,
+                    'pincode' => $request->pincode,
+                ]);
+                if ($create) {
+                    return redirect("/company/address")->with('flash', createMessage('Address'));
+                }
+                return redirect("/company/address")->with('flash', errorMessage());
             }
             return redirect()->back()->withErrors(['Opps something went wrong!']);
         }

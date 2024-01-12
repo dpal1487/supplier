@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     AccountController,
     ActivityTypeController,
+    AddressController,
     AnswerController,
     BlogController,
     ClientController,
@@ -60,6 +61,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('account/projects', 'projects')->name('account.projects');
         Route::post('account/update', 'update')->name('account.update');
         Route::get('account/export', 'exportReport')->name('account.report');
+    });
+
+    Route::controller(AddressController::class)->group(function () {
+        Route::get('address/state', 'getState')->name('address.state');
+        Route::get('address/city', 'getCity')->name('address.city');
     });
     // Route::group(['middleware' => ['auth', 'role:user']], function () {
     Route::controller(ProjectController::class)->group(function () {

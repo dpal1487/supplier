@@ -31,12 +31,10 @@ export default defineComponent({
     validations() {
         return {
             form: {
-                address_line_1: {
+                address: {
                     required,
                 },
-                address_line_2: {
-                    required,
-                },
+
                 city: {
                     required,
                 },
@@ -58,8 +56,7 @@ export default defineComponent({
             form: this.$inertia.form({
                 id: this.address?.data?.id || '',
                 company_id: this.company?.data?.id || '',
-                address_line_1: this.address?.data?.address_line_1 || '',
-                address_line_2: this.address?.data?.address_line_2 || '',
+                address: this.address?.data?.address || '',
                 city: this.address?.data?.city || '',
                 state: this.address?.data?.state || '',
                 pincode: this.address?.data?.pincode || '',
@@ -67,6 +64,8 @@ export default defineComponent({
             }),
             isEdit: false,
             title: "Company Address",
+            states: [],
+            cities: [],
         };
     },
     methods: {
@@ -87,10 +86,6 @@ export default defineComponent({
                             },
                         });
             }
-        },
-
-        getStates(id) {
-
         },
         changeStatus() {
 
@@ -118,79 +113,37 @@ export default defineComponent({
                 {{ company.data.company_name }}
             </li>
         </template>
-        <!--begin::Navbar-->
         <Header :company="company?.data" :address="address?.data" />
-        <!--begin::details View-->
         <div class="card mb-5 mb-xl-10">
-            <!--begin::Card header-->
             <div class="card-header cursor-pointer">
-                <!--begin::Card title-->
                 <div class="card-title m-0">
                     <h3 class="fw-bold m-0">Company Address </h3>
                 </div>
-                <!--end::Card title-->
                 <button class="btn btn-primary align-self-center btn-sm"
                     @click="this.isEdit = this.isEdit ? false : true"><i class="bi bi-pencil me-2"></i>Edit Address
                 </button>
             </div>
-            <!--begin::Card body-->
             <div class="card-body" v-if="isEdit">
                 <div class="row">
                     <div class="col-12">
                         <JetValidationErrors />
-
                         <form @submit.prevent="submit">
-                            <!--begin::Input group-->
                             <div class="row mb-6">
-                                <!--begin::Label-->
-                                <label for="address-line-1" class="col-lg-4 col-form-label required fw-bold fs-6">Address
-                                    Line 1
+                                <label for="address" class="col-lg-4 col-form-label required fw-bold fs-6">Address
                                 </label>
-                                <!--end::Label-->
-                                <!--begin::Col-->
                                 <div class="col-lg-8">
-                                    <!--begin::Row-->
-                                    <jet-input id="address-line-1" type="text" v-model="v$.form.address_line_1.$model"
-                                        :class="v$.form.address_line_1.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                            " placeholder="Address Line 1" />
-                                    <div v-for="(error, index) of v$.form.address_line_1.$errors" :key="index">
+                                    <jet-input id="address" type="text" v-model="v$.form.address.$model" :class="v$.form.address.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " placeholder="Address" />
+                                    <div v-for="(error, index) of v$.form.address.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
-                                    <!--end::Row-->
                                 </div>
-                                <!--end::Col-->
                             </div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
                             <div class="row mb-6">
-                                <!--begin::Label-->
-                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="address_line_2">Address
-                                    Line 2</label>
-                                <!--end::Label-->
-                                <!--begin::Col-->
-                                <div class="col-lg-8">
-                                    <!--begin::Row-->
-                                    <jet-input id="address_line_2" type="text" v-model="v$.form.address_line_2.$model"
-                                        :class="v$.form.address_line_2.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                            " placeholder="Address Line 2" />
-                                    <div v-for="(error, index) of v$.form.address_line_2.$errors" :key="index">
-                                        <input-error :message="error.$message" />
-                                    </div>
-                                    <!--end::Row-->
-                                </div>
-                                <!--end::Col-->
-                            </div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
-                            <div class="row mb-6">
-                                <!--begin::Label-->
-                                <label class="col-lg-4 col-form-label required fw-bold fs-6">City</label>
-                                <!--end::Label-->
-                                <!--begin::Col-->
+                                <label for="city" class="col-lg-4 col-form-label required fw-bold fs-6">City
+                                </label>
                                 <div class="col-lg-8">
                                     <jet-input id="city" type="text" v-model="v$.form.city.$model" :class="v$.form.city.$errors.length > 0
                                         ? 'is-invalid'
@@ -200,16 +153,9 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
-
-                                <!--end::Col-->
                             </div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
                             <div class="row mb-6">
-                                <!--begin::Label-->
-                                <label class="col-lg-4 col-form-label fw-bold fs-6">State</label>
-                                <!--end::Label-->
-                                <!--begin::Col-->
+                                <label for="state" class="col-lg-4 col-form-label required fw-bold fs-6">State</label>
                                 <div class="col-lg-8">
                                     <jet-input id="state" type="text" v-model="v$.form.state.$model" :class="v$.form.state.$errors.length > 0
                                         ? 'is-invalid'
@@ -219,19 +165,14 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
-                                <!--end::Col-->
                             </div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
+
                             <div class="row mb-6">
-                                <!--begin::Label-->
                                 <label class="col-lg-4 col-form-label fw-bold fs-6">
                                     <span class="required">Country</span>
                                 </label>
-                                <!--end::Label-->
-                                <!--begin::Col-->
                                 <div class="col-lg-8 fv-row">
-                                    <Multiselect :options="countries.data" label="label" valueProp="id"
+                                    <Multiselect :can-clear="false" :options="countries.data" label="label" valueProp="id"
                                         class="form-control form-control-lg form-control-solid" placeholder="Select One"
                                         v-model="v$.form.country.$model" track-by="label" :searchable="true" :class="v$.form.country.$errors.length > 0
                                             ? 'is-invalid'
@@ -241,15 +182,9 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
-                                <!--end::Col-->
                             </div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
                             <div class="row mb-6">
-                                <!--begin::Label-->
                                 <label class="col-lg-4 col-form-label fw-bold fs-6">Pincode</label>
-                                <!--end::Label-->
-                                <!--begin::Col-->
                                 <div class="col-lg-8">
                                     <jet-input id="pincode" type="text" v-model="v$.form.pincode.$model" :class="v$.form.pincode.$errors.length > 0
                                         ? 'is-invalid'
@@ -259,14 +194,10 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
-                                <!--end::Col-->
                             </div>
-                            <!--end::Input group-->
                             <div class="d-flex justify-content-end mt-4">
-                                <!--begin::Button-->
                                 <button type="button" class="btn btn-outline-secondary me-5"
                                     @click="this.isEdit = false">Discard</button>
-                                <!--begin::Button-->
                                 <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
                                     <div v-show="form.processing" class="spinner-border spinner-border-sm">
                                         <span class="visually-hidden">Loading...</span>
@@ -279,86 +210,41 @@ export default defineComponent({
                 </div>
             </div>
             <div class="card-body" v-else>
-                <!--begin::Row-->
                 <div class="row mb-7">
-                    <!--begin::Label-->
-                    <label class="col-6 fw-bold fs-5 text-gray-800">Address Line 1</label>
-                    <!--end::Label-->
-                    <!-- {{ company?.data?.user }} -->
-                    <!--begin::Col-->
+                    <label class="col-6 fw-bold fs-5 text-gray-800">Address</label>
                     <div class="col-lg-6">
-                        <span class="fw-bold fs-6 text-gray-700"> {{ address?.data?.address_line_1 }}</span>
+                        <span class="fw-bold fs-6 text-gray-700"> {{ address?.data?.address }}</span>
                     </div>
-                    <!--end::Col-->
                 </div>
-                <!--end::Row-->
-                <!--begin::Row-->
+
                 <div class="row mb-7">
-                    <!--begin::Label-->
-                    <label class="col-6 fw-bold fs-5 text-gray-800">Address Line 2</label>
-                    <!--end::Label-->
-                    <!--begin::Col-->
-                    <div class="col-lg-6">
-                        <span class="fw-bold fs-6 text-gray-700"> {{ address?.data?.address_line_2 }}</span>
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Row-->
-                <!--begin::Input group-->
-                <div class="row mb-7">
-                    <!--begin::Label-->
                     <label class="col-6 fw-bold fs-5 text-gray-800">City</label>
-                    <!--end::Label-->
-                    <!--begin::Col-->
                     <div class="col-lg-6 fv-row">
                         <span class="fw-bold text-gray-700 fs-6">{{ address?.data?.city }}
                         </span>
                     </div>
-                    <!--end::Col-->
                 </div>
-                <!--end::Input group-->
-                <!--begin::Input group-->
                 <div class="row mb-7">
-                    <!--begin::Label-->
                     <label class="col-6 fw-bold fs-5 text-gray-800">State</label>
-                    <!--end::Label-->
-                    <!--begin::Col-->
                     <div class="col-lg-6 d-flex align-items-center">
                         <span class="fw-bold fs-6 text-gray-700 me-2">{{ address?.data?.state }}
                         </span>
                     </div>
-                    <!--end::Col-->
                 </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
                 <div class="row mb-7">
-                    <!--begin::Label-->
                     <label class="col-6 fw-bold fs-5 text-gray-800">Pincode</label>
-                    <!--end::Label-->
-                    <!--begin::Col-->
                     <div class="col-lg-6 d-flex align-items-center">
                         <span class="fw-bold fs-6 text-gray-700">{{ address?.data?.pincode }}
                         </span>
                     </div>
-                    <!--end::Col-->
                 </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
                 <div class="row mb-7">
-                    <!--begin::Label-->
                     <label class="col-6 fw-bold fs-5 text-gray-800">Country</label>
-                    <!--begin::Label-->
-                    <!--begin::Label-->
                     <div class="col-lg-6">
                         <span class="fw-bold fs-6 text-gray-700">{{ address?.data?.country?.name }}</span>
                     </div>
-                    <!--begin::Label-->
                 </div>
-                <!--end::Input group-->
             </div>
         </div>
-        <!--end::Card body-->
     </app-layout>
 </template>
