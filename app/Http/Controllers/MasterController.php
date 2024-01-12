@@ -52,6 +52,7 @@ class MasterController extends Controller
     }
     public function exportReport(Request $request)
     {
+        // return $request;
         return Excel::download(new RespondentReport($request), "RespondentReport.xlsx");
     }
 }

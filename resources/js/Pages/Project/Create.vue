@@ -3,7 +3,6 @@ import { defineComponent, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import AppToolbar from "../../Layouts/AppToolbar.vue";
-// import RadioType from "./Components/QuestionTypes/RadioType.vue"
 import Multiselect from "@vueform/multiselect";
 import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
