@@ -96,7 +96,7 @@ export default defineComponent({
                         :aria-labelled:by="`dropdown-${project.id}`">
                         <div class="menu-item px-3">
                             <a target="_blank" :href="`project/${project.id}/edit`" class="menu-link">
-                            <span><i class="bi bi-pencil me-2"></i>Edit</span>
+                                <span><i class="bi bi-pencil me-2"></i>Edit</span>
                             </a>
                         </div>
                         <div class="menu-item px-3">
@@ -116,7 +116,7 @@ export default defineComponent({
                 <!--begin::Item-->
                 <li class="nav-item row">
                     <span>
-                        {{ project.reports.total_clicks }}
+                        {{ project.reports?.total_clicks }}
                     </span>
                     <span class="text-gray-400">Total Clicks</span>
                 </li>

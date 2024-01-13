@@ -2,19 +2,27 @@
 
 namespace App\Http\Resources;
 
+use App\Models\CloseRespondent;
+use App\Models\ProjectLink;
+use App\Models\Respondent;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectLinkResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
-     */
     public function toArray($request)
     {
+        $closeProject = ProjectLink::where(['id' =>  $this->id])->first();
+        if (!empty($closeProject)) {
+            $collection = collect(CloseRespondent::where('project_link_id', $this->id)->get());
+        } else {
+            $collection = collect(Respondent::where('project_id', $this->id)->get());
+        }
+        $terminate = $collection->where('status', 'terminate');
+        $complete = $collection->where('status', 'complete');
+        $security_terminate = $collection->where('status', 'security-terminate');
+        $incomplete = $collection->where('status', NULL);
+        $quotafull = $collection->where('status', 'quotafull');
         return [
             'id' => $this->id,
             'state' => explode(' , ', $this->state),
@@ -39,13 +47,13 @@ class ProjectLinkResource extends JsonResource
             'supplier_count' => $this->suppliers ?  count($this->suppliers) : 0,
             'created_at' => date('d/M/y - H:m:s A', strtotime($this->created_at)),
             'reports' => [
-                'total_clicks' => count($this->total),
-                'complete' => count($this->completes),
-                'terminate' => count($this->terminate),
-                'quotafull' => count($this->quotafull),
-                'security_terminate' => count($this->security_terminate),
-                'incomplete' => count($this->incomplete),
-                'total_ir' => (count($this->completes) > 0) ? intval(((count($this->completes)) / (count($this->completes) + count($this->terminate))) * 100) : 0
+                'total_clicks' => $collection ? count($collection) : 0,
+                'complete' => $complete ? count($complete) : 0,
+                'terminate' => $terminate ? count($terminate) : 0,
+                'quotafull' => $quotafull ?  count($quotafull) : 0,
+                'incomplete' => $incomplete ?  count($incomplete) : 0,
+                'security_terminate' => $security_terminate ?  count($security_terminate) : 0,
+                'total_ir' => (count($complete) > 0) ? intval((count($complete) / (count($complete) + count($terminate))) * 100) . '%' : '0%'
             ]
         ];
     }

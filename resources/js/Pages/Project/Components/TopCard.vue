@@ -136,7 +136,7 @@ export default defineComponent({
                                 );
                             },
                             onError: (data) => {
-                                toast.error(this.$page.props.errors.message);
+                                // toast.error(data);
                             },
                         }
                     );
@@ -149,15 +149,11 @@ export default defineComponent({
             // return `${month}/${day}/${year}`;
         },
     },
-    created() {},
+    created() { },
 });
 </script>
 <template>
-    <loading
-        v-model:active="isLoading"
-        :can-cancel="false"
-        :is-full-page="true"
-    />
+    <loading v-model:active="isLoading" :can-cancel="false" :is-full-page="true" />
     <div class="card card-flush mb-5">
         <div class="card-header align-items-center">
             <div class="card-title">
@@ -168,12 +164,7 @@ export default defineComponent({
                     <span class="d-flex align-items-center">
                         <i class="bi bi-file-earmark-arrow-down"></i>
                         <span>Import ID's</span>
-                        <input
-                            type="file"
-                            @change="formSubmit"
-                            id="importId"
-                            class="d-none"
-                        />
+                        <input type="file" @change="formSubmit" id="importId" class="d-none" />
                     </span>
                 </label>
                 <!-- <a
@@ -182,16 +173,10 @@ export default defineComponent({
                     :href="`/project/${project.id}/export`"
                     ><i class="bi bi-file-earmark-arrow-up"></i>Export ID's
                 </a> -->
-                <a
-                    target="_blank"
-                    :href="`/project/${project.id}/report`"
-                    class="btn btn-primary m-1 btn-sm"
-                    ><i class="bi bi-graph-down-arrow"></i>Export Data
+                <a target="_blank" :href="`/project/${project.id}/report`" class="btn btn-primary m-1 btn-sm"><i
+                        class="bi bi-graph-down-arrow"></i>Export Report
                 </a>
-                <button
-                    class="btn btn-primary m-1 btn-sm"
-                    @click="this.isEdit = this.isEdit ? false : true"
-                >
+                <button class="btn btn-primary m-1 btn-sm" @click="this.isEdit = this.isEdit ? false : true">
                     <i class="bi bi-pencil me-2"></i>Edit
                 </button>
             </div>
@@ -199,246 +184,126 @@ export default defineComponent({
         <div class="card-body pt-0">
             <div class="row">
                 <div class="col-12" v-if="isEdit">
+                    <JetValidationErrors />
                     <form @submit.prevent="submit" autocomplete="off">
                         <div class="row g-5">
                             <div class="fv-row col-12">
-                                <jet-label
-                                    for="project-name"
-                                    value="Project Name"
-                                />
-                                <jet-input
-                                    id="project-name"
-                                    type="text"
-                                    placeholder="Enter project Name / ID"
-                                    v-model="v$.form.project_name.$model"
-                                    :class="
-                                        v$.form.project_name.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    "
-                                />
-                                <div
-                                    v-for="(error, index) of v$.form
-                                        .project_name.$errors"
-                                    :key="index"
-                                >
+                                <jet-label for="project-name" value="Project Name" />
+                                <jet-input id="project-name" type="text" placeholder="Enter project Name / ID"
+                                    v-model="v$.form.project_name.$model" :class="v$.form.project_name.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " />
+                                <div v-for="(error, index) of v$.form
+                                    .project_name.$errors" :key="index">
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
                             <div class="fv-row col-md-6">
-                                <jet-label
-                                    for="project-client"
-                                    value="Project Client"
-                                />
-                                <Multiselect
-                                    :canClear="false"
-                                    id="project-client"
-                                    :options="clients"
-                                    label="display_name"
-                                    valueProp="id"
-                                    class="form-control form-control-solid"
-                                    placeholder="Select client"
-                                    :searchable="true"
-                                    :class="
-                                        v$.form.client.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    "
-                                    v-model="form.client"
-                                />
-                                <div
-                                    v-for="(error, index) of v$.form.client
-                                        .$errors"
-                                    :key="index"
-                                >
+                                <jet-label for="project-client" value="Project Client" />
+                                <Multiselect :canClear="false" id="project-client" :options="clients" label="display_name"
+                                    valueProp="id" class="form-control form-control-solid" placeholder="Select client"
+                                    :searchable="true" :class="v$.form.client.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " v-model="form.client" />
+                                <div v-for="(error, index) of v$.form.client
+                                    .$errors" :key="index">
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
                             <div class="fv-row col-md-6">
-                                <jet-label
-                                    for="link-type"
-                                    value="Project Link Type"
-                                />
-                                <Multiselect
-                                    id="link-type"
-                                    :canClear="false"
-                                    :options="[
-                                        {
-                                            label: 'Single Link',
-                                            value: 'single',
-                                        },
-                                        {
-                                            label: 'Multi Link',
-                                            value: 'multi',
-                                        },
-                                    ]"
-                                    label="label"
-                                    valueProp="value"
-                                    class="form-control form-control-solid"
-                                    placeholder="Select link type"
-                                    :class="
-                                        v$.form.project_type.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    "
-                                    v-model="v$.form.project_type.$model"
-                                />
-                                <div
-                                    v-for="(error, index) of v$.form
-                                        .project_type.$errors"
-                                    :key="index"
-                                >
+                                <jet-label for="link-type" value="Project Link Type" />
+                                <Multiselect id="link-type" :canClear="false" :options="[
+                                    {
+                                        label: 'Single Link',
+                                        value: 'single',
+                                    },
+                                    {
+                                        label: 'Multi Link',
+                                        value: 'multi',
+                                    },
+                                ]" label="label" valueProp="value" class="form-control form-control-solid"
+                                    placeholder="Select link type" :class="v$.form.project_type.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " v-model="v$.form.project_type.$model" />
+                                <div v-for="(error, index) of v$.form
+                                    .project_type.$errors" :key="index">
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
                             <div class="fv-row col-md-6 fs-5">
-                                <jet-label
-                                    for="project-start"
-                                    value="Project Start Date"
-                                />
-                                <input
-                                    type="date"
-                                    v-model="v$.form.start_date.$model"
+                                <jet-label for="project-start" value="Project Start Date" />
+                                <input type="date" v-model="v$.form.start_date.$model"
                                     class="form-control form-control-lg form-control-solid"
-                                    placeholder="Enter project start date"
-                                    :class="
-                                        v$.form.start_date.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    "
-                                />
+                                    placeholder="Enter project start date" :class="v$.form.start_date.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " />
 
-                                <div
-                                    v-for="(error, index) of v$.form.start_date
-                                        .$errors"
-                                    :key="index"
-                                >
+                                <div v-for="(error, index) of v$.form.start_date
+                                    .$errors" :key="index">
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
                             <div class="fv-row col-md-6 fs-5">
-                                <jet-label
-                                    for="project-end"
-                                    value="Project End Date"
-                                />
-                                {{ form.end_date }}
-                                <input
-                                    type="date"
-                                    v-model="v$.form.end_date.$model"
+                                <jet-label for="project-end" value="Project End Date" />
+                                <input type="date" v-model="v$.form.end_date.$model"
                                     class="form-control form-control-lg form-control-solid"
-                                    placeholder="Enter project start date"
-                                    :class="
-                                        v$.form.end_date.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    "
-                                />
-                                <div
-                                    v-for="(error, index) of v$.form.end_date
-                                        .$errors"
-                                    :key="index"
-                                >
+                                    placeholder="Enter project start date" :class="v$.form.end_date.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " />
+                                <div v-for="(error, index) of v$.form.end_date
+                                    .$errors" :key="index">
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
                             <div class="fv-row col-md-6">
-                                <jet-label
-                                    for="device-type"
-                                    value="Project Device"
-                                />
-                                <Multiselect
-                                    :can-clear="false"
-                                    id="project-status"
-                                    :options="devices"
-                                    label="label"
-                                    valueProp="value"
-                                    class="form-control form-control-solid"
-                                    placeholder="Select status"
-                                    mode="tags"
-                                    :close-on-select="false"
-                                    :create-option="true"
-                                    :class="
-                                        v$.form.device_type.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    "
-                                    v-model="v$.form.device_type.$model"
-                                />
+                                <jet-label for="device-type" value="Project Device" />
+                                <Multiselect :can-clear="false" id="project-status" :options="devices" label="label"
+                                    valueProp="value" class="form-control form-control-solid" placeholder="Select status"
+                                    mode="tags" :close-on-select="false" :create-option="true" :class="v$.form.device_type.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " v-model="v$.form.device_type.$model" />
 
-                                <div
-                                    v-for="(error, index) of v$.form.device_type
-                                        .$errors"
-                                    :key="index"
-                                >
+                                <div v-for="(error, index) of v$.form.device_type
+                                    .$errors" :key="index">
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
                             <div class="fv-row col-md-6 col-sm-12">
-                                <jet-label
-                                    for="project-status"
-                                    value="Project Status"
-                                />
-                                <Multiselect
-                                    :canClear="false"
-                                    id="project-status"
-                                    :options="status"
-                                    label="label"
-                                    valueProp="value"
-                                    class="form-control form-control-solid"
-                                    placeholder="Select status"
-                                    :class="
-                                        v$.form.project_status.$errors.length >
+                                <jet-label for="project-status" value="Project Status" />
+                                <Multiselect :canClear="false" id="project-status" :options="status" label="label"
+                                    valueProp="value" class="form-control form-control-solid" placeholder="Select status"
+                                    :class="v$.form.project_status.$errors.length >
                                         0
-                                            ? 'is-invalid'
-                                            : ''
-                                    "
-                                    v-model="v$.form.project_status.$model"
-                                />
-                                <div
-                                    v-for="(error, index) of v$.form
-                                        .project_status.$errors"
-                                    :key="index"
-                                >
+                                        ? 'is-invalid'
+                                        : ''
+                                        " v-model="v$.form.project_status.$model" />
+                                <div v-for="(error, index) of v$.form
+                                    .project_status.$errors" :key="index">
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
                             <div class="fv-row col-12">
-                                <jet-label
-                                    for="project-target"
-                                    value="Project Target"
-                                />
-                                <textarea
-                                    rows="5"
-                                    class="form-control form-control-solid"
-                                    v-model="form.target"
-                                    id="project-target"
-                                    placeholder="Type important message here..."
-                                ></textarea>
+                                <jet-label for="project-target" value="Project Target" />
+                                <textarea rows="5" class="form-control form-control-solid" v-model="form.target"
+                                    id="project-target" placeholder="Type important message here..."></textarea>
                             </div>
                             <div class="d-flex justify-content-end mt-3 mb-3">
                                 <!--begin::Button-->
-                                <button
-                                    type="button"
-                                    class="btn btn-secondary me-5"
-                                    @click="this.isEdit = false"
-                                >
+                                <button type="button" class="btn btn-secondary me-5" @click="this.isEdit = false">
                                     Discard
                                 </button>
                                 <!--begin::Button-->
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary"
-                                    :class="{
-                                        'text-white-50': form.processing,
-                                    }"
-                                >
-                                    <div
-                                        v-show="form.processing"
-                                        class="spinner-border spinner-border-sm"
-                                    >
-                                        <span class="visually-hidden"
-                                            >Loading...</span
-                                        >
+                                <button type="submit" class="btn btn-primary" :class="{
+                                    'text-white-50': form.processing,
+                                }">
+                                    <div v-show="form.processing" class="spinner-border spinner-border-sm">
+                                        <span class="visually-hidden">Loading...</span>
                                     </div>
                                     Save Changes
                                 </button>
@@ -446,18 +311,14 @@ export default defineComponent({
                         </div>
                     </form>
                 </div>
-                <div class="col-md-6" v-else>
-                    <table
-                        class="table table-striped table-bordered text-center align-middle"
-                    >
+                <div class="col-md-7" v-else>
+                    <table class="table table-striped table-bordered text-start align-middle">
                         <tbody>
                             <tr>
-                                <th
-                                    style="
+                                <th style="
                                         white-space: nowrap;
                                         min-width: 150px;
-                                    "
-                                >
+                                    ">
                                     Project ID
                                 </th>
                                 <td class="fs-6 fw-bold text-gray-800">
@@ -465,12 +326,10 @@ export default defineComponent({
                                 </td>
                             </tr>
                             <tr>
-                                <th
-                                    style="
+                                <th style="
                                         white-space: nowrap;
                                         min-width: 150px;
-                                    "
-                                >
+                                    ">
                                     Project Name
                                 </th>
                                 <td class="fs-6 fw-bold text-gray-800">
@@ -478,37 +337,27 @@ export default defineComponent({
                                 </td>
                             </tr>
                             <tr>
-                                <th
-                                    style="
+                                <th style="
                                         white-space: nowrap;
                                         min-width: 150px;
-                                    "
-                                >
+                                    ">
                                     Status
                                 </th>
-                                <td
-                                    class="fs-6 fw-bold text-gray-800 text-capitalize"
-                                >
+                                <td class="fs-6 fw-bold text-gray-800 text-capitalize">
                                     {{ project?.status }}
                                 </td>
                             </tr>
                             <tr>
-                                <th
-                                    style="
+                                <th style="
                                         white-space: nowrap;
                                         min-width: 150px;
-                                    "
-                                >
+                                    ">
                                     Client
                                 </th>
                                 <td class="fs-6 fw-bold text-gray-800">
-                                    <Link
-                                        :href="`/client/${project.client.id}`"
-                                        v-if="
-                                            $page.props.user.role.role.slug !=
-                                            'user'
-                                        "
-                                        >{{ project.client.display_name }}
+                                    <Link :href="`/client/${project.client.id}`" v-if="$page.props.user.role.role.slug !=
+                                        'user'
+                                        ">{{ project.client.display_name }}
                                     </Link>
                                     <span v-else>{{
                                         project.client.display_name
@@ -516,47 +365,34 @@ export default defineComponent({
                                 </td>
                             </tr>
                             <tr>
-                                <th
-                                    style="
+                                <th style="
                                         white-space: nowrap;
                                         min-width: 150px;
-                                    "
-                                >
+                                    ">
                                     Project Type
                                 </th>
-                                <td
-                                    class="fs-6 fw-bold text-gray-800 text-capitalize"
-                                >
+                                <td class="fs-6 fw-bold text-gray-800 text-capitalize">
                                     {{ project.project_type }}
                                 </td>
                             </tr>
                             <tr>
-                                <th
-                                    style="
+                                <th style="
                                         white-space: nowrap;
                                         min-width: 150px;
-                                    "
-                                >
+                                    ">
                                     Device Type
                                 </th>
                                 <td class="fs-6 fw-bold text-gray-800">
-                                    <span
-                                        class="badge badge-success mx-1 text-capitalize"
-                                        v-if="project.device_type"
-                                        v-for="(type, index) in JSON.parse(
-                                            project.device_type
-                                        )"
-                                        >{{ type }}</span
-                                    >
+                                    <span class="badge badge-success mx-1 text-capitalize" v-if="project.device_type" v-for="(type, index) in JSON.parse(
+                                        project.device_type
+                                    )">{{ type }}</span>
                                 </td>
                             </tr>
                             <tr>
-                                <th
-                                    style="
+                                <th style="
                                         white-space: nowrap;
                                         min-width: 150px;
-                                    "
-                                >
+                                    ">
                                     Start Date
                                 </th>
                                 <td class="fs-6 fw-bold text-gray-800">
@@ -564,12 +400,10 @@ export default defineComponent({
                                 </td>
                             </tr>
                             <tr>
-                                <th
-                                    style="
+                                <th style="
                                         white-space: nowrap;
                                         min-width: 150px;
-                                    "
-                                >
+                                    ">
                                     End Date
                                 </th>
                                 <td class="fs-6 fw-bold text-gray-800">
@@ -577,17 +411,13 @@ export default defineComponent({
                                 </td>
                             </tr>
                             <tr>
-                                <th
-                                    style="
+                                <th style="
                                         white-space: nowrap;
                                         min-width: 150px;
-                                    "
-                                >
+                                    ">
                                     Target
                                 </th>
-                                <td
-                                    class="fs-6 fw-bold text-gray-800 whitespace-break"
-                                >
+                                <td class="fs-6 fw-bold text-gray-800 whitespace-break">
                                     {{ project.target }}
                                 </td>
                             </tr>
@@ -598,48 +428,26 @@ export default defineComponent({
         </div>
         <ul class="nav nav-stretch nav-line-tabs fs-5 fw-bold px-5">
             <li class="nav-item">
-                <Link
-                    class="nav-link text-active-primary ms-0 me-10 py-5"
-                    :class="route().current() == 'project.show' ? 'active' : ''"
-                    :href="`/project/${project.id}`"
-                    v-if="
-                        $page.props.user.role.role.slug == 'user' ||
+                <Link class="nav-link text-active-primary ms-0 me-10 py-5"
+                    :class="route().current() == 'project.show' ? 'active' : ''" :href="`/project/${project.id}`" v-if="$page.props.user.role.role.slug == 'user' ||
                         $page.props.user.role.role.slug == 'pm' ||
                         $page.props.user.role.role.slug == 'admin'
-                    "
-                >
-                    Project Overview</Link
-                >
+                        ">
+                Project Overview</Link>
             </li>
             <li class="nav-item">
-                <Link
-                    class="nav-link text-active-primary ms-0 me-10 py-5"
-                    :class="
-                        route().current() == 'project.suppliers' ? 'active' : ''
-                    "
-                    :href="`/project/${project.id}/suppliers`"
-                    v-if="
-                        $page.props.user.role.role.slug == 'pm' ||
-                        $page.props.user.role.role.slug == 'admin'
-                    "
-                >
-                    Suppliers</Link
-                >
+                <Link class="nav-link text-active-primary ms-0 me-10 py-5" :class="route().current() == 'project.suppliers' ? 'active' : ''
+                    " :href="`/project/${project.id}/suppliers`" v-if="$page.props.user.role.role.slug == 'pm' ||
+        $page.props.user.role.role.slug == 'admin'
+        ">
+                Suppliers</Link>
             </li>
             <li class="nav-item">
-                <Link
-                    class="nav-link text-active-primary ms-0 me-10 py-5"
-                    :class="
-                        route().current() == 'project.activity' ? 'active' : ''
-                    "
-                    :href="`/project/${project.id}/activity`"
-                    v-if="
-                        $page.props.user.role.role.slug == 'pm' ||
-                        $page.props.user.role.role.slug == 'admin'
-                    "
-                >
-                    Activity</Link
-                >
+                <Link class="nav-link text-active-primary ms-0 me-10 py-5" :class="route().current() == 'project.activity' ? 'active' : ''
+                    " :href="`/project/${project.id}/activity`" v-if="$page.props.user.role.role.slug == 'pm' ||
+        $page.props.user.role.role.slug == 'admin'
+        ">
+                Activity</Link>
             </li>
         </ul>
     </div>

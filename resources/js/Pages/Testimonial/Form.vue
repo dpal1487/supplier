@@ -39,7 +39,7 @@ export default defineComponent({
             form: this.$inertia.form({
                 id: this.testimonial?.data?.id || '',
                 name: this.testimonial?.data?.name || '',
-                is_published: this.testimonial?.data?.is_published || '',
+                is_published: this.testimonial?.data?.is_published || 0,
                 testimonial: this.testimonial?.data.testimonial || '',
             }),
             is_published: [

@@ -146,8 +146,7 @@ export default defineComponent({
             </li>
         </template>
         <JetValidationErrors />
-        <form @submit.prevent="submit" autocomplete="off"
-            class="row">
+        <form @submit.prevent="submit" autocomplete="off" class="row">
             <div class="col-12 col-lg-4 ">
                 <div class="card mb-5  gap-5">
                     <div class="card-header">

@@ -125,12 +125,22 @@ export default defineComponent({
                                                         <td class="text-start ps-5">
                                                             {{ item.project_name }}
                                                         </td>
-                                                        <td>{{ invoice.data.currency.symbol }}{{ item.cpi }}
+                                                        <td>{{ invoice.data.currency.symbol }} {{ item.cpi }}
                                                         </td>
                                                         <td>{{ item.quantity }}</td>
                                                         <td class="text-end text-dark fw-bolder pe-5">
-                                                            {{ invoice.data.currency.symbol }}{{ (item.cpi *
+                                                            {{ invoice.data.currency.symbol }} {{ (item.cpi *
                                                                 item.quantity).toFixed(2) }}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="3"
+                                                            class="border-0 text-right px-10 text-gray-950 fw-bold fs-6">
+                                                            Sub Total
+                                                        </td>
+                                                        <td class="border-0 text-right pe-5 text-gray-950 fw-bold fs-6">
+                                                            {{ invoice.data.currency.symbol }} {{ invoice.data.total_amount
+                                                            }}
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -138,188 +148,149 @@ export default defineComponent({
                                         </div>
                                     </div>
                                 </div>
-                                <div class="d-flex pt-10 pb-10">
-                                    <div class="col-4">
-                                        <div class="mb-0">
-                                            <table class="table">
-                                                <tr class="fw-bold text-gray-700 fs-5">
-                                                    <td class="col-6">
-                                                        <div class="fw-semibold pe-10 text-gray-600 fs-4">Account Holder
-                                                        </div>
-                                                    </td>
-                                                    <td class="col-6">
-                                                        <div class="fw-bold fs-4 text-gray-800">
-                                                            A.R Solution
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr class="fw-bold text-gray-700 fs-5">
-                                                    <td class="col-6">
-                                                        <div class="fw-semibold pe-10 text-gray-600 fs-4">Account Number
-                                                        </div>
-                                                    </td>
-                                                    <td class="col-6">
-                                                        <div class="fw-bold fs-4 text-gray-800">
-                                                            097863300000931
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr class="fw-bold text-gray-700 fs-5">
-                                                    <td class="col-6">
-                                                        <div class="fw-semibold pe-10 text-gray-600 fs-4">IFSC
-                                                        </div>
-                                                    </td>
-                                                    <td class="col-6">
-                                                        <div class="fw-bold fs-4 text-gray-800">
-                                                            YESB0000978
-                                                        </div>
-                                                    </td>
-                                                </tr>
-
-                                                <tr class="fw-bold text-gray-700 fs-5">
-                                                    <td class="col-6">
-                                                        <div class="fw-semibold pe-10 text-gray-600 fs-4">Account Type
-                                                        </div>
-                                                    </td>
-                                                    <td class="col-6">
-                                                        <div class="fw-bold fs-4 text-gray-800">
-                                                            Current
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                <div class="row my-5">
+                                    <div class="col-5">
+                                        <div class="d-flex  my-2">
+                                            <div class="fw-semibold w-200px pe-10 text-gray-600 fs-4">
+                                                Account Holder
+                                            </div>
+                                            <div class="fw-bold fs-4 text-gray-800  flex-root text-start">
+                                                A.R Solution
+                                            </div>
+                                        </div>
+                                        <div class="d-flex  my-2">
+                                            <div class="fw-semibold w-200px pe-10 text-gray-600 fs-4">
+                                                Account Number
+                                            </div>
+                                            <div class="fw-bold fs-4 flex-root text-gray-800 text-start">
+                                                097863300000931
+                                            </div>
+                                        </div>
+                                        <div class="d-flex  my-2">
+                                            <div class="fw-semibold w-200px pe-10 text-gray-600 fs-4">
+                                                IFSC
+                                            </div>
+                                            <div class="fw-bold fs-4 flex-root text-gray-800">
+                                                YESB0000978
+                                            </div>
+                                        </div>
+                                        <div class="d-flex  my-2">
+                                            <div class="fw-semibold w-200px pe-10 text-gray-600 fs-4">
+                                                Account Type
+                                            </div>
+                                            <div class="fw-bold fs-4 flex-root text-gray-800">
+                                                Current
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-8">
-                                        <div class="table-responsive mb-0">
-                                            <table class="table">
-                                                <tr class="fw-bold text-gray-700 fs-5">
-                                                    <td class=" text-start">
-                                                        <div class="fw-bold text-gray-800 fs-4">Net payable amount
-
-                                                            {{ invoice.data.currency.symbol }}
-                                                            {{ invoice.data.total_amount }} X {{
-                                                                invoice?.data?.conversion_rate }}
-                                                        </div>
-                                                    </td>
-                                                    <td class=" text-start border-bottom">
-                                                        <div class="text-dark fw-bolder">INR {{ (invoice.data.total_amount *
-                                                            invoice.data.conversion_rate).toFixed(2) }}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr class="fw-bold text-gray-800 fs-5">
-                                                    <td class=" text-start">
-                                                        <div class="fw-semibold text-gray-700 fs-4">Invoice value
-                                                            before GST :
-                                                        </div>
-                                                    </td>
-                                                    <td class=" text-start border-bottom">
-                                                        <div class="text-dark fw-bolder">INR {{
-                                                            parseFloat(invoice.data.total_amount * invoice.data.tax_rate /
-                                                                118).toFixed(2) }}</div>
-                                                    </td>
-                                                </tr>
-                                                <tr class="fw-bold text-gray-800 fs-5"
-                                                    v-if="invoice.data?.client?.tax_number && invoice.data?.client?.tax_number != 'null'">
-                                                    <td class=" text-start">
-                                                        <div class="fw-semibold text-gray-700 fs-4">GST value at
-                                                            {{ invoice.data.tax_rate }}% :</div>
-                                                    </td>
-                                                    <td class=" text-start border-bottom">
-                                                        <div class="text-dark fw-bolder">INR {{
-                                                            parseFloat(invoice.data.total_amount * invoice.data.tax_rate /
-                                                                118).toFixed(2) }}</div>
-                                                    </td>
-                                                </tr>
-                                                <tr class="fw-bold text-gray-800 fs-5">
-                                                    <td class=" text-start">
-                                                        <div class="fw-semibold text-gray-700 fs-4">Invoice value with
-                                                            GST</div>
-                                                    </td>
-                                                    <td class=" text-start border-bottom">
-                                                        <div class="text-dark fw-bolder">
-                                                            1 {{ invoice.data.currency.code }} = {{
-                                                                invoice.data.conversion_rate }}
-                                                            INR</div>
-                                                    </td>
-                                                </tr>
-                                                <tr class="fw-bold text-gray-700 fs-5">
-                                                    <td class=" text-start">
-                                                        <div class="fw-semibold pe-10 text-gray-600 fs-4">Total</div>
-                                                    </td>
-                                                    <td class=" text-start border-bottom"
-                                                        v-if="invoice.data?.client?.tax_number && invoice.data?.client?.tax_number != 'null'">
-                                                        <div class="text-dark fw-bolder">{{
-                                                            invoice.data.currency.symbol }}{{ invoice.data.total_amount }}
-                                                            X INR {{ invoice.data.conversion_rate }} =
-                                                            {{ invoice.data.currency.code }} {{ (
-                                                                (invoice.data.total_amount *
-                                                                    invoice.data.conversion_rate) +
-                                                                (parseFloat(invoice.data.total_amount
-                                                                    / 118 *
-                                                                    invoice.data.tax_rate))).toFixed(2) }}
-                                                        </div>
-                                                    </td>
-                                                    <td class=" text-end border-bottom" v-else>
-                                                        <div class="text-dark fw-bolder">{{
-                                                            invoice.data.currency.symbol }}{{ invoice.data.total_amount }}
-                                                            X INR {{ invoice.data.conversion_rate }} =
-                                                            {{ invoice.data.currency.code }} {{ (
-                                                                invoice.data.total_amount *
-                                                                invoice.data.conversion_rate).toFixed(2) }}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-
-                                                <div class="text-dark fw-bolder border-top  fs-2 text-start ">
-                                                    <div class="my-5 mx-5">
-                                                        Notes / Terms
-                                                        <div class="text-gray-800 fw-semibold  fs-4 text-start">
-                                                            1 {{ invoice.data.currency.name }} to {{
-                                                                invoice.data.conversion_rate }} INR ({{ invoice.data.date }})
-                                                        </div>
-                                                    </div>
+                                    <div class="col-7" v-if="invoice.data.client">
+                                        <div class="d-flex ">
+                                            <div class="fw-semibold w-250px  text-gray-700 fs-4">
+                                                Net payable amount :
+                                            </div>
+                                            <div class="fw-bold fs-4 text-gray-800  flex-root text-start"
+                                                v-if="invoice?.data?.client?.tax_number != 'null'">
+                                                {{ invoice?.data?.currency.symbol }}
+                                                {{ invoice?.data?.total_amount }} X {{ invoice?.data?.conversion_rate }} INR
+                                                =
+                                                INR
+                                                {{ Number((invoice?.data?.total_amount *
+                                                    invoice?.data?.conversion_rate))
+                                                    + Number(parseFloat((invoice?.data?.total_amount *
+                                                        invoice?.data?.conversion_rate) / 118 *
+                                                        invoice?.data?.tax_rate).toFixed(2)) }}
+                                            </div>
+                                            <div class="fw-bold fs-4 text-gray-800  flex-root" v-else>
+                                                {{ invoice?.data?.currency.symbol }}
+                                                {{ invoice?.data?.total_amount }} X {{ invoice?.data?.conversion_rate }} INR
+                                                =
+                                                INR
+                                                {{ (invoice?.data?.total_amount * invoice?.data?.conversion_rate).toFixed(2)
+                                                }}
+                                            </div>
+                                        </div>
+                                        <div v-if="invoice?.data?.client?.tax_number != 'null'">
+                                            <div class="d-flex my-2">
+                                                <div class="fw-semibold w-250px  text-gray-700 fs-4">Invoice value
+                                                    before GST :
                                                 </div>
-
-
-                                            </table>
+                                                <div class="fw-bold text-gray-800 fs-4 mx-1">
+                                                    INR {{ (
+                                                        invoice?.data?.total_amount *
+                                                        invoice?.data?.conversion_rate).toFixed(2) }}
+                                                </div>
+                                            </div>
+                                            <div class="d-flex my-2">
+                                                <div class="fw-semibold w-250px  text-gray-700 fs-4">GST value at
+                                                    {{ invoice?.data?.tax_rate }}% :
+                                                </div>
+                                                <div class="fw-bold text-gray-800 fs-4 mx-1">
+                                                    INR {{
+                                                        parseFloat((
+                                                            invoice?.data?.total_amount *
+                                                            invoice?.data?.conversion_rate).toFixed(2) / 118 *
+                                                            invoice?.data?.tax_rate).toFixed(2) }}
+                                                </div>
+                                            </div>
+                                            <div class="d-flex my-2">
+                                                <div class="fw-semibold w-250px  text-gray-700 fs-4">Invoice value
+                                                    with
+                                                    GST :
+                                                </div>
+                                                <div class="fw-bold text-gray-800 fs-4 mx-1">
+                                                    INR {{ Number((invoice?.data?.total_amount *
+                                                        invoice?.data?.conversion_rate))
+                                                        + Number(parseFloat((invoice?.data?.total_amount *
+                                                            invoice?.data?.conversion_rate) / 118 *
+                                                            invoice?.data?.tax_rate).toFixed(2)) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="my-5 text-dark fw-bolder border-top  fs-2 text-start ">
+                                            <div class="mt-5">
+                                                Notes / Terms
+                                                <div class="text-gray-800 fw-semibold  fs-4 text-start">
+                                                    1 {{ invoice?.data?.currency.name }} to {{
+                                                        invoice?.data?.conversion_rate }} INR ({{ invoice?.data?.date }})
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center border-top pt-10">
-                                    <div class="mw-400px">
-                                        <div class="d-flex flex-stack mb-3">
-                                            <div class="text-end fw-bold fs-4 text-gray-800">
-                                                Contact Details
-                                            </div>
-                                        </div>
-                                        <div class="d-flex flex-stack mb-3">
-                                            <div class="fw-semibold pe-10 text-gray-600 fs-4">Contact Number : </div>
-                                            <div class="text-end fw-bold fs-4 text-gray-800">+91 75038-76258</div>
-                                        </div>
-                                        <div class="d-flex flex-stack mb-3">
-                                            <div class="fw-semibold pe-10 text-gray-600 fs-4">Contact Email : </div>
-                                            <div class="text-end fw-bold fs-4 text-gray-800">rahul.kumar@alrestion.com</div>
-                                        </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center border-top pt-10">
+                            <div class="mw-400px">
+                                <div class="d-flex flex-stack mb-3">
+                                    <div class="text-end fw-bold fs-4 text-gray-800">
+                                        Contact Details
                                     </div>
-                                    <div class="mw-400px">
-                                        <div class="d-flex flex-stack">
-                                            <!-- <Link href="/"> -->
-                                            <img alt="Logo" src="/assets/images/logo-light.png" style="height:100px;">
-                                            <!-- </Link> -->
-                                        </div>
+                                </div>
+                                <div class="d-flex flex-stack mb-3">
+                                    <div class="fw-semibold pe-10 text-gray-600 fs-4">Contact Number : </div>
+                                    <div class="text-end fw-bold fs-4 text-gray-800">+91 75038-76258</div>
+                                </div>
+                                <div class="d-flex flex-stack mb-3">
+                                    <div class="fw-semibold pe-10 text-gray-600 fs-4">Contact Email : </div>
+                                    <div class="text-end fw-bold fs-4 text-gray-800">rahul.kumar@alrestion.com
                                     </div>
+                                </div>
+                            </div>
+                            <div class="mw-400px">
+                                <div class="d-flex flex-stack">
+                                    <!-- <Link href="/"> -->
+                                    <img alt="Logo" src="/assets/images/logo-light.png" style="height:100px;">
+                                    <!-- </Link> -->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-end mt-5">
-                <button class="btn btn-success" @click="printDiv('printableArea')"><i class="bi bi-filetype-pdf"></i>Save
-                    PDF</button>
-            </div>
+        </div>
+        <div class="d-flex justify-content-end mt-5">
+            <button class="btn btn-success" @click="printDiv('printableArea')"><i class="bi bi-filetype-pdf"></i>Save
+                PDF</button>
         </div>
     </AppLayout>
 </template>

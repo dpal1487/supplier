@@ -47,7 +47,7 @@ export default defineComponent({
                 await utils.changeSampleSizeValue(route("mapping.sample-size"), {
                     id: id,
                     sample_size: e.target.value,
-                    project_link_id: project_link_id
+                    project_link_id: this.project_link?.id
                 });
                 this.isReadonly = true;
             }

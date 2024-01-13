@@ -74,12 +74,6 @@ class ProjectController extends Controller
             if (!empty($request->order_by == 'project_name_desc')) {
                 $projects = Project::orderBy('project_name', 'desc');
             }
-            // if (!empty($request->order_by == 'client_name_asc')) {
-            //     $projects = Project::with(['client' => function ($q) {
-            //         $q->orderBy('name', 'asc');
-            //     }]);
-            //     return $projects->get();
-            // }
         } else {
             $projects = Project::orderBy('updated_at', 'desc');
             if (Auth::user()->role->role->slug == 'user') {
@@ -325,7 +319,7 @@ class ProjectController extends Controller
     }
     public function update(Request $request, $id)
     {
-        $project = Project::find($id);
+
         $request->validate([
             'project_name' => 'required',
             'client' => 'required',
@@ -335,38 +329,43 @@ class ProjectController extends Controller
             'device_type' => 'required',
             'project_type' => 'required',
         ]);
-        if (Project::where('id', $id)->update([
-            'project_name' => $request->project_name,
-            'client_id' => $request->client,
-            'target' => $request->target,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'device_type' => json_encode($request->device_type),
-            'project_type' => $request->project_type,
-            'target' => $request->target,
-            'status' => $request->project_status,
-        ])) {
-            $activity = ProjectActivity::create([
-                "project_id" => $id,
-                "type_id" => "status",
-                "text" => $request->project_name . " was updated",
-                "user_id"   => Auth::user()->id,
+        $project = Project::find($id);
 
-            ]);
-            broadcast(new SendMessage($this->project($id)));
-            broadcast(new NotificationEvent([
-                'user_id' => auth()->user()->id,
-                'message' => 'Project - ' . $this->project($id)->project_name . ' with id - ' . $this->project($id)->project_id . ' was updated by ' . $this->user_details() . '.',
-                'type' => 'notification',
-                'title' => 'Project - ' . $this->project($id)->project_id
-            ]));
-            auth()->user()->notify(new ActionNotification($project, auth()->user(), $request->project_name . ' was updated'));
-            if ($request->action == 'project_show') {
-                return redirect('project/' . $id)->with('flash', updateMessage('Project'));
+        if ($project) {
+            if (Project::where('id', $id)->update([
+                'project_name' => $request->project_name,
+                'client_id' => $request->client,
+                'target' => $request->target,
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date,
+                'device_type' => json_encode($request->device_type),
+                'project_type' => $request->project_type,
+                'target' => $request->target,
+                'status' => $request->project_status,
+            ])) {
+                $activity = ProjectActivity::create([
+                    "project_id" => $id,
+                    "type_id" => "status",
+                    "text" => $request->project_name . " was updated",
+                    "user_id"   => Auth::user()->id,
+
+                ]);
+                broadcast(new SendMessage($this->project($id)));
+                broadcast(new NotificationEvent([
+                    'user_id' => auth()->user()->id,
+                    'message' => 'Project - ' . $this->project($id)->project_name . ' with id - ' . $this->project($id)->project_id . ' was updated by ' . $this->user_details() . '.',
+                    'type' => 'notification',
+                    'title' => 'Project - ' . $this->project($id)->project_id
+                ]));
+                auth()->user()->notify(new ActionNotification($project, auth()->user(), $request->project_name . ' was updated'));
+                if ($request->action == 'project_show') {
+                    return redirect('project/' . $id)->with('flash', updateMessage('Project'));
+                }
+                return redirect('projects')->with('flash', updateMessage('Project'));
             }
-            return redirect('projects')->with('flash', updateMessage('Project'));
+            return redirect()->back()->withErrors(errorMessage());
         }
-        return redirect()->back()->withErrors(errorMessage());
+        return redirect()->back()->with('flash', errorMessage());
     }
     public function destroy($id)
     {
@@ -441,9 +440,7 @@ class ProjectController extends Controller
                 "type_id" => "status",
                 "text" => $notification,
                 "user_id"   => Auth::user()->id,
-
             ]);
-
             broadcast(new SendMessage($this->project($request->id)));
             broadcast(new NotificationEvent([
                 'user_id' => auth()->user()->id,
@@ -452,6 +449,30 @@ class ProjectController extends Controller
                 'title' => 'Project - ' . $this->project($request->id)->project_id
             ]));
             auth()->user()->notify(new ActionNotification($this->project($request->id), Auth::user(), $notification));
+            $project = Project::where(['id' => $request->id, 'status' => 'close'])->first();
+            if (!empty($project)) {
+                Project::where(['id' => $request->id])->update(['status' => $request->status]);
+                $respondents = CloseRespondent::where('project_id', '=', $request->id)->get();
+                if (count($respondents) > 0) {
+                    foreach ($respondents as $respondent) {
+                        Respondent::create([
+                            'client_browser' => $respondent->client_browser,
+                            'device' => $respondent->device,
+                            'end_ip' => $respondent->end_ip,
+                            'id' => $respondent->id,
+                            'project_id' => $project->id,
+                            'project_link_id' => $respondent->project_link_id,
+                            'starting_ip' => $respondent->starting_ip,
+                            'status' => $respondent->status,
+                            'supplier_id' => $respondent->supplier_id,
+                            'supplier_project_id' => $respondent->supplier_project_id,
+                            'user_id' => $respondent->user_id,
+                        ]);
+                    }
+                    $respondents = CloseRespondent::where('project_id', '=', $request->id)->delete();
+                }
+                return response()->json(updateMessage('Project status'));
+            }
             if (Project::where(['id' => $request->id])->update(['status' => $request->status])) {
                 return response()->json(updateMessage('Project status'));
             }
@@ -481,7 +502,6 @@ class ProjectController extends Controller
         }
         return redirect()->back();
     }
-
     public function  activity($id)
     {
         $project = Project::find($id);
@@ -496,7 +516,6 @@ class ProjectController extends Controller
         }
         return redirect()->back();
     }
-
     public function importId(Request $request)
     {
         if ($request->hasFile('file')) {

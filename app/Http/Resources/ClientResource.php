@@ -23,14 +23,14 @@ class ClientResource extends JsonResource
             'status' => $this->status,
             'id' => $this->id,
             'description' => $this->description,
-            'tax_number' => $this->tax_number,
-            'label'=>$this->name." (".$this->display_name.")",
+            'tax_number' => $this->tax_number ? $this->tax_number : null,
+            'label' => $this->name . " (" . $this->display_name . ")",
             'created_at' => date('d M,Y', strtotime($this->created_at)),
-            'reports'=>[
-                'total_projects'=>count($this->projects),
-                'live_projects'=>count($this->projects->where('status','live')),
-                'hold_projects'=>count($this->projects->where('status','hold')),
-                'close_projects'=>count($this->projects->where('status','close')),
+            'reports' => [
+                'total_projects' => count($this->projects),
+                'live_projects' => count($this->projects->where('status', 'live')),
+                'hold_projects' => count($this->projects->where('status', 'hold')),
+                'close_projects' => count($this->projects->where('status', 'close')),
             ]
         ];
     }

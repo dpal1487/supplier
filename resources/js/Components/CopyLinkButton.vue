@@ -3,8 +3,8 @@ import { defineComponent } from 'vue';
 import { copyText } from "vue3-clipboard";
 export default defineComponent({
     props: ["link", "text", "tooltip"],
-  
-    data(){
+
+    data() {
         return {
             copied: false,
         }
@@ -28,7 +28,9 @@ export default defineComponent({
 </script>
 
 <template>
-    <button style="min-width: 120px;" :class="`btn btn-outline btn-sm clipboard ${copied ? 'bg-light-success btn-outline-success' : ' btn-outline-dark'}`" @click="copied ? () => null : doCopy(link)" :title="tooltip">
+    <button style="min-width: 120px;"
+        :class="`btn btn-outline btn-sm clipboard ${copied ? 'bg-light-success btn-outline-success' : ' btn-outline-dark'}`"
+        @click="copied ? () => null : doCopy(link)" :title="tooltip">
         <span v-if="copied">
             Copied !!
         </span>

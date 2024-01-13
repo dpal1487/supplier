@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\CloseRespondent;
+use App\Models\Project;
 use App\Models\Respondent;
 
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -11,7 +13,12 @@ class ProjectListResource extends JsonResource
 
     public function toArray($request)
     {
-        $collection = collect(Respondent::where('project_id', $this->id)->get());
+        $closeProject = Project::where(['id' =>  $this->id, 'status'  => 'close'])->first();
+        if (!empty($closeProject)) {
+            $collection = collect(CloseRespondent::where('project_id', $this->id)->get());
+        } else {
+            $collection = collect(Respondent::where('project_id', $this->id)->get());
+        }
         $terminate = $collection->where('status', 'terminate');
         $complete = $collection->where('status', 'complete');
         $security_terminate = $collection->where('status', 'security-terminate');

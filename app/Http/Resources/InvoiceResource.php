@@ -31,7 +31,7 @@ class InvoiceResource extends JsonResource
             'notes' => $this->notes,
             'status' => $this->status,
             'items' => $this->items,
-            'date' => date("d/m/Y", strtotime($this->created_at)),
+            'date' => date("m/d/Y", strtotime($this->created_at)),
         ];
     }
 }

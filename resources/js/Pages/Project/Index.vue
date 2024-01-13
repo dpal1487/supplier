@@ -106,6 +106,7 @@ export default defineComponent({
                 </div>
             </div>
         </div>
+        <!-- {{ projects }} -->
         <project-list :projects="projects.data" :status="status.data" :action="action" />
         <div class="row" v-if="projects.meta">
             <div class="col-sm-12 d-flex align-items-center justify-content-between">

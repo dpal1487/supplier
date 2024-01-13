@@ -20,15 +20,15 @@ class MasterController extends Controller
         $surveys = Respondent::orderBy('created_at', 'desc')->where(['supplier_id' => Null]);
         $users = User::where('status', 1)->orderBy('first_name', 'asc')->get();
         $projects = Project::where('project_name', 'like', '%' . $request->q . '%')->get()->pluck('id');
-        $closeSurveys = CloseRespondent::orderBy('created_at', 'desc')->where('supplier_id', "=", Null)->whereIn('project_id', $projects);
 
         if (!empty($request->q)) {
             $projects = Project::where('project_name', 'like', '%' . $request->q . '%')->get()->pluck('id');
             $surveys = $surveys->whereIn('project_id', $projects);
-            $closeSurveys = $closeSurveys->whereIn('project_id', $projects);
-            if ($closeSurveys->get()->isEmpty()) {
+            if ($surveys->count() > 0) {
                 $surveys = $surveys;
             } else {
+                $closeSurveys = CloseRespondent::orderBy('created_at', 'desc')->where('supplier_id', "=", Null)->whereIn('project_id', $projects);
+                $closeSurveys = $closeSurveys->whereIn('project_id', $projects);
                 $surveys = $closeSurveys;
             }
         }
