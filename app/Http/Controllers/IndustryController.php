@@ -21,7 +21,7 @@ class IndustryController extends Controller
         if (!empty($request->q)) {
             $industries = $industries->where('name', 'like', '%' . $request->q . '%');
         }
-        if (!empty($request->status) && $request->status !== null) {
+        if ($request->status !== 'all' && $request->status !== null) {
             $industries = $industries->where('status',  (int)$request->status);
         }
         return Inertia::render('Industry/Index', [
