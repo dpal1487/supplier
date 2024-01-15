@@ -1,3 +1,4 @@
+
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -9,9 +10,9 @@ import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/css/index.css';
 import { Inertia } from "@inertiajs/inertia";
 import ProjectLinkForm from "./Components/Model/ProjectLinkForm.vue"
-
+import Multiselect from "@vueform/multiselect";
 export default defineComponent({
-    props: ["project", "project_links", "clients", "status", 'suppliers' , 'countries'],
+    props: ["project", "project_links", "clients", "status", 'suppliers', 'countries'],
     data() {
         return {
             title: "Project Overview",
@@ -19,7 +20,8 @@ export default defineComponent({
             isFullPage: true,
             isModalOpen: false,
             activeId: null,
-            form: {}
+            form: {},
+
         };
     },
     components: {
@@ -31,6 +33,7 @@ export default defineComponent({
         Pagination,
         Loading,
         ProjectLinkForm,
+        Multiselect
     },
     methods: {
         search() {
@@ -85,25 +88,20 @@ export default defineComponent({
         <ProjectLinkForm :show="isModalOpen" @hidemodal="hideSupplierListModal" :project="project?.data"
             :countries="countries?.data" />
         <div class="card card-flush mb-5">
-            <div class="card-header align-items-center px-5">
+            <div class="card-header align-items-center px-5 ">
                 <form @submit.prevent="search" class="card-title">
                     <input v-model="form.q" class="form-control form-control-sm form-control-solid" type="text"
                         placeholder="Search here..." />
-                    <select v-model="form.status" class="form-control form-control-sm form-control-solid ms-3">
-                        <option value="">Select status</option>
-                        <option value="1">Active</option>
-                        <option value="0">Inctive</option>
-                    </select>
+                    <Multiselect :can-clear="false" :options="$page.props.ziggy.status" label="name" value-prop="value"
+                        v-model="form.status" class="multiselect__content ms-3" placeholder="Select status">
+                    </Multiselect>
                     <button class="btn btn-primary btn-sm ms-3"><i class="bi bi-search"></i></button>
                 </form>
-                <!-- <Link v-if="$page.props.user.role.role.slug != 'user'" :href="`/mapping/${project.data.id}/create`"
-                    class="btn btn-primary btn-sm"><i class="bi bi-plus-circle"></i>Add New Link</Link> -->
-
                 <button type="button" v-if="$page.props.user.role.role.slug != 'user'" class="btn btn-primary btn-sm"
                     @click="showSupplierListModal(project?.data?.id)"><i class="bi bi-plus-circle"></i>Add New
                     Link </button>
             </div>
         </div>
-        <ProjectLinkList :links="project_links.data" :countries="countries?.data"/>
+        <ProjectLinkList :links="project_links.data" :countries="countries?.data" />
     </app-layout>
 </template>

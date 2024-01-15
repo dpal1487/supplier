@@ -1,3 +1,4 @@
+
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -5,7 +6,7 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import SupplierList from "../Sampling/Components/SupplierList.vue";
 import TopCard from "./Components/TopCard.vue";
 import { Inertia } from "@inertiajs/inertia";
-
+import Multiselect from "@vueform/multiselect";
 import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/css/index.css';
 export default defineComponent({
@@ -25,7 +26,8 @@ export default defineComponent({
         Head,
         SupplierList,
         TopCard,
-        Loading
+        Loading,
+        Multiselect
     },
 
     methods: {
@@ -74,15 +76,21 @@ export default defineComponent({
                 <form @submit.prevent="search" class="card-title">
                     <input v-model="form.q" class="form-control form-control-sm form-control-solid" type="text"
                         placeholder="Search here..." />
-                    <select v-model="form.status" class="form-control form-control-sm form-control-solid ms-3">
-                        <option value="">Select status</option>
-                        <option value="1">Active</option>
-                        <option value="0">Inctive</option>
-                    </select>
+                    <Multiselect :can-clear="false" :options="$page.props.ziggy.status" label="name" value-prop="value"
+                        v-model="form.status" class="multiselect__content ms-3" placeholder="Select status">
+                    </Multiselect>
                     <button class="btn btn-primary btn-sm ms-3"><i class="bi bi-search"></i></button>
                 </form>
             </div>
         </div>
-        <SupplierList :projects="supplier_projects.data" action="project.supplier" />
+        <SupplierList :projects="supplier_projects.data" action="project.supplier" v-if="supplier_projects.data.length" />
+        <div class="d-flex justify-content-center align-content-center" v-else>
+            <div class="text-center py-10">
+                <img src="/assets/images/emptyrespondent.png" style="height: 100px" />
+                <div class="fw-bold fs-2 text-gray-900 mt-5">
+                    No Supplier Found!
+                </div>
+            </div>
+        </div>
     </app-layout>
 </template>

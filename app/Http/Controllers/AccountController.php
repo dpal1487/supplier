@@ -74,10 +74,8 @@ class AccountController extends Controller
                 $query->where('project_name', 'like', "%$request->q%");
             });
         }
-        if ($request->status) {
-            if ($request->status != 'all') {
-                $surveys = $surveys->where('status', $request->status);
-            }
+        if ($request->status !== 'all' && $request->status !== null) {
+            $surveys = $surveys->where('status', (int)$request->status);
         }
         return Inertia::render('Account/Project', [
             'surveys' => RespondentResource::collection($surveys->paginate(100)->appends(request()->query())),

@@ -29,13 +29,6 @@ class AnswerController extends Controller
             'questions' => $questions
         ]);
     }
-
-    public function create()
-    {
-        $questions = Question::get();
-        return Inertia::render('Answer/Form', ['questions' => $questions]);
-    }
-
     public function store(Request $request)
     {
 

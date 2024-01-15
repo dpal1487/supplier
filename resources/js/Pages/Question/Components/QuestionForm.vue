@@ -79,7 +79,6 @@ export default defineComponent({
         async submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                // if (this.id) {
                 this.processing = true;
                 axios.post(this.id ? this.route("question.update", this.id) : this.route('question.store'), this.form)
                     .then((response) => {
@@ -105,9 +104,14 @@ export default defineComponent({
         id: {
             async handler() {
                 this.isLoading = true;
-                const response = await axios.get(`/question/${this.id}/edit`);
-                this.form = response?.data?.question;
-                this.form.industry = response?.data?.question?.industry?.id
+                if (this.id) {
+                    const response = await axios.get(`/question/${this.id}/edit`);
+                    this.form = response?.data?.question;
+                    this.form.industry = response?.data?.question?.industry?.id
+                }
+                else {
+                    this.form = {}
+                }
                 this.isLoading = false;
             }
         }
@@ -115,16 +119,14 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Modal :show="show" @onhide="$emit('hidemodal')" :title="id ? 'Edit Question Form' : 'Add New Question'">
+    <Modal :show="show" @onhide="$emit('hidemodal')" :title="id ? 'Edit Question' : 'Add New Question'">
         <SectionLoader v-if="isLoading == true" :width="40" :height="40" />
         <div v-else>
             <JetValidationErrors />
-            <!-- {{ question?.data?.question_key }} -->
-            <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+            <form @submit.prevent="submit()">
                 <div class="card">
                     <div class="card-body">
                         <div class="row g-5 col-md-12">
-                            <!-- {{ v$.form.industry.$model }} -->
                             <div class="fv-row col-6">
                                 <jet-label for="industry" value="Industry" />
                                 <Multiselect :can-clear="false" :options="industries" label="name" valueProp="id"
@@ -138,7 +140,6 @@ export default defineComponent({
                                 </div>
 
                             </div>
-                            <!-- <jet-input type="text" v-model="v$.form.id.$model" /> -->
                             <div class="fv-row col-6">
                                 <jet-label for="question_key" value="Question Key" />
                                 <jet-input id="question_key" type="text" v-model="v$.form.question_key.$model" :class="v$.form.question_key.$errors.length > 0
@@ -189,7 +190,6 @@ export default defineComponent({
                         </div>
                     </div>
                 </div>
-                <!--end::Variations-->
                 <div class="row">
                     <div class="d-flex justify-content-end">
                         <Link href="/question"
@@ -207,10 +207,8 @@ export default defineComponent({
                             </span>
 
                         </button>
-                        <!--end::Button-->
                     </div>
                 </div>
-                <!--end::Actions-->
             </form>
         </div>
     </Modal>

@@ -180,8 +180,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Modal :show="show" @onhide="$emit('hidemodal')"
-        :title="pageName == 'editPage' ? 'Edit Link Form' : 'Add New Link Form'">
+    <Modal :show="show" @onhide="$emit('hidemodal')" :title="pageName == 'editPage' ? 'Edit Link' : 'Add New Link'">
         <SectionLoader v-if="isLoading" :width="40" :height="40" />
         <div v-else>
             <JetValidationErrors />
@@ -216,7 +215,7 @@ export default defineComponent({
                         <Multiselect :can-clear="false" :options="cities" label="name" valueProp="name"
                             :create-option="true" mode="tags" class="form-control form-control-solid"
                             placeholder="Select city" :searchable="true" v-model="form.project_city"
-                            :disabled="!form.project_state" />
+                            :disabled="!form.project_country" />
                     </div>
 
                     <div class="fv-row col-12">
@@ -327,15 +326,14 @@ export default defineComponent({
                         </div>
                     </div>
                     <div class="d-flex justify-content-end">
-                        <!--begin::Button-->
                         <Link type="button" class="btn btn-secondary me-5" :href="`/project/${form.project_id}`">Discard
                         </Link>
-                        <!--begin::Button-->
                         <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': processing }">
                             <div v-if="processing == true" class="spinner-border spinner-border-sm">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
-                            Save
+                            <span v-if="pageName == 'editPage'">Save Chages</span>
+                            <span v-else>Save</span>
                         </button>
                     </div>
                 </div>

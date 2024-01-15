@@ -34,7 +34,6 @@ export default defineComponent({
     },
     methods: {
         async confirmDelete(id, index) {
-            console.log(id)
             this.isLoading = true;
             await utils.deleteIndexDialog(route('activity_type.destroy', id), this.activity_types.data, index);
             this.isLoading = false;
@@ -120,7 +119,7 @@ export default defineComponent({
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody class="fw-semibold text-gray-600">
+                                <tbody class="fw-semibold text-gray-600" v-if="activity_types.data.length > 0">
                                     <tr v-for="(activity_type, index) in activity_types.data" :key="index">
                                         <td>{{ index + 1 }}</td>
                                         <td>{{ activity_type?.text }}</td>
@@ -139,6 +138,11 @@ export default defineComponent({
                                                 </li>
                                             </div>
                                         </td>
+                                    </tr>
+                                </tbody>
+                                <tbody class="fw-semibold text-gray-600" v-else>
+                                    <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
+                                        <td colspan="6" class="text-center h-full">No Record Found</td>
                                     </tr>
                                 </tbody>
                             </table>

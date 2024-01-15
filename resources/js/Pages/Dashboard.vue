@@ -105,11 +105,11 @@ export default defineComponent({
                             <span class="card-label fw-bold text-gray-800 align-middle mb-4">Projects Stats</span>
                         </h3>
                     </div>
-                    <div class="card-body pt-6">
+                    <div class="card-body pt-2">
                         <div class="table-responsive">
                             <table class="table table-row-dashed align-middle">
                                 <thead>
-                                    <tr class="text-gray-400 fw-bold fs-7 text-uppercase text-center">
+                                    <tr class="text-gray-600 fw-bold fs-7 text-uppercase text-center">
                                         <th>PROJECT ID</th>
                                         <th>PROJECT NAME</th>
                                         <th>PROJECT TYPE</th>
@@ -118,31 +118,23 @@ export default defineComponent({
                                     </tr>
                                 </thead>
                                 <tbody class="text-center">
-                                    <tr v-for="(project, index) in projects.latest_projects?.data" :key="index">
-                                        <td>
-                                            <span class="text-gray-600 fw-semibold d-block fs-7">{{ project?.project_id
-                                            }}</span>
+                                    <tr v-for="(project, index) in projects.latest_projects?.data" :key="index"
+                                        class="text-gray-400  fs-7">
+                                        <td>{{ project?.project_id }}</td>
+                                        <td>{{ project?.project_name }}
                                         </td>
                                         <td>
-                                            <span class="text-gray-600 fw-semibold d-block fs-7">{{ project?.project_name
-                                            }}</span>
+                                            <span
+                                                class="badge text-gray-500 badge-light-secondary mx-1 text-capitalize rounded-pill"
+                                                v-if="project.device_type"
+                                                v-for="(type, index) in JSON.parse(project.device_type)">{{ type }}</span>
+                                        </td>
+                                        <td>{{ project?.client?.name }}
                                         </td>
                                         <td>
-                                            <span class="badge badge-success mx-1 text-capitalize"
-                                                v-if="project.device_type" v-for="(type, index) in JSON.parse(
-                                                    project.device_type
-                                                )">{{ type }}</span>
-                                        </td>
-
-                                        <td>
-                                            <span class="text-gray-600 fw-semibold d-block fs-7">{{ project?.client?.name
-                                            }}</span>
-                                        </td>
-
-                                        <td>
-                                            <span :class="`fw-semibold d-block fs-7 badge bg-${project?.status == 'live'
-                                                    ? 'success'
-                                                    : 'danger'
+                                            <span :class="`mx-1 text-capitalize badge badge-light-${project?.status == 'live'
+                                                ? 'success'
+                                                : 'danger'
                                                 }`">{{ project?.status }}</span>
                                         </td>
                                     </tr>

@@ -75,7 +75,6 @@ class InvoiceController extends Controller
     }
     public function store(Request $request)
     {
-
         $request->validate([
             'issue_date' => 'required',
             'due_date' => 'required',
@@ -137,7 +136,6 @@ class InvoiceController extends Controller
     public function show($id)
     {
         $invoice = Invoice::find($id);
-
         if ($invoice) {
             return Inertia::render('Invoice/Show', [
                 'invoice' => new InvoiceResource($invoice),

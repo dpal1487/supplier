@@ -60,7 +60,7 @@ export default defineComponent({
         <div class="app-content flex-column-fluid">
             <div class="card" id="printableArea">
                 <div class="card-body p-lg-20">
-                    <div class="d-flex flex-column flex-xl-row">
+                    <div class="d-flex flex-column">
                         <div class="flex-lg-row-fluid me-xl-18 mb-10 mb-xl-0">
                             <div class="mt-n1">
                                 <div class="d-flex flex-stack pb-10">

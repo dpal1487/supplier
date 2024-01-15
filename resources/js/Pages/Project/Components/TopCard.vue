@@ -167,17 +167,11 @@ export default defineComponent({
                         <input type="file" @change="formSubmit" id="importId" class="d-none" />
                     </span>
                 </label>
-                <!-- <a
-                    target="_blank"
-                    class="btn btn-primary m-1 btn-sm"
-                    :href="`/project/${project.id}/export`"
-                    ><i class="bi bi-file-earmark-arrow-up"></i>Export ID's
-                </a> -->
                 <a target="_blank" :href="`/project/${project.id}/report`" class="btn btn-primary m-1 btn-sm"><i
                         class="bi bi-graph-down-arrow"></i>Export Report
                 </a>
                 <button class="btn btn-primary m-1 btn-sm" @click="this.isEdit = this.isEdit ? false : true">
-                    <i class="bi bi-pencil me-2"></i>Edit
+                    <i class="bi bi-pencil"></i>Edit
                 </button>
             </div>
         </div>
@@ -383,7 +377,7 @@ export default defineComponent({
                                     Device Type
                                 </th>
                                 <td class="fs-6 fw-bold text-gray-800">
-                                    <span class="badge badge-success mx-1 text-capitalize" v-if="project.device_type" v-for="(type, index) in JSON.parse(
+                                    <span class="badge badge-success mx-1 text-capitalize rounded-pill" v-if="project.device_type" v-for="(type, index) in JSON.parse(
                                         project.device_type
                                     )">{{ type }}</span>
                                 </td>

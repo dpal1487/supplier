@@ -65,8 +65,16 @@ export default defineComponent({
     <SupplierListModel :show="isModalOpen" @hidemodal="hideSupplierListModal" :id="activeId" />
     <ProjectLinkForm :show="isFormModalOpen" @hidemodal="hideProjectLinkForm" :id="projectId" :countries="countries"
         :pageName="pageName" />
-    <div class="card mb-5" v-for="(project_link, index) in links" :key="index">
+    <div class="card mb-5" v-if="links?.length > 0" v-for="(project_link, index) in links" :key="index">
         <ProjectLinkListItem :index="index" :project_link="project_link" @onSupplier="showSupplierListModal"
             @editProjectLink="showProjectLinkForm" @onDelete="confirmDelete" />
+    </div>
+    <div class="d-flex justify-content-center align-content-center" v-else>
+        <div class="text-center py-10">
+            <img src="/assets/images/emptyrespondent.png" style="height: 100px" />
+            <div class="fw-bold fs-2 text-gray-900 mt-5">
+                No Project Link Found!
+            </div>
+        </div>
     </div>
 </template>

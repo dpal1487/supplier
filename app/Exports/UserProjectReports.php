@@ -30,7 +30,7 @@ class UserProjectReports implements FromQuery, WithMapping, WithHeadings
     public function map($final): array
     {
         return [
-            $final->project->project_id,
+            $final->project?->project_id,
             $final->project?->project_name,
             $final->user ? $final->user->first_name . ' ' . $final->user->last_name : $final->user_id,
             $final->starting_ip,

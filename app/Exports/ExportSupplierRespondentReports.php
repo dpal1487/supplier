@@ -45,14 +45,14 @@ class ExportSupplierRespondentReports implements FromQuery, WithMapping, WithHea
     }
     public function query()
     {
-        $respondents =new Respondent;
+        $respondents = new Respondent;
         $respondents = $respondents->where('supplier_id', $this->id);
         if (!empty($this->request->q)) {
             $respondents = $respondents->whereHas('project', function ($query) {
                 $query->where('project_name', 'like', '%' . $this->request->q . '%');
             });
         }
-        if (!empty($this->request->status)) {
+        if ($this->request->s !== 'all' && $this->request->s !== null) {
             $respondents = $respondents->where('status', $this->request->status);
         }
         return $respondents;

@@ -31,11 +31,6 @@ class QuestionController extends Controller
             'industries' => $industries
         ]);
     }
-    public function create()
-    {
-        $industries = Industry::get();
-        return Inertia::render('Question/Form', ['industries' => $industries]);
-    }
     public function store(Request $request)
     {
         $request->validate([
@@ -72,13 +67,6 @@ class QuestionController extends Controller
             'answers' => AnswerResources::collection($answers),
         ]);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Question  $question
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $industries = Industry::get();
@@ -87,20 +75,7 @@ class QuestionController extends Controller
             'question' => new questionResources($question),
             'industries' => $industries,
         ]);
-
-        // return Inertia::render('Question/Form', [
-        //     'question' => new questionResources($question),
-        //     'industries' => $industries,
-        // ]);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Question  $question
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request)
     {
         $request->validate([
@@ -131,20 +106,14 @@ class QuestionController extends Controller
         return redirect()->back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Question  $question
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Question $question)
-    {
-        // dd($id);
 
+    public function destroy($id)
+    {
+        $question = Question::find($id);
         if ($question->delete()) {
-            return response()->json(['success' => true, 'message' => 'Question has been deleted successfully.']);
+            return response()->json(deleteMessage('Question'));
         }
-        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
+        return response()->json(errorMessage());
     }
 
     public function selectDelete(Request $request)

@@ -292,9 +292,10 @@ class ProjectController extends Controller
         if (!empty($request->q)) {
             $links = $links->where('project_name', 'like', "%{$request->q}%");
         }
-        if (!empty($request->status)) {
-            $links = $links->where('status', $request->status);
+        if ($request->status !== 'all' && $request->status !== null) {
+            $links = $links->where('status', (int)$request->status);
         }
+
         if (!empty($project)) {
             return Inertia::render('Project/Show', [
                 'project' => new ProjectResource($project),
@@ -484,12 +485,11 @@ class ProjectController extends Controller
         $project = Project::find($id);
         $projects = SupplierProject::where('project_id', $id);
 
-        // return $projects->get();
         if (!empty($request->supplier)) {
             $projects = $projects->where('supplier_id', 'like', "%{$request->supplier}%");
         }
-        if (!empty($request->status)) {
-            $projects = $projects->where('status', $request->status);
+        if ($request->status !== 'all' && $request->status !== null) {
+            $projects = $projects->where('status', (int)$request->status);
         }
         if ($project) {
             return Inertia::render('Project/Supplier', [

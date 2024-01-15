@@ -9,7 +9,6 @@ use App\Models\Respondent;
 use App\Models\Role;
 use App\Models\Survey;
 use App\Models\User;
-use App\Models\UsersRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -26,9 +25,6 @@ class UserController extends Controller
     }
     public function index(Request $request)
     {
-
-
-
         $users = User::orderBy('first_name', 'asc');
         if ($request->q) {
             $users = $users->where('first_name', 'like', "%{$request->q}%");
@@ -162,10 +158,8 @@ class UserController extends Controller
                 $query->where('project_name', 'like', "%$request->q%");
             });
         }
-        if ($request->status) {
-            if ($request->status != 'all') {
-                $surveys = $surveys->where('status', $request->status);
-            }
+        if ($request->status != 'all' && $request->status !== null) {
+            $surveys = $surveys->where('status', $request->status);
         }
         return Inertia::render('User/Project', [
             'surveys' => RespondentResource::collection($surveys->paginate(20)->appends(request()->query())),
@@ -176,6 +170,7 @@ class UserController extends Controller
 
     public function exportProjectIds(Request $request)
     {
-        return Excel::download(new UserProjectReports($request), "UserProjectReport.xlsx");
+        $user = User::find($request->user_id);
+        return Excel::download(new UserProjectReports($request), ucwords($user->first_name . '_' . $user->last_name) . "_ProjectReport.xlsx");
     }
 }

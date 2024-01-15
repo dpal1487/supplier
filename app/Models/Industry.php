@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Industry extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'image_id', 'status'];
+    protected $fillable = ['name', 'status'];
 
     public function image()
     {
-        return $this->hasOne(Image::class, 'id', 'image_id');
+        return $this->hasOne(Image::class, 'entity_id', 'id')->where('entity_type', 'industry');
     }
 
     public static function boot()

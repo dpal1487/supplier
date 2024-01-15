@@ -18,7 +18,7 @@ export default defineComponent({
             isModalOpen: false,
             activeId: '',
             tbody: [
-                "Indusctry Name",
+                "Industry Name",
                 "Question",
                 "Text",
                 "Language",
@@ -39,11 +39,11 @@ export default defineComponent({
     methods: {
         async confirmDelete(id, index) {
             this.isLoading = true;
-            await utils.deleteIndexDialog(route('question.destroy', id), this.questions.data, index);
+            await utils.deleteIndexDialog(route('question.delete', id), this.questions.data, index);
             this.isLoading = false;
         },
         search() {
-            Inertia.get("/question", this.form);
+            Inertia.get("/questions", this.form);
         },
 
         showQuestionForm(id) {
@@ -112,23 +112,25 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-600" v-if="questions.data.length > 0">
                             <tr v-for="(question, index) in questions.data" :key="index">
-                                <td>
+                                <td class="w-150px">
                                     <Link :href="'/question/' + question.id"
                                         class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1 text-capitalize">{{
                                             question?.industry?.name }} </Link>
                                 </td>
-                                <td>{{ question.question_key }}</td>
-                                <td>{{ question.text }}</td>
+                                <td class="w-150px">{{ question.question_key }}</td>
+                                <td class="w-450px">{{ question.text }}</td>
                                 <td>{{ question.language }}</td>
-                                <td>{{ question.type }}</td>
-                                <td>
+                                <td class="">
+                                    <span class="badge text-gray-500 badge-light-secondary rounded-pill">{{
+                                        question.type }}</span>
+                                </td>
+                                <td class="w-150px">
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
                                             :id="`dropdown-${question.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
-                                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
@@ -137,15 +139,10 @@ export default defineComponent({
                                                         fill="currentColor"></path>
                                                 </svg>
                                             </span>
-                                            <!--end::Svg Icon-->
                                         </a>
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
                                             :aria-labelled:by="`dropdown-${question.id}`">
                                             <li class="menu-item px-3">
-                                                <!-- <Link
-                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/question/${question.id}/edit`">Edit
-                                                </Link> -->
                                                 <button
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
                                                     @click="showQuestionForm(question?.id)">
@@ -172,7 +169,11 @@ export default defineComponent({
                                 </td>
                             </tr>
                         </tbody>
-                        <!--end::Table body-->
+                        <tbody class="fw-semibold text-gray-600" v-else>
+                            <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
+                                <td colspan="6" class="text-center h-full">No Record Found</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
                 <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="questions.meta">

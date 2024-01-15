@@ -144,94 +144,49 @@ export default defineComponent({
 
 <template>
     <Modal :show="show" :title="isEdit ? 'Edit User' : 'Add User'" @onhide="$emit('hidemodal', false)">
-        <!--begin::Modal body-->
         <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
-            <!--begin::Form-->
             <form @submit.prevent="submit()" class="form" action="#">
-                <!--begin::Scroll-->
-                <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_user_scroll" data-kt-scroll="true"
+                <div class="d-flex flex-column scroll-y me-n7 pe-7" data-kt-scroll="true"
                     data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
                     data-kt-scroll-dependencies="#kt_modal_add_user_header"
                     data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px">
-                    <!--begin::Input group-->
                     <div class="fv-row mb-7">
-                        <!--begin::Label-->
                         <label class="d-block fw-semibold fs-6 mb-5">Avatar</label>
-                        <!--end::Label-->
-                        <!--begin::Image placeholder-->
-
-                        <!--end::Image placeholder-->
-                        <!--begin::Image input-->
                         <ImageInput :image="this.user?.full_path" :onchange="onFileChange" :remove="removeSelectedAvatar"
                             :selectedImage="url" :isUploading="isUploading" />
-
-
-                        <!--end::Image input-->
-                        <!--begin::Hint-->
                         <div class="form-text">Allowed file types: png, jpg, jpeg.
                         </div>
-                        <!--end::Hint-->
                     </div>
-                    <!--end::Input group-->
-                    <!--begin::Input group-->
                     <div class="fv-row mb-7">
-                        <!--begin::Label-->
                         <label class="required fw-semibold fs-6 mb-2">Full
                             Name</label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
                         <input type="text" name="user_name" class="form-control form-control-solid mb-3 mb-lg-0"
                             placeholder="Full name" />
-                        <!--end::Input-->
                     </div>
-                    <!--end::Input group-->
-                    <!--begin::Input group-->
                     <div class="fv-row mb-7">
-                        <!--begin::Label-->
                         <label class="required fw-semibold fs-6 mb-2">Email</label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
                         <input type="email" name="user_email" class="form-control form-control-solid mb-3 mb-lg-0"
                             placeholder="example@domain.com" />
-                        <!--end::Input-->
                     </div>
-                    <!--end::Input group-->
-                    <!--begin::Input group-->
                     <div class="mb-7">
-                        <!--begin::Label-->
                         <label class="required fw-semibold fs-6 mb-5">Role</label>
-                        <!--end::Label-->
-                        <!--begin::Roles-->
-                        <!--begin::Input row-->
                         <div v-for="(role, index) in roles" :key="index">
                             <div class="d-flex fv-row">
-                                <!--begin::Radio-->
                                 <div class="form-check form-check-custom form-check-solid">
-                                    <!--begin::Input-->
                                     <input class="form-check-input me-3" v-model="form.user_role" type="radio"
                                         name="user_role" id="kt_modal_update_role_option_0" />
-                                    <!--end::Input-->
-                                    <!--begin::Label-->
                                     <label class="form-check-label" for="kt_modal_update_role_option_0">
                                         <div class="fw-bold text-gray-800 text-capitalize">{{ role.name }}
                                         </div>
                                         <div class="text-gray-600">Best for business
                                             owners and company administrators</div>
                                     </label>
-                                    <!--end::Label-->
                                 </div>
-                                <!--end::Radio-->
                             </div>
-                            <!--end::Input row-->
                             <div class='separator separator-dashed my-5'></div>
                         </div>
-
-                        <!--end::Roles-->
                     </div>
-                    <!--end::Input group-->
                 </div>
-                <!--end::Scroll-->
-                <!--begin::Actions-->
                 <div class="text-center pt-15 gap-5">
                     <button type="reset" class="btn btn-light me-3" data-kt-users-modal-action="cancel">Discard</button>
                     <button type="submit" class="btn btn-primary" :data-kt-indicator="form.processing ? 'on' : 'off'">
@@ -240,10 +195,7 @@ export default defineComponent({
                             <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                     </button>
                 </div>
-                <!--end::Actions-->
             </form>
-            <!--end::Form-->
         </div>
-        <!--end::Modal body-->
     </Modal>
 </template>

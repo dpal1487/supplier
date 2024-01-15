@@ -1,28 +1,33 @@
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
+import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
-import AnswerForm from "./Components/AnswerForm.vue";
+import 'vue-loading-overlay/dist/css/index.css';
+import IndustryForm from "./Components/IndustryForm.vue";
+import axios from "axios";
 import utils from "../../utils";
 export default defineComponent({
-    props: ["answers", "message", "questions"],
-
+    props: ["industries"],
     data() {
         return {
             form: {},
-            title: "Answers",
+            isFullPage: true,
+            isLoading: false,
             isModalOpen: false,
             activeId: '',
+            title: "Industry",
             tbody: [
-                "Question",
-                "Answer",
-                "Order By",
+                "Image",
+                "Name",
+                "Status",
                 "Action",
             ],
+            checkbox: [],
         };
     },
     components: {
@@ -32,50 +37,65 @@ export default defineComponent({
         Pagination,
         Multiselect,
         Loading,
-        AnswerForm
+        IndustryForm
     },
     methods: {
-        async confirmDelete(id, index) {
-            this.isLoading = true;
-            await utils.deleteIndexDialog(route('answer.delete', id), this.answers.data, index);
-            this.isLoading = false;
-        },
-        search() {
-            Inertia.get("/answers", this.form);
-        },
-        showAnswerForm(id) {
+
+        showIndustryForm(id) {
             if (id) {
                 this.isModalOpen = true;
                 this.activeId = id;
             }
             this.isModalOpen = true;
         },
-        hideAnswerForm() {
+        hideIndustryForm() {
             this.isModalOpen = false;
+        },
+        async confirmDelete(id, index) {
+            this.isLoading = true;
+            await utils.deleteIndexDialog(route('industry.destroy', id), this.industries.data, index);
+            this.isLoading = false;
+        },
+        search() {
+            Inertia.get("/industries", this.form);
+        },
+        changeStatus(e, id) {
+            this.isLoading = true;
+            axios
+                .post("/industry/status", { id: id, status: e })
+                .then((response) => {
+                    if (response.data.success) {
+                        toast.success(response.data.message);
+                        return;
+                    }
+                    toast.error(response.data.message);
+                })
+                .finally(() => (this.isLoading = false));
         },
     },
 });
 </script>
 <template>
+    <loading :active="isLoading" :can-cancel="true" :is-full-page="isFullPage"></loading>
+    <IndustryForm :show="isModalOpen" @hidemodal="hideIndustryForm" :id="activeId" />
     <app-layout :title="title">
         <template #breadcrumb>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/answers" class="text-muted text-hover-primary">{{ title }}</Link>
+                <Link href="/industry" class="text-muted text-hover-primary">{{ title }}</Link>
             </li>
         </template>
         <template #toolbar>
             <div class="d-flex align-items-center gap-2 gap-lg-3">
-                <button class="btn btn-sm fw-bold btn-primary" @click="showAnswerForm()">
-                    <i class="bi bi-plus-circle"></i>Add New Answer
+                <button class="btn btn-sm fw-bold btn-primary" @click="showIndustryForm()">
+                    <i class="bi bi-plus-circle"></i>Add New Industry
                 </button>
             </div>
         </template>
 
-        <Head :title="title" />
-        <AnswerForm :show="isModalOpen" @hidemodal="hideAnswerForm" :id="activeId" :questions="questions" />
+        <Head title="industry" />
         <div class="card">
             <div>
                 <form class="card-header justify-content-start p-5 gap-3" @submit.prevent="search()">
@@ -92,11 +112,16 @@ export default defineComponent({
                         <input type="text" v-model="form.q" class="form-control form-control-solid w-250px ps-14"
                             placeholder="Search " />
                     </div>
+                    <div class="w-100 mw-200px">
+                        <Multiselect :can-clear="false" :options="$page.props.ziggy.status" label="name" valueProp="value"
+                            class="form-control form-control-solid" placeholder="Select Status" v-model="form.status" />
+                    </div>
                     <button type="submit" class="btn btn-primary">
                         Search
                     </button>
                 </form>
             </div>
+
             <div class="card-body pt-0">
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5 text-left">
@@ -107,18 +132,30 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600" v-if="answers.data.length > 0">
-                            <tr v-for="(answer, index) in answers.data" :key="index">
-                                <td class="text-gray-800 fs-5 fw-bold mb-1">
-                                    {{ answer.question?.question_key }}
+                        <tbody class="fw-semibold text-gray-600" v-if="industries.data.length > 0">
+                            <tr v-for="(industry, index) in industries.data" :key="index">
+                                <td v-if="industry.image">
+                                    <div class="symbol symbol-50px me-5">
+                                        <img alt="Logo" :src="industry.image?.url">
+                                    </div>
                                 </td>
-                                <td>{{ answer.answer }}</td>
-                                <td v-if="(answer.order_by == 1)">Ascending</td>
-                                <td v-else="( answer.order_by == 0 )">Descending</td>
+                                <td v-else>
+                                    <div class="symbol symbol-50px me-5">
+                                        <img alt="Logo" src="/assets/images/comingsoon.png">
+                                    </div>
+                                </td>
+                                <td class="w-300px">{{ industry.name }}</td>
                                 <td>
+                                    <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
+                                        <input class="form-check-input h-20px w-30px" type="checkbox"
+                                            @input="changeStatus($event.target.checked, industry.id)"
+                                            :checked="industry.status == 1 ? true : false" />
+                                    </div>
+                                </td>
+                                <td class="w-150px">
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${answer.id}`" data-bs-toggle="dropdown"
+                                            :id="`dropdown-${industry.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
                                             <span class="svg-icon svg-icon-5 m-0">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -130,18 +167,28 @@ export default defineComponent({
                                             </span>
                                         </a>
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                            :aria-labelled:by="`dropdown-${answers.id}`">
+                                            :aria-labelled:by="`dropdown-${industry.id}`">
                                             <li class="menu-item px-3">
                                                 <button
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    @click="showAnswerForm(answer?.id)">
-                                                    <i class="bi bi-pencil"></i>Edit
+                                                    @click="showIndustryForm(industry?.id)"><i
+                                                        class="bi bi-pencil me-2"></i>Edit
                                                 </button>
                                             </li>
                                             <li class="menu-item px-3">
-                                                <button @click="confirmDelete(answer.id, index)"
+                                                <Link
+                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
+                                                    :href="`/industry/${industry.id}`"><i
+                                                    class="bi bi-view-list me-2"></i>View
+                                                </Link>
+                                            </li>
+                                            <li class="menu-item px-3">
+                                                <button @click="confirmDelete(
+                                                    industry.id, index
+                                                )
+                                                    "
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
-                                                    <i class="bi bi-trash"></i> Delete
+                                                    <i class="bi bi-trash3 me-2"></i>Delete
                                                 </button>
                                             </li>
                                         </ul>
@@ -149,7 +196,6 @@ export default defineComponent({
                                 </td>
                             </tr>
                         </tbody>
-
                         <tbody class="fw-semibold text-gray-600" v-else>
                             <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
                                 <td colspan="6" class="text-center h-full">No Record Found</td>
@@ -157,10 +203,11 @@ export default defineComponent({
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="answers.meta">
-                    <Pagination :links="answers.meta.links" />
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="industries.meta">
+                    <Pagination :links="industries.meta.links" />
                 </div>
             </div>
         </div>
+
     </app-layout>
 </template>

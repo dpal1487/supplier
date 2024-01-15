@@ -3,7 +3,6 @@ import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Pagination from "../../Jetstream/Pagination.vue";
-import Multiselect from "@vueform/multiselect";
 import { Inertia } from "@inertiajs/inertia";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/css/index.css";
@@ -13,7 +12,7 @@ export default defineComponent({
     props: ["clients"],
     data() {
         return {
-            form:{},
+            form: {},
             tbody: [
                 "Company Name",
                 "Email",
@@ -24,7 +23,7 @@ export default defineComponent({
                 "Action",
             ],
             isLoading: false,
-            title:"Clients"
+            title: "Clients"
         };
     },
     components: {
@@ -32,13 +31,12 @@ export default defineComponent({
         Link,
         Head,
         Pagination,
-        Multiselect,
         Loading,
     },
     methods: {
         async updateStatus(id, e) {
             this.isLoading = true;
-            await utils.changeStatus(route('client.status'),{ id: id, status: e });
+            await utils.changeStatus(route('client.status'), { id: id, status: e });
             this.isLoading = false;
         },
         async confirmDelete(index) {
@@ -66,7 +64,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item text-muted">
-                {{title}}
+                {{ title }}
             </li>
         </template>
         <template #toolbar>
@@ -92,10 +90,7 @@ export default defineComponent({
                     <input type="text" v-model="form.q" class="form-control form-control-solid w-250px ps-14"
                         placeholder="Search Client" />
                 </div>
-                <!-- <div class="w-100 mw-200px">
-                    <Multiselect :options="$page.props.ziggy.status" label="name" valueProp="value"
-                        class="form-control form-control-solid" placeholder="Select Status" v-model="form.status" />
-                </div> -->
+
                 <button type="submit" class="btn btn-primary">
                     Search
                 </button>

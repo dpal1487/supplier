@@ -20,7 +20,7 @@ export default defineComponent({
     setup() {
         return { v$: useVuelidate() };
     },
-    props: ['show', 'id', 'questions'],
+    props: ['show', 'id', 'questions', "abc"],
 
     components: {
         Link,
@@ -93,8 +93,14 @@ export default defineComponent({
         id: {
             async handler() {
                 this.isLoading = true;
-                const response = await axios.get(`/answer/${this.id}/edit`);
-                this.form = response?.data?.answer;
+                if (this.id) {
+                    const response = await axios.get(`/answer/${this.id}/edit`);
+                    this.form = response?.data?.answer;
+                    this.isLoading = false;
+                }
+                else {
+                    this.form = {}
+                }
                 this.isLoading = false;
             }
         }
@@ -102,52 +108,49 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Modal :show="show" @onhide="$emit('hidemodal')" :title="id ? 'Edit Answer Form' : 'Add New Answer'">
+    <Modal :show="show" @onhide="$emit('hidemodal')" :title="id ? 'Edit Answer' : 'Add New Answer'" minWidth="450px">
         <SectionLoader v-if="isLoading == true" :width="40" :height="40" />
         <div v-else>
             <JetValidationErrors />
-            <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid">
+            <form @submit.prevent="submit()">
                 <div class="card ">
-                    <div class="card-body p-0">
-                        <div class="row col-md-12 ">
-                            <div class="fv-row col-6 mb-5">
-                                <jet-label for="question" value="Question" />
-                                <Multiselect :canClear="false" :options="questions" label="question_key" valueProp="id"
-                                    class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                    v-model="v$.form.question.$model" track-by="question_key" :searchable="true" :class="v$.form.question.$errors.length > 0
-                                        ? 'is-invalid'
-                                        : ''
-                                        " />
-                                <div v-for="(error, index) of v$.form.question.$errors" :key="index">
-                                    <input-error :message="error.$message" />
-                                </div>
-                            </div>
-                            <div class="fv-row col-6">
-                                <jet-label for="answer" value="Answer" />
-                                <jet-input id="answer" type="text" v-model="v$.form.answer.$model" :class="v$.form.answer.$errors.length > 0
+                    <div class="card-body">
+                        <div class="fv-row col-12 mb-5">
+                            <jet-label for="question" value="Question" />
+                            <Multiselect :canClear="false" :options="questions" label="question_key" valueProp="id"
+                                class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                                v-model="v$.form.question.$model" track-by="question_key" :searchable="true" :class="v$.form.question.$errors.length > 0
                                     ? 'is-invalid'
                                     : ''
-                                    " placeholder="Answer" />
-                                <div v-for="(error, index) of v$.form.answer.$errors" :key="index">
-                                    <input-error :message="error.$message" />
-                                </div>
+                                    " />
+                            <div v-for="(error, index) of v$.form.question.$errors" :key="index">
+                                <input-error :message="error.$message" />
                             </div>
-                            <div class="fv-row col-6 mb-5">
-                                <jet-label for="order_by" value="Order By" />
-                                <Multiselect :canClear="false" :options="order_by" label="name" valueProp="id"
-                                    class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                    v-model="v$.form.order_by.$model" track-by="name" :searchable="true" :class="v$.form.order_by.$errors.length > 0
-                                        ? 'is-invalid'
-                                        : ''
-                                        " />
-                                <div v-for="(error, index) of v$.form.order_by.$errors" :key="index">
-                                    <input-error :message="error.$message" />
-                                </div>
+                        </div>
+                        <div class="fv-row col-12 mb-5">
+                            <jet-label for="answer" value="Answer" />
+                            <jet-input id="answer" type="text" v-model="v$.form.answer.$model" :class="v$.form.answer.$errors.length > 0
+                                ? 'is-invalid'
+                                : ''
+                                " placeholder="Answer" />
+                            <div v-for="(error, index) of v$.form.answer.$errors" :key="index">
+                                <input-error :message="error.$message" />
+                            </div>
+                        </div>
+                        <div class="fv-row col-12 mb-5">
+                            <jet-label for="order_by" value="Order By" />
+                            <Multiselect :canClear="false" :options="order_by" label="name" valueProp="id"
+                                class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                                v-model="v$.form.order_by.$model" track-by="name" :searchable="true" :class="v$.form.order_by.$errors.length > 0
+                                    ? 'is-invalid'
+                                    : ''
+                                    " />
+                            <div v-for="(error, index) of v$.form.order_by.$errors" :key="index">
+                                <input-error :message="error.$message" />
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--end::Variations-->
                 <div class="row">
                     <div class="d-flex justify-content-end">
                         <Link href="/answer"
@@ -168,7 +171,6 @@ export default defineComponent({
                         <!--end::Button-->
                     </div>
                 </div>
-                <!--end::Actions-->
             </form>
         </div>
     </Modal>

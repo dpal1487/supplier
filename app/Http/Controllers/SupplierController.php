@@ -41,8 +41,8 @@ class SupplierController extends Controller
                 ->where('supplier_name', 'like', "%$request->q%")
                 ->orWhere('display_name', 'like', "%$request->q%");
         }
-        if (!empty($request->s)) {
-            $suppliers = $suppliers->where('status', $request->s);
+        if ($request->s !== 'all' && $request->s !== null) {
+            $suppliers = $suppliers->where('status', (int)$request->s);
         }
         return Inertia::render('Supplier/Index', [
             'suppliers' => SupplierResource::collection($suppliers->paginate(10)->appends($request->all())),
@@ -59,7 +59,6 @@ class SupplierController extends Controller
     }
     public function store(Request $request)
     {
-
         $request->validate([
             'supplier_name' => 'required',
             'display_name' => 'required',
@@ -94,7 +93,6 @@ class SupplierController extends Controller
                     'security_terminate_url' => $request->security_terminate_url,
                 ]);
                 if ($supplierRedirect) {
-
                     return redirect("/suppliers")->with('flash', ['message' => 'Supplier successfully added.']);
                 }
             }
@@ -248,15 +246,14 @@ class SupplierController extends Controller
 
     public function respondents(Request $request, $id)
     {
-
+        // return $id;
         $respondents = Respondent::where('supplier_id', $id);
-
         if (!empty($request->q)) {
             $respondents = $respondents->whereHas('project', function ($query) use ($request) {
                 $query->where('project_name', 'like', '%' . $request->q . '%');
             });
         }
-        if ($request->status && $request->status != 'all') {
+        if (!empty($request->status) && $request->status != 'all') {
             $respondents = $respondents->where('status', $request->status);
         }
         return Inertia::render('Supplier/Respondents', [
@@ -267,6 +264,6 @@ class SupplierController extends Controller
 
     public function supplierExports(Request $request, $id)
     {
-        return Excel::download(new ExportSupplierRespondentReports($request, $id), "SupplierRespondentReport.xlsx");
+        return Excel::download(new ExportSupplierRespondentReports($request, $id), ucfirst($this->getSupplier($id)->supplier_name) . "_RespondentReport.xlsx");
     }
 }

@@ -96,6 +96,12 @@ export default defineComponent({
                     role: ["pm", "admin"],
                 },
                 {
+                    link: "/industries",
+                    title: "Industries",
+                    icon: "bi bi-rss-fill",
+                    role: ["pm", "admin"],
+                },
+                {
                     link: "/activity_types",
                     title: "Activity Types",
                     icon: "bi bi-book",

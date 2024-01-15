@@ -19,7 +19,7 @@ class HandleInertiaRequests extends Middleware
     protected $status = [
         [
             'name' => 'All',
-            'value' => '',
+            'value' => 'all',
         ],
         [
             'name' => 'Active',

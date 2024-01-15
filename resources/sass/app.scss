@@ -54458,3 +54458,10 @@ html:not([data-theme=dark]) {
     border-radius: 1.5rem;
     width:1px;
 }
+
+.multiselect__content {
+    max-height: 200px !important;
+    min-width: 150px;
+    background-color: var(--kt-input-solid-bg);
+    /* Height ko customize kare */
+}

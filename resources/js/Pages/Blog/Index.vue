@@ -132,8 +132,8 @@ export default defineComponent({
                                         <img alt="Logo" src="/assets/images/comingsoon.png">
                                     </div>
                                 </td>
-                                <td>{{ blog.title }}</td>
-                                <td v-html="blog?.content"></td>
+                                <td class="w-300px">{{ blog.title }}</td>
+                                <td class="w-450px" v-html="blog?.content"></td>
                                 <td>
                                     <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
                                         <input class="form-check-input h-20px w-30px" type="checkbox"
@@ -141,7 +141,7 @@ export default defineComponent({
                                             :checked="blog.is_published == 1 ? true : false" />
                                     </div>
                                 </td>
-                                <td>
+                                <td class="w-150px">
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
                                             :id="`dropdown-${blog.id}`" data-bs-toggle="dropdown"
@@ -160,13 +160,13 @@ export default defineComponent({
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/blog/${blog.id}/edit`">Edit
+                                                    :href="`/blog/${blog.id}/edit`"><i class="bi bi-pencil me-2"></i>Edit
                                                 </Link>
                                             </li>
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/blog/${blog.id}`">Show
+                                                    :href="`/blog/${blog.id}`"><i class="bi bi-view-list me-2"></i>View
                                                 </Link>
                                             </li>
                                             <li class="menu-item px-3">
@@ -175,7 +175,7 @@ export default defineComponent({
                                                 )
                                                     "
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
-                                                    Delete
+                                                    <i class="bi bi-trash3 me-2"></i>Delete
                                                 </button>
                                             </li>
                                         </ul>

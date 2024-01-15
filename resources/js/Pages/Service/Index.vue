@@ -132,13 +132,16 @@ export default defineComponent({
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/service/${service.id}/edit`">Edit
+                                                    :href="`/service/${service.id}/edit`">
+                                                <i class="bi bi-pencil me-2"></i>
+                                                Edit
                                                 </Link>
                                             </li>
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/service/${service.id}`">View
+                                                    :href="`/service/${service.id}`"><i
+                                                    class="bi bi-view-list me-2"></i>View
                                                 </Link>
                                             </li>
 
@@ -148,7 +151,7 @@ export default defineComponent({
                                                 )
                                                     "
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
-                                                    Delete
+                                                    <i class="bi bi-trash3 me-2"></i>Delete
                                                 </button>
                                             </li>
                                         </ul>

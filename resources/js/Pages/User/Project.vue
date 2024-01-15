@@ -144,18 +144,21 @@ export default defineComponent({
                                 <td>{{ survey.created_at }}</td>
                                 <td>{{ survey.client_browser }}</td>
                                 <td>
-                                    <div v-if="(survey.status == 'terminate')" class="badge badge-danger">Terminate</div>
-                                    <div v-else-if="(survey.status == 'complete')" class="badge badge-success">Complete
+                                    <div v-if="(survey.status == 'terminate')" class="border-pill badge badge-light-danger">
+                                        Terminate</div>
+                                    <div v-else-if="(survey.status == 'complete')"
+                                        class="border-pill badge badge-light-success">Complete
                                     </div>
-                                    <div v-else-if="(survey.status == 'quotafull')" class="badge badge-info">Quotafull</div>
-                                    <div v-else-if="(survey.status == 'null')" class="badge badge-light">Incomplete</div>
-                                    <div v-else class="badge badge-danger">Security Terminate</div>
+                                    <div v-else-if="(survey.status == 'quotafull')"
+                                        class="border-pill badge badge-light-info">Quotafull</div>
+                                    <div v-else-if="(survey.status == 'null')" class="border-pill badge badge-light-light">
+                                        Incomplete</div>
+                                    <div v-else class="border-pill badge badge-light-danger">Security Terminate
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
-                        <!--end::Table body-->
                     </table>
-
                 </div>
                 <div class="row mb-5" v-if="surveys.meta">
                     <div class="col-sm-12 d-flex align-items-center justify-content-between">

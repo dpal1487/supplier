@@ -11,7 +11,6 @@ import { required } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import utils from "../../utils";
-import ImageInput from "@/Components/ImageInput.vue"
 import DragDropFile from "@/Components/DragDropFile.vue"
 
 export default defineComponent({
@@ -74,7 +73,6 @@ export default defineComponent({
         JetLabel,
         InputError,
         ClassicEditor,
-        ImageInput,
         DragDropFile,
     },
     methods: {

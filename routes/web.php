@@ -15,6 +15,7 @@ use App\Http\Controllers\{
     DashboardController,
     FinalIdController,
     ImageController,
+    IndustryController,
     ProjectController,
     InvoiceController,
     MappingController,
@@ -229,11 +230,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::controller(QuestionController::class)->group(function () {
             Route::get('questions', 'index')->name('questions.index');
             Route::group(['prefix' => 'question'], function () {
-                Route::post('create', 'store')->name('question.create');
+                Route::post('store', 'store')->name('question.store');
                 Route::get('{id}/edit', 'edit')->name('question.edit');
                 Route::get('{id}', 'show')->name('question.show');
                 Route::post('update', 'update')->name('question.update');
-                Route::delete('delete', 'destroy')->name('question.delete');
+                Route::delete('delete/{id}', 'destroy')->name('question.delete');
             });
         });
 
@@ -255,6 +256,18 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 Route::delete('destroy/{id}', 'destroy')->name('activity_type.destroy');
             });
         });
+
+        Route::controller(IndustryController::class)->group(function () {
+            Route::get('industries', 'index')->name('industries.index');
+            Route::group(['prefix' => 'industry'], function () {
+                Route::post('status',  'statusUpdate')->name('industry.status');
+                Route::post('store', 'store')->name('industry.store');
+                Route::get('{id}/edit', 'edit')->name('industry.edit');
+                Route::post('update', 'update')->name('industry.update');
+                Route::delete('destroy/{id}', 'destroy')->name('industry.destroy');
+            });
+        });
+
         Route::controller(RoleController::class)->group(function () {
             Route::group(['prefix' => 'role'], function () {
                 Route::get('/', 'index')->name('role.index');
@@ -265,7 +278,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 Route::delete('delete/{id}', 'destroy')->name('role.destroy');
             });
         });
-
         Route::controller(PermissionController::class)->group(function () {
             Route::get('/permissions', 'index')->name('permission.index');
             Route::group(['prefix' => 'permission'], function () {
@@ -275,7 +287,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 Route::delete('destroy/{id}', 'destroy')->name('permission.destroy');
             });
         });
-
         Route::controller(ImageController::class)->group(function () {
             Route::post('/image/{entity}', 'store')->name('image.store');
         });
