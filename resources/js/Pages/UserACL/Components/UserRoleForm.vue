@@ -229,10 +229,12 @@ export default defineComponent({
             </div>
             <div class="text-center pt-15">
                 <button type="reset" class="btn btn-light me-3" @onhide="$emit('hidemodal', false)">Discard</button>
-                <button type="submit" class="btn btn-primary" :data-kt-indicator="processing ? 'on' : 'off'">
-                    <span class="indicator-label">Submit</span>
-                    <span class="indicator-progress">Please wait...
-                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': processing }">
+                    <div v-show="processing" class="spinner-border spinner-border-sm">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <span v-if="isEdit">Save Changes</span>
+                    <span v-else>Save</span>
                 </button>
             </div>
         </form>

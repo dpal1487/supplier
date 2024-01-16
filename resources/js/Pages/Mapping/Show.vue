@@ -40,6 +40,7 @@ export default defineComponent({
 </script>
 <template>
     <app-layout :title="title">
+
         <Head :title="title" />
         <TopCard :project="project.data" :countries="countries.data" :states="states.data" :cities="cities.data" />
         <template #breadcrumb>
@@ -74,13 +75,13 @@ export default defineComponent({
                     <div class="table-responsive" v-if="respondents.data.length > 0">
                         <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
                             <thead>
-                                <tr class="text-gray-400 fw-bold fs-7 w-100 text-uppercase">
+                                <tr class="text-gray-700 fw-bold fs-7 w-100 text-uppercase">
                                     <th class="min-w-120px" v-for="(th, index) in tbody" :key="index">
                                         {{ th }}
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="fw-semibold text-gray-600">
+                            <tbody class="fw-semibold text-gray-400">
                                 <tr v-for="(
                                         respondent, index
                                     ) in respondents.data" :key="index">

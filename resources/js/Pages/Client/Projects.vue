@@ -93,16 +93,27 @@ export default defineComponent({
                             Search
                         </button>
 
-                        <a target="_blank" :href="route('client.project.report', {id:client?.data?.id})"
+                        <a target="_blank" :href="route('client.project.report', { id: client?.data?.id })"
                             class="btn btn-primary m-1"><i class="bi bi-graph-down-arrow"></i>Export
                             Report</a>
                     </form>
                 </div>
             </div>
         </div>
-        <ProjectList :projects="projects.data" :status="status.data" action="client.project" />
-        <div class="row mt-5" v-if="projects.meta">
-            <div class=" col-sm-12 d-flex align-items-center justify-content-between">
+        <div v-if="projects.data.length > 0">
+            <ProjectList :projects="projects.data" :status="status.data" action="client.project" />
+        </div>
+
+        <div class="d-flex justify-content-center align-content-center pt-10 pb-10" v-else>
+            <div class="text-center py-10">
+                <img src="/assets/images/emptyrespondent.png" style="height: 200px" />
+                <div class="fw-bold fs-2 text-gray-900 mt-5">
+                    No Project Found!
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5" v-if="projects.data.length > 0">
+            <div class=" col-sm-12 d-flex align-items-center justify-content-between" v-if="projects.meta">
                 <span class="fw-bold text-gray-700">
                     Showing {{ projects.meta.from }} to {{ projects.meta.to }}
                     of {{ projects.meta.total }} entries

@@ -32,8 +32,8 @@ class ClientController extends Controller
         if (!empty($request->q)) {
             $clients = $clients->where('name', 'like', "%{$request->q}%")->orWhere('display_name', 'like', "%{$request->q}%");
         }
-        if (!empty($request->status)) {
-            $clients = $clients->where('status', $request->status);
+        if ($request->status !== 'all' && $request->status !== null) {
+            $clients = $clients->where('status', (int)$request->status);
         }
         $clients = $clients->paginate(10)->appends(request()->query());
         return Inertia::render('Client/Index', [
@@ -245,7 +245,7 @@ class ClientController extends Controller
     {
         if (Client::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
             $status = $request->status == 0  ? "Inactivate" : "Activate";
-            return response()->json(statusMessage('Client'));
+            return response()->json(['message' => "Your Client has been " . $status, 'success' => true]);
         }
         return response()->json(errorMessage());
     }

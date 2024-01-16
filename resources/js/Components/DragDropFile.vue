@@ -55,7 +55,7 @@ export default defineComponent({
         }
     },
     created() {
-        if (this.image) this.isDefaultImage = true;
+        if (this.image?.url) this.isDefaultImage = true;
     }
 });
 
@@ -106,7 +106,6 @@ export default defineComponent({
                     </button>
                 </div>
             </div>
-
             <div class="position-absolute image-hover w-100 h-100 top-0 start-0" v-else>
                 <img style="z-index: 1;" class="position-absolute top-0 start-0 w-100 h-100"
                     :src="isDefaultImage ? image : generateURL(files[0])" alt="preview image" />

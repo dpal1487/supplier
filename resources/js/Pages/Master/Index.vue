@@ -5,6 +5,7 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 export default defineComponent({
     props: ["surveys", "users"],
     data() {
@@ -34,12 +35,13 @@ export default defineComponent({
         };
     },
     components: {
-        AppLayout,
-        Link,
-        Head,
-        Pagination,
-        Multiselect,
-    },
+    AppLayout,
+    Link,
+    Head,
+    Pagination,
+    Multiselect,
+    NoRecordMessage
+},
     methods: {
         search() {
             Inertia.get(
@@ -123,13 +125,13 @@ export default defineComponent({
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 w-100 text-uppercase">
+                            <tr class="text-gray-700 fw-bold fs-7 w-100 text-uppercase">
                                 <th class="min-w-120px" v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-400" v-if="surveys?.data?.length > 0">
                             <tr v-for="(survey, index) in surveys.data" :key="index">
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ survey.id }} </td>
@@ -141,20 +143,32 @@ export default defineComponent({
                                 <td>{{ survey.created_at }}</td>
                                 <td>{{ survey.client_browser }}</td>
                                 <td>
-                                    <div v-if="(survey.status == 'terminate')" class="badge badge-danger">Terminate</div>
-                                    <div v-else-if="(survey.status == 'complete')" class="badge badge-success">Complete
+                                    <div v-if="(survey.status == 'terminate')"
+                                        class="mx-1 text-capitalize badge badge-light-danger">Terminate</div>
+                                    <div v-else-if="(survey.status == 'complete')"
+                                        class="mx-1 text-capitalize badge badge-light-success">Complete
                                     </div>
-                                    <div v-else-if="(survey.status == 'quotafull')" class="badge badge-info">Quotafull</div>
-                                    <div v-else-if="(survey.status == 'security-terminate')" class="badge badge-danger">
+                                    <div v-else-if="(survey.status == 'quotafull')"
+                                        class="mx-1 text-capitalize badge badge-light-info">Quotafull</div>
+                                    <div v-else-if="(survey.status == 'security-terminate')"
+                                        class="mx-1 text-capitalize badge badge-light-danger">
                                         Security Terminate</div>
-                                    <div v-else class="badge badge-light">Incomplete</div>
+                                    <div v-else class="mx-1 text-capitalize badge badge-light">Incomplete</div>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                        <tbody class="fw-semibold text-gray-400" v-else>
+                            <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
+                                <td colspan="10" class="text-center h-full">
+                                  <NoRecordMessage />
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="row" v-if="surveys.meta">
-                    <div class="col-sm-12 d-flex align-items-center justify-content-between">
+                <div class="row" v-if="surveys?.data?.length > 0">
+                    <div class="col-sm-12 d-flex align-items-center justify-content-between" v-if="surveys.meta">
                         <span class="fw-bold text-gray-700">
                             Showing {{ surveys.meta.from }} to {{ surveys.meta.to }}
                             of {{ surveys.meta.total }} entries

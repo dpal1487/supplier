@@ -131,7 +131,7 @@ export default defineComponent({
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
-                            <tr class="text-gray-400 fw-bold fs-7 w-100 text-uppercase">
+                            <tr class="text-gray-600 fw-bold fs-7 w-100 text-uppercase">
 
                                 <th class="min-w-120px" v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
@@ -141,7 +141,7 @@ export default defineComponent({
                         </thead>
                         <!--end::Table head-->
                         <!--begin::Table body-->
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-600" v-if="surveys.data.length > 0">
                             <tr v-for="(survey, index) in surveys.data" :key="index">
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ survey?.id }}</td>
@@ -159,6 +159,11 @@ export default defineComponent({
                                     <div v-else-if="(survey.status == 'null')" class="badge badge-light">Incomplete</div>
                                     <div v-else class="badge badge-danger">Security Terminate</div>
                                 </td>
+                            </tr>
+                        </tbody>
+                        <tbody class="fw-semibold text-gray-600" v-else>
+                            <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
+                                <td colspan="9" class="text-center h-full">No Record Found</td>
                             </tr>
                         </tbody>
                     </table>

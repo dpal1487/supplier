@@ -49,28 +49,23 @@ export default defineComponent({
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
                 this.processing = true;
-                console.log(this.form.id)
                 axios.post(this.form.id ? this.route("activity_type.update", this.id) : this.route('activity_type.store'), this.form)
                     .then((response) => {
                         if (response.data.success) {
                             this.processing = false;
                             toast.success(response.data.message)
                             Inertia.get('/activity_types')
-                        } else {
-                            toast.info(response.data.message)
                         }
-                        if (response.data.error) {
-                            toast.error(response.data.error)
+                        else {
+                            toast.error(response.data.message)
                         }
                     })
             }
         },
     },
-
 });
 </script>
 <template>
-    <JetValidationErrors />
     <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
         <div class="card">
             <div class="card-header">

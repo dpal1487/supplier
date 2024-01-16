@@ -8,6 +8,7 @@ import { Inertia } from "@inertiajs/inertia";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/css/index.css";
 import ProjectList from "./Components/ProjectList.vue";
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 export default defineComponent({
     props: ["projects", "status", "clients"],
     data() {
@@ -29,14 +30,15 @@ export default defineComponent({
         };
     },
     components: {
-        AppLayout,
-        Link,
-        Head,
-        Pagination,
-        Multiselect,
-        Loading,
-        ProjectList,
-    },
+    AppLayout,
+    Link,
+    Head,
+    Pagination,
+    Multiselect,
+    Loading,
+    ProjectList,
+    NoRecordMessage
+},
     methods: {
         search() {
             this.isLoading = true;
@@ -107,9 +109,16 @@ export default defineComponent({
             </div>
         </div>
         <!-- {{ projects }} -->
-        <project-list :projects="projects.data" :status="status.data" :action="action" />
-        <div class="row" v-if="projects.meta">
-            <div class="col-sm-12 d-flex align-items-center justify-content-between">
+        <div v-if="projects.data.length > 0">
+            <project-list :projects="projects.data" :status="status.data" :action="action" />
+        </div>
+        <div class="d-flex justify-content-center align-content-center pt-10 pb-10" v-else>
+            <div class="text-center py-10">
+               <NoRecordMessage />
+            </div>
+        </div>
+        <div class="row" v-if="projects.data.length > 0">
+            <div class="col-sm-12 d-flex align-items-center justify-content-between" v-if="projects.meta">
                 <span class="fw-bold text-gray-700">
                     Showing {{ projects.meta.from }} to
                     {{ projects.meta.to }} of {{ projects.meta.total }} entries

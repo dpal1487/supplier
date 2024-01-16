@@ -8,6 +8,7 @@ import { Inertia } from "@inertiajs/inertia";
 import Loading from "vue-loading-overlay";
 import utils from "../../utils";
 import QuestionForm from "./Components/QuestionForm.vue";
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 export default defineComponent({
     props: ["questions", "industries"],
 
@@ -34,7 +35,8 @@ export default defineComponent({
         Pagination,
         Multiselect,
         Loading,
-        QuestionForm
+        QuestionForm,
+        NoRecordMessage
     },
     methods: {
         async confirmDelete(id, index) {
@@ -69,7 +71,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/question" class="text-muted text-hover-primary">Question</Link>
+                <Link href="/questions" class="text-muted text-hover-primary">Questions</Link>
             </li>
         </template>
         <template #toolbar>
@@ -106,13 +108,13 @@ export default defineComponent({
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5 text-left">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-700 fw-bold fs-7 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600" v-if="questions.data.length > 0">
+                        <tbody class="fw-semibold text-gray-400" v-if="questions.data.length > 0">
                             <tr v-for="(question, index) in questions.data" :key="index">
                                 <td class="w-150px">
                                     <Link :href="'/question/' + question.id"
@@ -171,7 +173,9 @@ export default defineComponent({
                         </tbody>
                         <tbody class="fw-semibold text-gray-600" v-else>
                             <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
-                                <td colspan="6" class="text-center h-full">No Record Found</td>
+                                <td colspan="6" class="text-center h-full">
+                                    <NoRecordMessage />
+                                </td>
                             </tr>
                         </tbody>
                     </table>

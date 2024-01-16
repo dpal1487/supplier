@@ -33,7 +33,6 @@ class AnswerController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-
             'question' => 'required',
             'answer' => 'required',
             'order_by' => 'required',

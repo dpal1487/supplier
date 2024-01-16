@@ -7,6 +7,8 @@ import { Inertia } from "@inertiajs/inertia";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/css/index.css";
 import utils from "../../utils";
+import Multiselect from "@vueform/multiselect";
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 
 export default defineComponent({
     props: ["clients"],
@@ -27,18 +29,21 @@ export default defineComponent({
         };
     },
     components: {
-        AppLayout,
-        Link,
-        Head,
-        Pagination,
-        Loading,
-    },
+    AppLayout,
+    Link,
+    Head,
+    Pagination,
+    Loading,
+    Multiselect,
+    NoRecordMessage
+},
     methods: {
-        async updateStatus(id, e) {
+        async updateStatus(e, id) {
             this.isLoading = true;
             await utils.changeStatus(route('client.status'), { id: id, status: e });
             this.isLoading = false;
         },
+
         async confirmDelete(index) {
             this.isLoading = true;
             await utils.deleteIndexDialog(route('client.destroy', this.clients.data[index].id), this.clients.data, index);
@@ -89,6 +94,8 @@ export default defineComponent({
                     </span>
                     <input type="text" v-model="form.q" class="form-control form-control-solid w-250px ps-14"
                         placeholder="Search Client" />
+                    <Multiselect :options="$page.props.ziggy.status" label="name" value-prop="value" v-model="form.status"
+                        class="form-control form-control-solid w-150px mx-2" placeholder="Select Status" />
                 </div>
 
                 <button type="submit" class="btn btn-primary">
@@ -99,13 +106,13 @@ export default defineComponent({
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-700 fw-bold fs-7 text-uppercase ">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-400" v-if="clients.data.length > 0">
                             <tr v-for="(client, index) in clients.data" :key="index">
                                 <td>
                                     <Link :href="'/client/' + client.id"
@@ -116,10 +123,11 @@ export default defineComponent({
                                 <td>{{ client.contact_number }}</td>
                                 <td>{{ client.tax_number }}</td>
                                 <td>
-                                    <span :class="`badge bg-${client.status == 1
-                                        ? 'success'
-                                        : 'danger'
-                                        }`">{{ client.status ? 'Active' : 'Inactive' }}</span>
+                                    <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
+                                        <input class="form-check-input h-20px w-30px" type="checkbox"
+                                            @input="updateStatus($event.target.checked, client.id)"
+                                            :checked="client.status == 1 ? true : false" />
+                                    </div>
                                 </td>
                                 <td>{{ client.created_at }}</td>
                                 <td>
@@ -150,11 +158,19 @@ export default defineComponent({
 
                             </tr>
                         </tbody>
+
+                        <tbody class="fw-semibold text-gray-600" v-else>
+                            <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
+                                <td colspan="9" class="text-center h-full">
+                                    <NoRecordMessage />
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
-            <div class="row mb-5 mx-5" v-if="clients.meta">
-                <div class="col-sm-12 d-flex align-items-center justify-content-between mb-5">
+            <div class="row mb-5 mx-5" v-if="clients.data.length > 0">
+                <div class="col-sm-12 d-flex align-items-center justify-content-between mb-5" v-if="clients.meta">
                     <span class="fw-bold text-gray-700">
                         Showing {{ clients.meta.from }} to {{ clients.meta.to }}
                         of {{ clients.meta.total }} entries

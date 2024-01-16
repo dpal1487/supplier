@@ -183,67 +183,87 @@ export default defineComponent({
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-7" v-if="invoice.data.client">
-                                        <div class="d-flex ">
-                                            <div class="fw-semibold w-250px  text-gray-700 fs-4">
-                                                Net payable amount :
-                                            </div>
-                                            <div class="fw-bold fs-4 text-gray-800  flex-root text-start"
-                                                v-if="invoice?.data?.client?.tax_number != 'null'">
-                                                {{ invoice?.data?.currency.symbol }}
-                                                {{ invoice?.data?.total_amount }} X {{ invoice?.data?.conversion_rate }} INR
-                                                =
-                                                INR
-                                                {{ Number((invoice?.data?.total_amount *
-                                                    invoice?.data?.conversion_rate))
-                                                    + Number(parseFloat((invoice?.data?.total_amount *
-                                                        invoice?.data?.conversion_rate) / 118 *
-                                                        invoice?.data?.tax_rate).toFixed(2)) }}
-                                            </div>
-                                            <div class="fw-bold fs-4 text-gray-800  flex-root" v-else>
-                                                {{ invoice?.data?.currency.symbol }}
-                                                {{ invoice?.data?.total_amount }} X {{ invoice?.data?.conversion_rate }} INR
-                                                =
-                                                INR
-                                                {{ (invoice?.data?.total_amount * invoice?.data?.conversion_rate).toFixed(2)
-                                                }}
-                                            </div>
-                                        </div>
-                                        <div v-if="invoice?.data?.client?.tax_number != 'null'">
-                                            <div class="d-flex my-2">
-                                                <div class="fw-semibold w-250px  text-gray-700 fs-4">Invoice value
-                                                    before GST :
+                                    <div class="col-7">
+                                        <div v-if="invoice.data.client">
+                                            <div class="d-flex ">
+                                                <div class="fw-semibold w-250px  text-gray-700 fs-4">
+                                                    Net payable amount :
                                                 </div>
-                                                <div class="fw-bold text-gray-800 fs-4 mx-1">
-                                                    INR {{ (
-                                                        invoice?.data?.total_amount *
-                                                        invoice?.data?.conversion_rate).toFixed(2) }}
-                                                </div>
-                                            </div>
-                                            <div class="d-flex my-2">
-                                                <div class="fw-semibold w-250px  text-gray-700 fs-4">GST value at
-                                                    {{ invoice?.data?.tax_rate }}% :
-                                                </div>
-                                                <div class="fw-bold text-gray-800 fs-4 mx-1">
-                                                    INR {{
-                                                        parseFloat((
-                                                            invoice?.data?.total_amount *
-                                                            invoice?.data?.conversion_rate).toFixed(2) / 118 *
-                                                            invoice?.data?.tax_rate).toFixed(2) }}
-                                                </div>
-                                            </div>
-                                            <div class="d-flex my-2">
-                                                <div class="fw-semibold w-250px  text-gray-700 fs-4">Invoice value
-                                                    with
-                                                    GST :
-                                                </div>
-                                                <div class="fw-bold text-gray-800 fs-4 mx-1">
-                                                    INR {{ Number((invoice?.data?.total_amount *
+                                                <div class="fw-bold fs-4 text-gray-800  flex-root text-start"
+                                                    v-if="invoice?.data?.client?.tax_number != 'null'">
+                                                    {{ invoice?.data?.currency.symbol }}
+                                                    {{ invoice?.data?.total_amount }} X {{ invoice?.data?.conversion_rate }}
+                                                    INR
+                                                    =
+                                                    INR
+                                                    {{ Number((invoice?.data?.total_amount *
                                                         invoice?.data?.conversion_rate))
                                                         + Number(parseFloat((invoice?.data?.total_amount *
                                                             invoice?.data?.conversion_rate) / 118 *
                                                             invoice?.data?.tax_rate).toFixed(2)) }}
                                                 </div>
+                                                <div class="fw-bold fs-4 text-gray-800  flex-root" v-else>
+                                                    {{ invoice?.data?.currency.symbol }}
+                                                    {{ invoice?.data?.total_amount }} X {{ invoice?.data?.conversion_rate }}
+                                                    INR
+                                                    =
+                                                    INR
+                                                    {{ (invoice?.data?.total_amount *
+                                                        invoice?.data?.conversion_rate).toFixed(2)
+                                                    }}
+                                                </div>
+                                            </div>
+                                            <div v-if="invoice?.data?.client?.tax_number != 'null'">
+                                                <div class="d-flex my-2">
+                                                    <div class="fw-semibold w-250px  text-gray-700 fs-4">Invoice value
+                                                        before GST :
+                                                    </div>
+                                                    <div class="fw-bold text-gray-800 fs-4 mx-1">
+                                                        INR {{ (
+                                                            invoice?.data?.total_amount *
+                                                            invoice?.data?.conversion_rate).toFixed(2) }}
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex my-2">
+                                                    <div class="fw-semibold w-250px  text-gray-700 fs-4">GST value at
+                                                        {{ invoice?.data?.tax_rate }}% :
+                                                    </div>
+                                                    <div class="fw-bold text-gray-800 fs-4 mx-1">
+                                                        INR {{
+                                                            parseFloat((
+                                                                invoice?.data?.total_amount *
+                                                                invoice?.data?.conversion_rate).toFixed(2) / 118 *
+                                                                invoice?.data?.tax_rate).toFixed(2) }}
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex my-2">
+                                                    <div class="fw-semibold w-250px  text-gray-700 fs-4">Invoice value
+                                                        with
+                                                        GST :
+                                                    </div>
+                                                    <div class="fw-bold text-gray-800 fs-4 mx-1">
+                                                        INR {{ Number((invoice?.data?.total_amount *
+                                                            invoice?.data?.conversion_rate))
+                                                            + Number(parseFloat((invoice?.data?.total_amount *
+                                                                invoice?.data?.conversion_rate) / 118 *
+                                                                invoice?.data?.tax_rate).toFixed(2)) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex " v-else>
+                                            <div class="fw-semibold w-250px  text-gray-700 fs-4">
+                                                Net payable amount :
+                                            </div>
+                                            <div class="fw-bold fs-4 text-gray-800  flex-root">
+                                                {{ invoice?.data?.currency.symbol }}
+                                                {{ invoice?.data?.total_amount }} X {{ invoice?.data?.conversion_rate }}
+                                                INR
+                                                =
+                                                INR
+                                                {{ (invoice?.data?.total_amount *
+                                                    invoice?.data?.conversion_rate).toFixed(2)
+                                                }}
                                             </div>
                                         </div>
                                         <div class="my-5 text-dark fw-bolder border-top  fs-2 text-start ">

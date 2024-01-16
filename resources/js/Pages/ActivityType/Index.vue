@@ -8,6 +8,7 @@ import { Inertia } from "@inertiajs/inertia";
 import ActivityTypeForm from "./Components/ActivityTypeForm.vue";
 import SectionLoader from "../../Components/SectionLoader.vue";
 import utils from "../../utils.js";
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 
 export default defineComponent({
     props: ["activity_types"],
@@ -30,7 +31,8 @@ export default defineComponent({
         Head,
         Pagination,
         ActivityTypeForm,
-        SectionLoader
+        SectionLoader,
+        NoRecordMessage
     },
     methods: {
         async confirmDelete(id, index) {
@@ -113,13 +115,13 @@ export default defineComponent({
                         <div class="table-responsive">
                             <table class="table align-middle table-row-dashed fs-6 gy-5 text-left">
                                 <thead>
-                                    <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                                    <tr class="text-gray-700 fw-bold fs-7 text-uppercase">
                                         <th v-for="(th, index) in tbody" :key="index">
                                             {{ th }}
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody class="fw-semibold text-gray-600" v-if="activity_types.data.length > 0">
+                                <tbody class="fw-semibold text-gray-400" v-if="activity_types.data.length > 0">
                                     <tr v-for="(activity_type, index) in activity_types.data" :key="index">
                                         <td>{{ index + 1 }}</td>
                                         <td>{{ activity_type?.text }}</td>
@@ -142,7 +144,9 @@ export default defineComponent({
                                 </tbody>
                                 <tbody class="fw-semibold text-gray-600" v-else>
                                     <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
-                                        <td colspan="6" class="text-center h-full">No Record Found</td>
+                                        <td colspan="6" class="text-center h-full">
+                                            <NoRecordMessage />
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

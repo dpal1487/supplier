@@ -24,6 +24,7 @@ class SurveyInitController extends Controller
         $ip = '162.159.24.227';
         $data = Location::get($ip);
 
+
         $agent = new Agent();
         $project = SupplierProject::where(['id' => $pid])->first();
 

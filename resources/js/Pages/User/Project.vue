@@ -7,6 +7,7 @@ import Pagination from "../../Jetstream/Pagination.vue";
 import ProjectList from "../Project/Components/ProjectList.vue";
 import Multiselect from "@vueform/multiselect";
 import { Inertia } from "@inertiajs/inertia";
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 export default defineComponent({
     props: ["surveys", "user", 'header'],
     data() {
@@ -40,7 +41,8 @@ export default defineComponent({
         AppLayout,
         Pagination,
         ProjectList,
-        Multiselect
+        Multiselect,
+        NoRecordMessage
     },
     methods: {
         search() {
@@ -126,14 +128,14 @@ export default defineComponent({
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 w-100 text-uppercase">
+                            <tr class="text-gray-700 fw-bold fs-7 w-100 text-uppercase">
 
                                 <th class="min-w-120px" v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-400" v-if="surveys?.data?.length > 0">
                             <tr v-for="(survey, index) in surveys.data" :key="index">
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ survey.project_id }}</td>
@@ -158,10 +160,17 @@ export default defineComponent({
                                 </td>
                             </tr>
                         </tbody>
+                        <tbody class="fw-semibold text-gray-600" v-else>
+                            <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
+                                <td colspan="9" class="text-center h-full">
+                                    <NoRecordMessage />
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
-                <div class="row mb-5" v-if="surveys.meta">
-                    <div class="col-sm-12 d-flex align-items-center justify-content-between">
+                <div class="row my-5" v-if="surveys.data.length > 0">
+                    <div class="col-sm-12 d-flex align-items-center justify-content-between" v-if="surveys.meta">
                         <span class="fw-bold text-gray-700">
                             Showing {{ surveys.meta.from }} to {{ surveys.meta.to }}
                             of {{ surveys.meta.total }} entries

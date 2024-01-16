@@ -17,7 +17,7 @@ class SuppliersResponedentResource extends JsonResource
         return [
             'id' => $this->id,
             'project_id' => $this->project?->project->project_name ?? $this->project_id,
-            'user' => $this->user ? $this->user->first_name . ' ' . $this->user->last_name : $this->user_id,
+            'user' =>  $this->user_id,
             'supplier_name' => $this->supplier?->supplier_name,
             'supplier_project_id' => $this->supplier_project_id,
             'project_name' => $this->project_link?->project_name,

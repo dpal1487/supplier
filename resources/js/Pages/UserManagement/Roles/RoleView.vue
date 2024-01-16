@@ -563,12 +563,13 @@ export default defineComponent({
                                             <div class="text-center pt-15 gap-5">
                                                 <button type="reset" class="btn btn-light me-3"
                                                     data-kt-roles-modal-action="cancel">Discard</button>
+
                                                 <button type="submit" class="btn btn-primary"
-                                                    data-kt-roles-modal-action="submit">
-                                                    <span class="indicator-label">Submit</span>
-                                                    <span class="indicator-progress">Please wait...
-                                                        <span
-                                                            class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                                    :class="{ 'text-white-50': processing }">
+                                                    <div v-show="processing" class="spinner-border spinner-border-sm">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    <span>Save</span>
                                                 </button>
                                             </div>
                                             <!--end::Actions-->
@@ -651,9 +652,9 @@ export default defineComponent({
                                                 <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                                                     <th class="w-10px pe-2 sorting_disabled" rowspan="1" colspan="1"
                                                         aria-label="
-																	
-																		
-																	
+
+
+
 																" style="width: 29.8906px;">
                                                         <div
                                                             class="form-check form-check-sm form-check-custom form-check-solid me-3">

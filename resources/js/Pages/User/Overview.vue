@@ -306,7 +306,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-6 fv-row">
-                                <span :class="`badge bg-${user?.data?.status == 1
+                                <span :class="`badge badge-light-${user?.data?.status == 1
                                     ? 'success'
                                     : 'danger'
                                     }`">{{ user?.data?.status ? 'Active' : 'Inactive' }}</span>

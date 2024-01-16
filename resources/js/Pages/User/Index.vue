@@ -6,6 +6,7 @@ import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
 import utils from "../../utils";
 import { Inertia } from "@inertiajs/inertia";
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 export default defineComponent({
     props: ["users"],
     data() {
@@ -28,6 +29,7 @@ export default defineComponent({
         Head,
         Pagination,
         Multiselect,
+        NoRecordMessage
     },
     methods: {
         async confirmDelete(id, index) {
@@ -58,18 +60,13 @@ export default defineComponent({
         </template>
         <template #toolbar>
             <div class="d-flex align-items-center gap-2 gap-lg-3">
-                <!--begin::Primary button-->
                 <Link href="/user/create" class="btn btn-sm fw-bold btn-primary">
                 <i class="bi bi-plus-circle"></i>Add New User</Link>
-                <!--end::Primary button-->
             </div>
         </template>
         <div class="card">
             <form @submit.prevent="search" class="card-header justify-content-start p-5 gap-2 gap-md-5">
-                <!--begin::Card title-->
-                <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative">
-                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                     <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24" viewBox="0 0 24 24"
                             fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
@@ -79,7 +76,6 @@ export default defineComponent({
                                 fill="currentColor"></path>
                         </svg>
                     </span>
-                    <!--end::Svg Icon-->
                     <input type="text" v-model="form.q" class="form-control form-control-solid w-250px ps-14"
                         placeholder="Search User" />
                 </div>
@@ -87,36 +83,34 @@ export default defineComponent({
                 <button type="submit" class="btn btn-primary">
                     Search
                 </button>
-                <!--end::Search-->
             </form>
 
             <div class="card-body pt-0">
-                <!--begin::Table-->
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 w-100 text-uppercase">
+                            <tr class="text-gray-600 fw-bold fs-7 w-100 text-uppercase">
                                 <th class="min-w-120px" v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-600" v-if="users.data.length > 0">
                             <tr v-for="(user, index) in users.data" :key="index">
-                                <td>
-                                    <Link class="text-black" :href="`user/${user.id}`">{{ user.first_name + " " +
+                                <td class="text-capitalize">
+                                    <Link class="text-gray-700 text-hover-primary fw-bold" :href="`user/${user.id}`">{{
+                                        user.first_name + " " +
                                         user.last_name }}</Link>
                                 </td>
                                 <td>{{ user.email }}</td>
                                 <td>{{ user.role?.name }}</td>
-                                <td> <span :class="`badge bg-${user.status == 1
+                                <td> <span :class="`badge badge-light-${user.status == 1
                                     ? 'success'
                                     : 'danger'
                                     }`">{{ user.status ? 'Active' : 'Inactive' }}</span></td>
                                 <td>
                                     <a href="#" class="btn btn-sm btn-light menu-dropdown" :id="`dropdown-${user.id}`"
                                         data-bs-toggle="dropdown">Actions
-                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                         <span class="svg-icon svg-icon-5 m-0">
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
@@ -125,7 +119,6 @@ export default defineComponent({
                                                     fill="currentColor"></path>
                                             </svg>
                                         </span>
-                                        <!--end::Svg Icon-->
                                     </a>
                                     <div class="text-left dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
                                         :aria-labelled:by="`dropdown-${user.id}`">
@@ -135,22 +128,21 @@ export default defineComponent({
                                             </Link>
                                         </div>
                                         <div class="menu-item px-3">
-                                            <Link :href="`/user/${user.id}`" class="menu-link"><i
-                                                class="bi bi-view-list me-2"></i>View
-                                            </Link>
-                                        </div>
-                                        <div class="menu-item px-3">
                                             <span @click="confirmDelete(user.id, index)" class="menu-link"><i
                                                     class="bi bi-trash3 me-2"></i>Delete</span>
                                         </div>
                                     </div>
-
                                 </td>
                             </tr>
                         </tbody>
-                        <!--end::Table body-->
+                        <tbody class="fw-semibold text-gray-600" v-else>
+                            <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
+                                <td colspan="12" class="text-center h-full">
+                                    <NoRecordMessage />
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
-
                 </div>
                 <div class="d-flex align-items-center justify-content-center justify-content-md-end mb-10"
                     v-if="users.meta">

@@ -167,16 +167,15 @@ export default defineComponent({
                                 <div class="d-flex justify-content-end gap-5">
                                     <button type="button" class="btn btn-secondary"
                                         @click="this.isEdit = false">Discard</button>
-                                    <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                        :data-kt-indicator="processing ? 'on' : 'off'">
-                                        <span class="indicator-label">
+                                    
+
+                                        <button type="submit" class="btn btn-primary"
+                                            :class="{ 'text-white-50': processing }">
+                                            <div v-show="processing" class="spinner-border spinner-border-sm">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
                                             <span>Save Changes</span>
-                                        </span>
-                                        <span class="indicator-progress">
-                                            Please wait... <span
-                                                class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                        </span>
-                                    </button>
+                                        </button>
                                 </div>
                             </div>
                         </div>

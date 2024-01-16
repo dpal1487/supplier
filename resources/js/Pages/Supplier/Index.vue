@@ -9,6 +9,7 @@ import { Inertia } from "@inertiajs/inertia";
 import Loading from "vue-loading-overlay";
 import { toast } from "vue3-toastify";
 import utils from "../../utils";
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 
 // import { copyText } from "vue3-clipboard";
 
@@ -30,13 +31,14 @@ export default defineComponent({
         };
     },
     components: {
-        AppLayout,
-        Link,
-        Head,
-        Pagination,
-        Multiselect,
-        Loading,
-    },
+    AppLayout,
+    Link,
+    Head,
+    Pagination,
+    Multiselect,
+    Loading,
+    NoRecordMessage
+},
     methods: {
         async confirmDelete(index) {
             this.isLoading = true;
@@ -93,13 +95,13 @@ export default defineComponent({
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-700 fw-bold fs-7 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600 ">
+                        <tbody class="fw-semibold text-gray-400 " v-if="suppliers.data.length > 0">
                             <tr v-for="(supplier, index) in suppliers?.data" :key="index">
                                 <td>
                                     <Link :href="'/supplier/' + supplier.id"
@@ -111,7 +113,7 @@ export default defineComponent({
                                 <td>{{ supplier.country?.display_name }}</td>
 
                                 <td>
-                                    <span :class="`badge bg-${supplier?.status == 1 ? 'success' : 'danger'}`">{{
+                                    <span :class="`badge badge-light-${supplier?.status == 1 ? 'success' : 'danger'}`">{{
                                         supplier?.status ?
                                         "Active" : "Inactive" }}</span>
                                 </td>
@@ -145,11 +147,18 @@ export default defineComponent({
                                 </td>
                             </tr>
                         </tbody>
+                        <tbody class="fw-semibold text-gray-600" v-else>
+                            <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
+                                <td colspan="9" class="text-center h-full">
+                                    <NoRecordMessage />
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
-            <div class="row mb-5 mx-5" v-if="suppliers.meta">
-                <div class="col-sm-12 d-flex align-items-center justify-content-between mb-5">
+            <div class="row mb-5 mx-5" v-if="suppliers.data.length > 0">
+                <div class="col-sm-12 d-flex align-items-center justify-content-between mb-5" v-if="suppliers.meta">
                     <span class="fw-bold text-gray-700">
                         Showing {{ suppliers.meta.from }} to
                         {{ suppliers.meta.to }} of

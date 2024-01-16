@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import utils from "../../utils";
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 
 export default defineComponent({
     props: ["services"],
@@ -27,13 +28,14 @@ export default defineComponent({
         };
     },
     components: {
-        AppLayout,
-        Link,
-        Head,
-        Pagination,
-        Multiselect,
-        Loading,
-    },
+    AppLayout,
+    Link,
+    Head,
+    Pagination,
+    Multiselect,
+    Loading,
+    NoRecordMessage
+},
     methods: {
 
         async confirmDelete(id, index) {
@@ -91,13 +93,13 @@ export default defineComponent({
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-600 fw-bold fs-7 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-400" v-if="services.data.length > 0">
                             <tr v-for="(service, index) in services.data" :key="index">
                                 <td v-if="service.image">
                                     <div class="symbol symbol-50px me-5">
@@ -111,9 +113,8 @@ export default defineComponent({
                                 </td>
                                 <td>{{ service.name }}</td>
                                 <td class="text-capitalize">{{ service.page }}</td>
-
                                 <td class="text-capitalize" v-html="service.description"></td>
-                                <td>
+                                <td class="w-150px">
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
                                             :id="`dropdown-${service.id}`" data-bs-toggle="dropdown"
@@ -156,6 +157,13 @@ export default defineComponent({
                                             </li>
                                         </ul>
                                     </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody class="fw-semibold text-gray-600" v-else>
+                            <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
+                                <td colspan="5" class="text-center h-full">
+                                    <NoRecordMessage />
                                 </td>
                             </tr>
                         </tbody>

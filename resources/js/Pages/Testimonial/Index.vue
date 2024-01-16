@@ -10,6 +10,7 @@ import { toast } from "vue3-toastify";
 import axios from "axios";
 import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/css/index.css';
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 export default defineComponent({
     props: ["testimonials"],
     data() {
@@ -21,20 +22,20 @@ export default defineComponent({
             tbody: [
                 "Name",
                 "Testimonial",
-                "Publish",
+                "Status",
                 "Action",
             ],
         };
     },
     components: {
-        AppLayout,
-        Link,
-        Head,
-        Pagination,
-        Multiselect,
-        Loading,
-
-    },
+    AppLayout,
+    Link,
+    Head,
+    Pagination,
+    Multiselect,
+    Loading,
+    NoRecordMessage
+},
     methods: {
 
         async confirmDelete(id, index) {
@@ -109,13 +110,13 @@ export default defineComponent({
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5 text-left">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-700 fw-bold fs-7 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-500" v-if="testimonials.data.length > 0">
                             <tr v-for="(testimonial, index) in testimonials.data" :key="index">
                                 <td class="text-capitalize">{{ testimonial.name }}</td>
                                 <td v-html="testimonial.testimonial"></td>
@@ -126,7 +127,7 @@ export default defineComponent({
                                             :checked="testimonial.is_published == 1 ? true : false" />
                                     </div>
                                 </td>
-                                <td>
+                                <td class="w-150px">
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
                                             :id="`dropdown-${testimonial.id}`" data-bs-toggle="dropdown"
@@ -147,13 +148,14 @@ export default defineComponent({
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
                                                     :href="`/testimonial/${testimonial.id}/edit`">
-                                                    <i class="bi bi-pencil me-2"></i>Edit
+                                                <i class="bi bi-pencil me-2"></i>Edit
                                                 </Link>
                                             </li>
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/testimonial/${testimonial.id}`"><i class="bi bi-view-list me-2"></i>View
+                                                    :href="`/testimonial/${testimonial.id}`"><i
+                                                    class="bi bi-view-list me-2"></i>View
                                                 </Link>
                                             </li>
 
@@ -171,7 +173,13 @@ export default defineComponent({
                                 </td>
                             </tr>
                         </tbody>
-                        <!--end::Table body-->
+                        <tbody class="fw-semibold text-gray-600" v-else>
+                            <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
+                                <td colspan="5" class="text-center h-full">
+                                    <NoRecordMessage />
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
                 <div class="d-flex align-items-center justify-content-center justify-content-md-end"

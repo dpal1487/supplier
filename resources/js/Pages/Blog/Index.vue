@@ -11,6 +11,7 @@ import 'vue-loading-overlay/dist/css/index.css';
 
 import axios from "axios";
 import utils from "../../utils";
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 export default defineComponent({
     props: ["blogs", 'message'],
     data() {
@@ -31,13 +32,14 @@ export default defineComponent({
         };
     },
     components: {
-        AppLayout,
-        Link,
-        Head,
-        Pagination,
-        Multiselect,
-        Loading,
-    },
+    AppLayout,
+    Link,
+    Head,
+    Pagination,
+    Multiselect,
+    Loading,
+    NoRecordMessage
+},
     methods: {
 
         async confirmDelete(id, index) {
@@ -114,13 +116,13 @@ export default defineComponent({
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5 text-left">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-700 fw-bold fs-7 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-400" v-if="blogs.data.length > 0">
                             <tr v-for="(blog, index) in blogs.data" :key="index">
                                 <td v-if="blog.image">
                                     <div class="symbol symbol-50px me-5">
@@ -180,6 +182,13 @@ export default defineComponent({
                                             </li>
                                         </ul>
                                     </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody class="fw-semibold text-gray-600" v-else>
+                            <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
+                                <td colspan="5" class="text-center h-full">
+                                    <NoRecordMessage />
                                 </td>
                             </tr>
                         </tbody>

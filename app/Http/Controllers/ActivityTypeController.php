@@ -6,6 +6,8 @@ use App\Http\Resources\ActivityTypeResource;
 use App\Models\ActivityType;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Validator;
+
 
 class ActivityTypeController extends Controller
 {
@@ -23,15 +25,24 @@ class ActivityTypeController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'tesxt' => 'required',
+        $validator = Validator::make($request->all(), [
+            'text' => 'required',
         ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors()->first(),
+                'success' => false,
+                'errors' => $validator->errors(),
+            ]);
+        }
+
         $activityType = ActivityType::create([
             'text' => $request->text,
         ]);
         if ($activityType) {
             return response()->json(createMessage('ActivityType'));
         }
+        return redirect()->back()->withErrors($request->errors());
     }
     public function edit(Request $request)
     {
@@ -43,9 +54,12 @@ class ActivityTypeController extends Controller
     }
     public function update(Request $request)
     {
-        $request->validate([
-            'text' => 'required'
+        $validator = Validator::make($request->all(), [
+            'text' => 'required',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false]);
+        }
         $activityType = ActivityType::find($request->id);
         if ($activityType) {
             $update = ActivityType::where('id', $request->id)->update([

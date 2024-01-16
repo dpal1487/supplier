@@ -121,10 +121,6 @@ class MappingController extends Controller
                 'cities' => CityResource::collection(City::where('country_id', $project->country_id)->get()),
                 'countries' => $this->countries,
             ]);
-            // return Inertia::render('Mapping/Edit', [
-            //     'project' => new ProjectLinkResource($project),
-            //     'countries' => $this->countries,
-            // ]);
         }
         return redirect()->back();
     }

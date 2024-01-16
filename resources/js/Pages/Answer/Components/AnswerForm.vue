@@ -157,15 +157,12 @@ export default defineComponent({
                             class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
                         Discard
                         </Link>
-                        <button type="submit" class="btn btn-primary align-items-center justify-content-center mx-5"
-                            :data-kt-indicator="processing ? 'on' : 'off'">
-                            <span class="indicator-progress">
-                                Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                            </span>
-                            <span class="indicator-label ">
-                                <span v-if="id">Save Changes</span>
-                                <span v-else>Save</span>
-                            </span>
+                        <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
+                            <div v-show="form.processing" class="spinner-border spinner-border-sm">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <span v-if="id">Save Changes</span>
+                            <span v-else>Save</span>
 
                         </button>
                         <!--end::Button-->

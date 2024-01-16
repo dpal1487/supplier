@@ -8,6 +8,7 @@ import { Inertia } from "@inertiajs/inertia";
 import Loading from "vue-loading-overlay";
 import AnswerForm from "./Components/AnswerForm.vue";
 import utils from "../../utils";
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 export default defineComponent({
     props: ["answers", "message", "questions"],
 
@@ -32,7 +33,8 @@ export default defineComponent({
         Pagination,
         Multiselect,
         Loading,
-        AnswerForm
+        AnswerForm,
+        NoRecordMessage
     },
     methods: {
         async confirmDelete(id, index) {
@@ -101,13 +103,13 @@ export default defineComponent({
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5 text-left">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-700 fw-bold fs-7 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600" v-if="answers.data.length > 0">
+                        <tbody class="fw-semibold text-gray-400" v-if="answers.data.length > 0">
                             <tr v-for="(answer, index) in answers.data" :key="index">
                                 <td class="text-gray-800 fs-5 fw-bold mb-1">
                                     {{ answer.question?.question_key }}
@@ -152,7 +154,9 @@ export default defineComponent({
 
                         <tbody class="fw-semibold text-gray-600" v-else>
                             <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
-                                <td colspan="6" class="text-center h-full">No Record Found</td>
+                                <td colspan="6" class="text-center h-full">
+                                    <NoRecordMessage />
+                                </td>
                             </tr>
                         </tbody>
                     </table>

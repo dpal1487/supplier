@@ -16,7 +16,7 @@ use League\OAuth1\Client\Server\Server;
 
 class ServiceController extends Controller
 {
-    
+
     public function index(Request $request)
     {
         $services = new Service();
@@ -111,8 +111,8 @@ class ServiceController extends Controller
                     'message' => 'Service updated successfully',
                 ]);
             }
-            return response()->json([
-                'success' => true,
+            return redirect()->back()->withErrors([
+                'success' => false,
                 'message' => 'Service not updated',
             ]);
         }

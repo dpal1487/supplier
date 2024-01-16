@@ -63,10 +63,11 @@ export default defineComponent({
                                                 fill="currentColor"></path>
                                         </svg>
                                     </span>
-                                    <span>
+                                    <span v-if="address?.address">
                                         {{ address?.city }}, {{ address?.state }},
                                         {{ address?.country?.name }} - {{ address?.pincode }}
                                     </span>
+                                    <span v-else>Address </span>
                                 </span>
                                 <span class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
                                     <span class="svg-icon svg-icon-4 me-1"><svg width="24" height="24" viewBox="0 0 24 24"

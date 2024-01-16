@@ -109,7 +109,7 @@ export default defineComponent({
                         <div class="table-responsive">
                             <table class="table table-row-dashed align-middle">
                                 <thead>
-                                    <tr class="text-gray-600 fw-bold fs-7 text-uppercase text-center">
+                                    <tr class="text-gray-700 fw-bold fs-7 text-uppercase text-center">
                                         <th>PROJECT ID</th>
                                         <th>PROJECT NAME</th>
                                         <th>PROJECT TYPE</th>

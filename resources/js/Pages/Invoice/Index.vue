@@ -7,6 +7,7 @@ import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
 import "vue3-toastify/dist/index.css";
 import Loading from "vue-loading-overlay";
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 export default defineComponent({
     props: ["invoices", "clients", "status", "reports"],
     data() {
@@ -37,6 +38,7 @@ export default defineComponent({
         Pagination,
         Multiselect,
         Loading,
+        NoRecordMessage
     },
     methods: {
         search() {
@@ -72,7 +74,6 @@ export default defineComponent({
         <Head :title="title" />
         <div class="row mb-3">
             <div class="col-xl-3 col-md-6">
-                <!-- card -->
                 <div class="card card-animate">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
@@ -109,13 +110,9 @@ export default defineComponent({
                             </div>
                         </div>
                     </div>
-                    <!-- end card body -->
                 </div>
-                <!-- end card -->
             </div>
-            <!-- end col -->
             <div class="col-xl-3 col-md-6">
-                <!-- card -->
                 <div class="card card-animate">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
@@ -149,13 +146,9 @@ export default defineComponent({
                             </div>
                         </div>
                     </div>
-                    <!-- end card body -->
                 </div>
-                <!-- end card -->
             </div>
-            <!-- end col -->
             <div class="col-xl-3 col-md-6">
-                <!-- card -->
                 <div class="card card-animate">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
@@ -189,13 +182,9 @@ export default defineComponent({
                             </div>
                         </div>
                     </div>
-                    <!-- end card body -->
                 </div>
-                <!-- end card -->
             </div>
-            <!-- end col -->
             <div class="col-xl-3 col-md-6">
-                <!-- card -->
                 <div class="card card-animate">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
@@ -232,11 +221,8 @@ export default defineComponent({
                             </div>
                         </div>
                     </div>
-                    <!-- end card body -->
                 </div>
-                <!-- end card -->
             </div>
-            <!-- end col -->
         </div>
         <div class="card">
             <form @submit.prevent="search" class="card-header justify-content-start py-4 px-4 gap-2 gap-md-5">
@@ -273,7 +259,7 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-600" v-if="invoices.data.length > 0">
                             <tr v-for="(invoice, index) in invoices.data" :key="index">
                                 <td>
                                     <a target="_blank" class="text-gray-800 text-hover-primary fs-6 fw-bold"
@@ -306,22 +292,22 @@ export default defineComponent({
                                 <td>{{ invoice?.issue_date }}</td>
                                 <td>{{ invoice?.due_date }}</td>
                                 <td>
-                                    <span class="badge badge-success" v-if="invoice?.is_gst_paid == 2">Paid</span>
-                                    <span class="badge badge-warning" v-if="invoice?.is_gst_paid == 0">Unpaid</span>
+                                    <span class="badge badge-light-success" v-if="invoice?.is_gst_paid == 2">Paid</span>
+                                    <span class="badge badge-light-warning" v-if="invoice?.is_gst_paid == 0">Unpaid</span>
                                 </td>
                                 <td>
-                                    <span class="badge badge-success" v-if="invoice?.status == 1">Paid</span>
-                                    <span class="badge badge-warning" v-if="invoice?.status == 2">Unpaid</span>
-                                    <span class="badge badge-danger" v-if="invoice?.status == 3">Cancelled</span>
+                                    <span class="badge badge-light-success" v-if="invoice?.status == 1">Paid</span>
+                                    <span class="badge badge-light-warning" v-if="invoice?.status == 2">Unpaid</span>
+                                    <span class="badge badge-light-danger" v-if="invoice?.status == 3">Cancelled</span>
                                 </td>
                                 <td>
-                                    <span class="badge badge-primary">{{
+                                    <span class="badge badge-light-primary">{{
                                         invoice.type
                                     }}</span>
                                 </td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-light menu-dropdown" :id="`dropdown-${invoice.id}`"
-                                        data-bs-toggle="dropdown">Actions
+                                    <a href="#" class="btn btn-sm btn-light menu-dropdown w-100px"
+                                        :id="`dropdown-${invoice.id}`" data-bs-toggle="dropdown">Actions
                                         <span class="svg-icon svg-icon-5 m-0">
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
@@ -343,6 +329,13 @@ export default defineComponent({
                                                     class="bi bi-trash3 me-2"></i>Delete</span>
                                         </div>
                                     </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody class="fw-semibold text-gray-600" v-else>
+                            <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
+                                <td colspan="12" class="text-center h-full">
+                                    <NoRecordMessage />
                                 </td>
                             </tr>
                         </tbody>

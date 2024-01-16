@@ -9,6 +9,7 @@ import { toast } from "vue3-toastify";
 import Pagination from "../../Jetstream/Pagination.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import utils from "../../utils";
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 export default defineComponent({
     props: ['question', 'answers'],
     setup() {
@@ -39,14 +40,15 @@ export default defineComponent({
         }
     },
     components: {
-        AppLayout,
-        Header,
-        Link,
-        Head,
-        AnswerForm,
-        Pagination,
-        JetValidationErrors
-    },
+    AppLayout,
+    Header,
+    Link,
+    Head,
+    AnswerForm,
+    Pagination,
+    JetValidationErrors,
+    NoRecordMessage
+},
     methods: {
         submit(form) {
             this.form = form;
@@ -139,14 +141,13 @@ export default defineComponent({
                     <div class="table-responsive">
                         <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
                             <thead>
-                                <tr class="text-gray-900 fw-bold fs-6 text-uppercase">
-
+                                <tr class="text-gray-700 fw-bold fs-6 text-uppercase">
                                     <th v-for="(th, index) in tbody" :key="index">
                                         {{ th }}
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="fw-semibold text-gray-600">
+                            <tbody class="fw-semibold text-gray-400" v-if="answers.data.length > 0">
                                 <tr v-for="(answer, index) in answers.data" :key="index">
 
                                     <td class="text-gray-800 fs-5 fw-bold mb-1 text-capitalize">
@@ -188,6 +189,13 @@ export default defineComponent({
                                                 </li>
                                             </ul>
                                         </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody class="fw-semibold text-gray-600" v-else>
+                                <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
+                                    <td colspan="6" class="text-center h-full">
+                                        <NoRecordMessage />
                                     </td>
                                 </tr>
                             </tbody>

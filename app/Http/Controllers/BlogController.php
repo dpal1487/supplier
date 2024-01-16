@@ -28,8 +28,8 @@ class BlogController extends Controller
                 ->where('title', 'like', "%$request->q")
                 ->orWhere('content', 'like', "%$request->q%");
         }
-        if (!empty($request->status) || $request->status != '') {
-            $blogs = $blogs->where('is_published', '=', $request->status);
+        if ($request->status !== null && $request->status != 'all') {
+            $blogs = $blogs->where('is_published',  (int)$request->status);
         }
         return Inertia::render('Blog/Index', [
             'blogs' => BlogListResource::collection($blogs->paginate(10)->appends($request->all())),

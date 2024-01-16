@@ -101,9 +101,19 @@ export default defineComponent({
                 </div>
             </form>
         </div>
-        <SupplierList :projects="suppliers.data" action="supplier.project" />
-        <div class="row mt-5" v-if="suppliers.meta">
-            <div class="col-sm-12 d-flex align-items-center justify-content-between">
+        <div v-if="suppliers.data.length > 0">
+            <SupplierList :projects="suppliers.data" action="supplier.project" />
+        </div>
+        <div class="d-flex justify-content-center align-content-center pt-10 pb-10" v-else>
+            <div class="text-center py-10">
+                <img src="/assets/images/emptyrespondent.png" style="height: 150px" />
+                <div class="fw-bold fs-2 text-gray-900 mt-5">
+                    No Record Found!
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5" v-if="suppliers.data.length > 0">
+            <div class="col-sm-12 d-flex align-items-center justify-content-between" v-if="suppliers.meta">
                 <span class="fw-bold text-gray-700">
                     Showing {{ suppliers.meta.from }} to {{ suppliers.meta.to }}
                     of {{ suppliers.meta.total }} entries

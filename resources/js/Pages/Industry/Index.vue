@@ -11,6 +11,7 @@ import 'vue-loading-overlay/dist/css/index.css';
 import IndustryForm from "./Components/IndustryForm.vue";
 import axios from "axios";
 import utils from "../../utils";
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 export default defineComponent({
     props: ["industries"],
     data() {
@@ -31,14 +32,15 @@ export default defineComponent({
         };
     },
     components: {
-        AppLayout,
-        Link,
-        Head,
-        Pagination,
-        Multiselect,
-        Loading,
-        IndustryForm
-    },
+    AppLayout,
+    Link,
+    Head,
+    Pagination,
+    Multiselect,
+    Loading,
+    IndustryForm,
+    NoRecordMessage
+},
     methods: {
 
         showIndustryForm(id) {
@@ -126,13 +128,13 @@ export default defineComponent({
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5 text-left">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-700 fw-bold fs-7 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600" v-if="industries.data.length > 0">
+                        <tbody class="fw-semibold text-gray-400" v-if="industries.data.length > 0">
                             <tr v-for="(industry, index) in industries.data" :key="index">
                                 <td v-if="industry.image">
                                     <div class="symbol symbol-50px me-5">
@@ -176,13 +178,6 @@ export default defineComponent({
                                                 </button>
                                             </li>
                                             <li class="menu-item px-3">
-                                                <Link
-                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/industry/${industry.id}`"><i
-                                                    class="bi bi-view-list me-2"></i>View
-                                                </Link>
-                                            </li>
-                                            <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
                                                     industry.id, index
                                                 )
@@ -198,7 +193,9 @@ export default defineComponent({
                         </tbody>
                         <tbody class="fw-semibold text-gray-600" v-else>
                             <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
-                                <td colspan="6" class="text-center h-full">No Record Found</td>
+                                <td colspan="6" class="text-center h-full">
+                                    <NoRecordMessage />
+                                </td>
                             </tr>
                         </tbody>
                     </table>
