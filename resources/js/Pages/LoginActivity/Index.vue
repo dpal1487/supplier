@@ -38,19 +38,13 @@ export default defineComponent({
     methods: {
         search() {
             if (this.form.start_date) {
-
                 let jsDateString = this.form.start_date;
-
                 // Convert the JavaScript date string to a Date object
                 let jsDateObject = new Date(jsDateString);
-
                 // Format the Date object using toISOString and then replace 'T' with a space
                 let formattedDate = jsDateObject.toISOString();
-
                 this.form.start_date = formattedDate;
                 // Now, formattedDate contains the date in the 'Y-m-d H:i:s'
-
-
             }
             Inertia.get("/login_activities", this.form);
         },

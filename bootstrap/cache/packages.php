@@ -10,6 +10,13 @@
       'Currency' => 'AmrShawky\\LaravelCurrency\\Facade\\Currency',
     ),
   ),
+  'barryvdh/laravel-cors' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Fruitcake\\Cors\\CorsServiceProvider',
+    ),
+  ),
   'beyondcode/laravel-websockets' => 
   array (
     'providers' => 
