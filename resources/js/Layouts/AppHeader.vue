@@ -15,7 +15,7 @@ export default defineComponent({
             notificationDrop: false,
             themeModeDrop: false,
             form: {},
-            notificationQueue: []
+            notificationQueue: [],
         };
     },
     components: {
@@ -47,6 +47,9 @@ export default defineComponent({
                                 this.dequeueNotification()
                             },
                         });
+                    }
+                    else {
+                        this.showWebNotification(data);
                     }
                 }
             },
@@ -90,16 +93,18 @@ export default defineComponent({
             if ('Notification' in window) {
                 Notification.requestPermission().then((permission) => {
                     if (permission === 'granted') {
+                        this.notificationPermissionChecked = true;
                         const options = {
                             body: data.message,
-                            icon: '/assets/images/logo-light.png',
+                            icon: '/assets/images/ars.ico',
                         };
-                        new Notification(data.title, options);
+                        if (Notification.permission === 'granted') {
+                            new Notification(data.title, options);
+                        }
                     }
                 });
             }
         },
-
         enqueueNotification(notification) {
             this.notificationQueue.push(notification);
         },
