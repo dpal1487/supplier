@@ -108,6 +108,12 @@ export default defineComponent({
                     role: ["pm", "admin"],
                 },
                 {
+                    link: "/login_activities",
+                    title: "Login Activities",
+                    icon: "bi bi-person-check",
+                    role: ["pm", "admin"],
+                },
+                {
                     link: "/role",
                     title: "Role",
                     icon: "bi bi-people",

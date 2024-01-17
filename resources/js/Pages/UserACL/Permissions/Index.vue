@@ -99,7 +99,7 @@ export default defineComponent({
                     <table class="table align-middle table-row-dashed fs-6 gy-5 text-left">
                         <thead>
                             <tr class="text-gray-600 fw-bold fs-7 text-uppercase">
-                                <th v-for="(th, index) in tbody" :key="index">
+                                <th v-for="(th, index) in tbody" :key="index" >
                                     {{ th }}
                                 </th>
                             </tr>

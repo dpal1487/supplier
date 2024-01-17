@@ -18,6 +18,7 @@ use App\Http\Controllers\{
     IndustryController,
     ProjectController,
     InvoiceController,
+    LoginActivityController,
     MappingController,
     MasterController,
     RedirectController,
@@ -34,17 +35,6 @@ use App\Http\Controllers\{
 };
 use Illuminate\Support\Facades\Auth;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-| Routes
-*/
 
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
@@ -114,6 +104,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     // });
 
     Route::group(['middleware' => 'role:admin,account'], function () {
+        Route::get('login_activities', [LoginActivityController::class, 'loginActivity'])->name('login_activities');
         Route::controller(ClientController::class)->group(function () {
             Route::get('clients', 'index')->name('clients.index');
             Route::get('client/create', 'create')->name('client.create');

@@ -34,7 +34,7 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
         ]);
 
-        $created_user->assignRole('standard');
+        $created_user->assignRole('user');
 
         return $created_user;
     }
