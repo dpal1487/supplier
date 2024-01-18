@@ -27,7 +27,7 @@ export default defineComponent({
                     link: "/projects",
                     title: "Projects",
                     icon: "bi bi-card-heading",
-                    role: ["pm", "admin", "user"],
+                    role: ["pm", "account","admin", "user"],
                 },
                 {
                     link: "/clients",
@@ -57,7 +57,7 @@ export default defineComponent({
                     link: "/close-projects",
                     title: "Close Projects",
                     icon: "bi bi-card-heading",
-                    role: ["pm", "admin"],
+                    role: [""],
                 },
                 {
                     link: "/final-id",

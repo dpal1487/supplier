@@ -104,7 +104,7 @@ class SurveyInitController extends Controller
                             'project_link_id' => $projectLink->id,
                             'starting_ip' => $request->ip(),
                             'device' => $agent->device(),
-                            'client_browser' => $agent->device(),
+                            'client_browser' => $agent->browser(),
                         ]);
                         return Redirect::to(str_replace('RespondentID', $respondent->id, $projectLink->project_link));
                     } else {

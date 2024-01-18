@@ -37,7 +37,7 @@ export default defineComponent({
                                 </a>
                             </div>
                             <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
-                                <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
+                                <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
                                     <span class="svg-icon svg-icon-4 me-1">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -52,7 +52,7 @@ export default defineComponent({
                                     </span>
                                     {{ company.company_name }}
                                 </a>
-                                <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
+                                <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
                                     <span class="svg-icon svg-icon-4 me-1">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -93,7 +93,7 @@ export default defineComponent({
                                         </span>
                                         <div class="fs-2 fw-bold">1000</div>
                                     </div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Earnings</div>
+                                    <div class="fw-semibold fs-6 text-gray-500">Earnings</div>
                                 </div>
                                 <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                     <div class="d-flex align-items-center">
@@ -110,7 +110,7 @@ export default defineComponent({
                                         <div class="fs-2 fw-bold">
                                             20</div>
                                     </div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Projects</div>
+                                    <div class="fw-semibold fs-6 text-gray-500">Projects</div>
                                 </div>
                                 <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                     <div class="d-flex align-items-center">
@@ -126,7 +126,7 @@ export default defineComponent({
                                         </span>
                                         <div class="fs-2 fw-bold">100%</div>
                                     </div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Success Rate</div>
+                                    <div class="fw-semibold fs-6 text-gray-500">Success Rate</div>
                                 </div>
                             </div>
                         </div>

@@ -7,6 +7,7 @@ import Pagination from "../../Jetstream/Pagination.vue";
 import ProjectList from "../Project/Components/ProjectList.vue";
 import Multiselect from "@vueform/multiselect";
 import { Inertia } from "@inertiajs/inertia";
+import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 export default defineComponent({
     props: ["surveys", "user"],
 
@@ -42,7 +43,8 @@ export default defineComponent({
         AppLayout,
         Pagination,
         ProjectList,
-        Multiselect
+        Multiselect,
+        NoRecordMessage
     },
     methods: {
         search() {
@@ -85,7 +87,6 @@ export default defineComponent({
                 {{ title }}
             </li>
         </template>
-        <!--begin::Navbar-->
         <Header :user="user?.data" />
         <div class="card">
             <div class="card-header align-items-center gap-5 justify-content-between w-100">
@@ -93,10 +94,7 @@ export default defineComponent({
                     <h2>Projects </h2>
                 </div>
                 <form class="card-toolbar flex-row-fluid justify-content-end gap-3" @submit.prevent="search()">
-                    <!--begin::Card title-->
-                    <!--begin::Search-->
                     <div class="d-flex align-items-center position-relative">
-                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                         <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
@@ -106,7 +104,6 @@ export default defineComponent({
                                     fill="currentColor"></path>
                             </svg>
                         </span>
-                        <!--end::Svg Icon-->
                         <input type="text" v-model="form.q" class="form-control form-control-solid w-200px ps-14"
                             placeholder="Search " />
                     </div>
@@ -120,27 +117,19 @@ export default defineComponent({
                     </button>
                     <a target="_blank" :href="route('account.report', { ...$queryParams() })" class="btn btn-primary m-1"><i
                             class="bi bi-graph-down-arrow"></i>Export Data</a>
-
-                    <!--end::Search-->
                 </form>
             </div>
             <div class="card-body pt-0">
-                <!--begin::Table-->
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
-                        <!--begin::Table head-->
                         <thead>
-                            <!--begin::Table row-->
                             <tr class="text-gray-600 fw-bold fs-7 w-100 text-uppercase">
 
                                 <th class="min-w-120px" v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
-                            <!--end::Table row-->
                         </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600" v-if="surveys.data.length > 0">
                             <tr v-for="(survey, index) in surveys.data" :key="index">
                                 <td>{{ index + 1 }}</td>
@@ -163,13 +152,15 @@ export default defineComponent({
                         </tbody>
                         <tbody class="fw-semibold text-gray-600" v-else>
                             <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
-                                <td colspan="9" class="text-center h-full">No Record Found</td>
+                                <td colspan="9" class="text-center h-full">
+                                    <NoRecordMessage />
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="row" v-if="surveys.meta">
-                    <div class="col-sm-12 d-flex align-items-center justify-content-between">
+                <div class="row" v-if="surveys.data.lenght > 0">
+                    <div class="col-sm-12 d-flex align-items-center justify-content-between" v-if="surveys.meta">
                         <span class="fw-bold text-gray-700">
                             Showing {{ surveys.meta.from }} to {{ surveys.meta.to }}
                             of {{ surveys.meta.total }} entries

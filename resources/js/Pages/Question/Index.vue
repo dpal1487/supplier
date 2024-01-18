@@ -114,7 +114,7 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-400" v-if="questions.data.length > 0">
+                        <tbody class="fw-semibold text-gray-500" v-if="questions.data.length > 0">
                             <tr v-for="(question, index) in questions.data" :key="index">
                                 <td class="w-150px">
                                     <Link :href="'/question/' + question.id"

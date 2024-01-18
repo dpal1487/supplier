@@ -119,7 +119,7 @@ export default defineComponent({
                                 </thead>
                                 <tbody class="text-center">
                                     <tr v-for="(project, index) in projects.latest_projects?.data" :key="index"
-                                        class="text-gray-400  fs-7">
+                                        class="text-gray-500  fw-semibold">
                                         <td>{{ project?.project_id }}</td>
                                         <td>{{ project?.project_name }}
                                         </td>

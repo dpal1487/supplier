@@ -352,6 +352,7 @@ export default defineComponent({
                         <div class="row mb-3">
                             <div class="col-md-6 col-sm-12">
                                 <jet-label for="project-start" value="Project start date" />
+                                {{ form.start_date }}
                                 <VueDatePicker v-model="v$.form.start_date.$model" :enable-time-picker="false"
                                     :clearable="false" auto-apply
                                     input-class-name="form-control form-control-lg form-control-solid fw-normal" :class="v$.form.start_date.$errors.length > 0

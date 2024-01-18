@@ -114,22 +114,13 @@ export default defineComponent({
 
         <Head title="Employees" />
         <AddUser v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)" :roles="roles.data" />
-
-        <!--begin::Card-->
         <div class="card card-flush">
-
-            <!--begin::Card header-->
             <div>
                 <div class="card-header border-0 pt-6">
-                    <!--begin::Card title-->
                     <div class="card-title">
-                        <!--begin::Search-->
                         <div>
                             <form class="d-flex align-items-center position-relative my-1 gap-4" @submit.prevent="search()">
-                                <!--begin::Card title-->
-                                <!--begin::Search-->
                                 <div class="d-flex align-items-center position-relative">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                     <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
@@ -139,27 +130,18 @@ export default defineComponent({
                                                 fill="currentColor"></path>
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->
                                     <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
                                         placeholder="Search " />
                                 </div>
                                 <button type="submit" class="btn btn-primary">
                                     Search
                                 </button>
-                                <!--end::Search-->
-                                <!--end::Card toolbar-->
                             </form>
                         </div>
-                        <!--end::Search-->
                     </div>
-                    <!--begin::Card title-->
-                    <!--begin::Card toolbar-->
                     <div class="card-toolbar">
-                        <!--begin::Toolbar-->
                         <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-                            <!--begin::Add user-->
                             <button type="button" class="btn btn-primary" @click=toggleModal(true)>
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
                                 <span class="svg-icon svg-icon-2">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -168,39 +150,24 @@ export default defineComponent({
                                         <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
                                     </svg>
                                 </span>
-                                <!--end::Svg Icon-->Add User</button>
-                            <!--end::Add user-->
+                                Add User</button>
                         </div>
-                        <!--end::Toolbar-->
                     </div>
-                    <!--end::Card toolbar-->
                 </div>
             </div>
-            <!--end::Card header-->
-            <!--begin::Card body-->
             <div class="card-body py-4">
                 <div class="table-responsive">
-                    <!--begin::Table-->
                     <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
                         <thead>
-                            <!--begin::Table row-->
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-700 fw-bold fs-7 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
-                            <!--end::Table row-->
                         </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
-                        <tbody class="text-gray-600 fw-semibold">
-
-                            <!--begin::Table row-->
+                        <tbody class="text-gray-500 fw-semibold">
                             <tr v-for="(user, index) in users.data" :key="index">
-
-                                <!--begin::User=-->
                                 <td class="d-flex align-items-center">
-                                    <!--begin:: Avatar -->
                                     <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
                                         <a href="#" v-if="user.full_path">
                                             <div class="symbol-label">
@@ -211,8 +178,6 @@ export default defineComponent({
                                             <div class="symbol-label fs-3 bg-light-danger text-danger"> A </div>
                                         </a>
                                     </div>
-                                    <!--end::Avatar-->
-                                    <!--begin::User details-->
                                     <div class="d-flex flex-column">
                                         <a href="#" class="text-gray-800 text-hover-primary mb-1">{{ user.first_name + " " +
                                             user.last_name }}
@@ -220,26 +185,16 @@ export default defineComponent({
 
                                         <span>{{ user.email }}</span>
                                     </div>
-                                    <!--begin::User details-->
                                 </td>
-                                <!--end::User=-->
-                                <!--begin::Role=-->
                                 <td>Analyst </td>
-                                <!--end::Role=-->
-                                <!--begin::Last login=-->
                                 <td>
                                     <div class="badge badge-light fw-bold">20 mins ago</div>
                                 </td>
-                                <!--end::Last login=-->
-
-
-                                <!--begin::Action=-->
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
                                             :id="`dropdown-${user?.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
-                                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
@@ -248,9 +203,7 @@ export default defineComponent({
                                                         fill="currentColor"></path>
                                                 </svg>
                                             </span>
-                                            <!--end::Svg Icon-->
                                         </a>
-
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
                                             :aria-labelled:by="`dropdown-${user?.id}`">
                                             <li class="menu-item px-3">
@@ -272,20 +225,14 @@ export default defineComponent({
                                         </ul>
                                     </div>
                                 </td>
-                                <!--end::Action=-->
                             </tr>
-                            <!--end::Table row-->
                         </tbody>
-                        <!--end::Table body-->
                     </table>
-                    <!--end::Table-->
                 </div>
                 <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="users?.meta">
                     <Pagination :links="users.meta.links" />
                 </div>
             </div>
-            <!--end::Card body-->
         </div>
-        <!--end::Card-->
     </app-layout>
 </template>

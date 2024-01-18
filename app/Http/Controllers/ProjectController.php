@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\NotificationEvent;
 use App\Events\SendMessage;
+use App\Exports\ExportFinalIDs;
 use Inertia\Inertia;
 use App\Models\Client;
 use App\Models\Country;
@@ -34,6 +35,7 @@ use App\Http\Resources\ProjectStatusResource;
 use App\Http\Resources\StateResource;
 use App\Http\Resources\SupplierProjectResource;
 use App\Models\City;
+use App\Models\FinalId;
 use App\Models\State;
 use App\Notifications\ActionNotification;
 
@@ -583,6 +585,14 @@ class ProjectController extends Controller
             auth()->user()->notify(new ActionNotification($this->project($id), Auth::user(), $this->project($id)->project_name . " report download",));
 
             return Excel::download(new ProjectReport($id), $project->project_id . '-' . $project->project_name . '.xlsx');
+        }
+    }
+
+    public function finalIds($id)
+    {
+        $project = Project::find($id);
+        if (FinalId::where('project_id', $id)->first() && Respondent::where('project_id', $id)->first()) {
+            return Excel::download(new ExportFinalIDs($id), $project->project_id . '-' . $project->project_name . '.xlsx');
         }
     }
 }

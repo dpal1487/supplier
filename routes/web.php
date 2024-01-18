@@ -100,6 +100,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('project/{id}/export', 'exportId')->name('project.export');
 
         Route::get('project/{id}/report', 'report')->name('project.report');
+        Route::get('project/{id}/finalids', 'finalIds')->name('project.finalids');
     });
     // });
 
@@ -307,7 +308,6 @@ Route::group(['prefix' => 'survey'], function () {
     Route::get('vendor/{pid}', [SurveyInitController::class, 'supplier']);
     Route::get('init/{pid}/{uid}', [SurveyInitController::class, 'init']);
 });
-
 Route::group(['prefix' => 'redirect'], function () {
     Route::get('{slug}', [RedirectController::class, 'surveyEnd']);
 });

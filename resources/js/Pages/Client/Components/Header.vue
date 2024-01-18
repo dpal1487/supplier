@@ -52,7 +52,7 @@ export default defineComponent({
 
                             <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
                                 <span
-                                    class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2 text-capitalize">
+                                    class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2 text-capitalize">
                                     <span class="svg-icon svg-icon-4 me-1"><svg width="24" height="24" viewBox="0 0 24 24"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path opacity="0.3"
@@ -69,7 +69,7 @@ export default defineComponent({
                                     </span>
                                     <span v-else>Address </span>
                                 </span>
-                                <span class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
+                                <span class="d-flex align-items-center text-gray-500 text-hover-primary mb-2">
                                     <span class="svg-icon svg-icon-4 me-1"><svg width="24" height="24" viewBox="0 0 24 24"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path opacity="0.3"
@@ -91,23 +91,23 @@ export default defineComponent({
                                 <div
                                     class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3 text-center">
                                     <div class="fs-2 fw-bold">{{ client.reports.total_projects }}</div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Total Projects</div>
+                                    <div class="fw-semibold fs-6 text-gray-500">Total Projects</div>
                                 </div>
                                 <div
                                     class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3 text-center">
                                     <div class="fs-2 fw-bold">
                                         {{ client.reports.live_projects }}</div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Live Projects</div>
+                                    <div class="fw-semibold fs-6 text-gray-500">Live Projects</div>
                                 </div>
                                 <div
                                     class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3 text-center">
                                     <div class="fs-2 fw-bold">{{ client.reports.hold_projects }}</div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Hold Projects</div>
+                                    <div class="fw-semibold fs-6 text-gray-500">Hold Projects</div>
                                 </div>
                                 <div
                                     class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3 text-center">
                                     <div class="fs-2 fw-bold">{{ client.reports.close_projects }}</div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Closed Projects</div>
+                                    <div class="fw-semibold fs-6 text-gray-500">Closed Projects</div>
                                 </div>
                             </div>
                         </div>

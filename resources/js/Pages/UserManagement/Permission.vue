@@ -4,21 +4,14 @@ import { Head } from '@inertiajs/inertia-vue3';
 import AppLayout from '@/Layouts/AppLayout.vue'
 import PermissionForm from './Components/PermissionForm.vue';
 import Pagination from "../../Jetstream/Pagination.vue";
-
-import Swal from "sweetalert2";
-import axios from 'axios';
-import { toast } from 'vue3-toastify';
-import { Inertia } from '@inertiajs/inertia';
-
+import utils from '../../utils';
 export default defineComponent({
     props: ['permissions'],
-
     data() {
         return {
             isEdit: false,
             permission: [],
             showModal: false,
-
             tbody: [
                 "Name",
                 "Created Date",
@@ -33,7 +26,6 @@ export default defineComponent({
         AppLayout,
         PermissionForm,
         Pagination
-
     },
     methods: {
         toggleModal(value, permission) {
@@ -49,48 +41,11 @@ export default defineComponent({
                 this.showModal = false;
             }
         },
-        confirmDelete(id, index) {
+        async confirmDelete(id, index) {
             this.isLoading = true;
-            const name = this.permissions.data[index].name;
-            Swal.fire({
-                title: "Are you sure you want to delete " + name + " ?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#dc3545",
-                cancelButtonColor: "#6c757d",
-                confirmButtonText: "Yes, delete it!",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    axios
-                        .delete("/permission/" + id)
-                        .then((response) => {
-                            if (response.data.success) {
-                                toast.success(response.data.message)
-                                this.permissions.data.splice(index, 1);
-                                return;
-                            }
-                        })
-                        .catch((error) => {
-                            if (error.response.status == 400) {
-                                toast.error(error.response.data.message);
-                            }
-                        });
-                } else if (result.dismiss === 'cancel') {
-                    Swal.fire({
-                        text: name + " was not deleted.",
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn fw-bold btn-primary",
-                        }
-                    });
-                }
-
-            });
+            await utils.deleteIndexDialog(route('industry.destroy', id), this.permissions.data, index);
+            this.isLoading = false;
         },
-
     }
 });
 </script>
@@ -100,20 +55,12 @@ export default defineComponent({
     <AppLayout>
         <PermissionForm v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)"
             :permission="permission" />
-
-        <!--begin::Card-->
         <div class="card card-flush">
-            <!--begin::Card header-->
             <div class="card-header mt-6">
-                <!--begin::Card title-->
                 <div class="card-title">
-                    <!--begin::Search-->
                     <div>
                         <form class="d-flex align-items-center position-relative my-1 gap-4" @submit.prevent="search()">
-                            <!--begin::Card title-->
-                            <!--begin::Search-->
                             <div class="d-flex align-items-center position-relative">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                 <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
                                         viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
@@ -123,25 +70,17 @@ export default defineComponent({
                                             fill="currentColor"></path>
                                     </svg>
                                 </span>
-                                <!--end::Svg Icon-->
                                 <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
                                     placeholder="Search " />
                             </div>
                             <button type="submit" class="btn btn-primary">
                                 Search
                             </button>
-                            <!--end::Search-->
-                            <!--end::Card toolbar-->
                         </form>
                     </div>
-                    <!--end::Search-->
                 </div>
-                <!--end::Card title-->
-                <!--begin::Card toolbar-->
                 <div class="card-toolbar">
-                    <!--begin::Button-->
                     <button type="button" class="btn btn-light-primary" @click=toggleModal(true)>
-                        <!--begin::Svg Icon | path: icons/duotune/general/gen035.svg-->
                         <span class="svg-icon svg-icon-3">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor" />
@@ -150,43 +89,25 @@ export default defineComponent({
                                 <rect x="6.01041" y="10.9247" width="12" height="2" rx="1" fill="currentColor" />
                             </svg>
                         </span>
-                        <!--end::Svg Icon-->Add Permission</button>
-                    <!--end::Button-->
+                        Add Permission</button>
                 </div>
-                <!--end::Card toolbar-->
             </div>
-            <!--end::Card header-->
-            <!--begin::Card body-->
             <div class="card-body pt-0">
-                <!--begin::Table-->
                 <table class="table align-middle table-row-dashed fs-6 gy-5 mb-0" id="kt_permissions_table">
-                    <!--begin::Table head-->
                     <thead>
-                        <!--begin::Table row-->
-                        <tr class="text-gray-400 text-center fw-bold fs-7 min-w-100px text-uppercase">
+                        <tr class="text-gray-700 text-center fw-bold fs-7 min-w-100px text-uppercase">
                             <th class="min-w-100px" v-for="(th, index) in tbody" :key="index">
                                 {{ th }}
                             </th>
                         </tr>
-                        <!--end::Table row-->
                     </thead>
-                    <!--end::Table head-->
-                    <!--begin::Table body-->
-                    <tbody class="fw-semibold text-gray-600">
+                    <tbody class="fw-semibold text-gray-500">
                         <tr class="text-center" v-for="(permission, index) in permissions?.data" :key="index">
-                            <!--begin::Name=-->
                             <td>{{ permission.name }}</td>
-                            <!--end::Name=-->
-
-                            <!--begin::Created Date-->
                             <td>{{ permission.created_at }}</td>
-                            <!--end::Created Date-->
-                            <!--begin::Action=-->
                             <td>
-                                <!--begin::Update-->
                                 <button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
                                     @click="toggleModal(true, permission)">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen019.svg-->
                                     <span class="svg-icon svg-icon-3">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -198,15 +119,11 @@ export default defineComponent({
                                                 fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->
                                 </button>
-                                <!--end::Update-->
-                                <!--begin::Delete-->
                                 <button class="btn btn-icon btn-active-light-primary w-30px h-30px" @click="confirmDelete(
                                     permission.id, index
                                 )
                                     ">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
                                     <span class="svg-icon svg-icon-3">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -221,24 +138,15 @@ export default defineComponent({
                                                 fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->
                                 </button>
-                                <!--end::Delete-->
                             </td>
-                            <!--end::Action=-->
                         </tr>
-
                     </tbody>
-                    <!--end::Table body-->
                 </table>
-                <!--end::Table-->
             </div>
-            <!--end::Card body-->
             <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="permissions.meta">
                 <Pagination :links="permissions.meta.links" />
             </div>
         </div>
-        <!--end::Card-->
-
     </AppLayout>
 </template>

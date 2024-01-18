@@ -122,9 +122,6 @@ export default defineComponent({
                         <div class="text-left dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
                             :aria-labelled:by="`dropdown-${project.id}`">
                             <div class="menu-item px-3">
-                                <!-- <Link :href="`/sampling/${project.id}/edit`" class="menu-link"><i
-                                    class="bi bi-pencil me-2"></i>Edit
-                                </Link> -->
                                 <span @click="sapmlingEdit(project.id)" class="menu-link"><i
                                         class="bi bi-pencil me-2"></i>Edit</span>
                             </div>
@@ -141,49 +138,49 @@ export default defineComponent({
                         <span>
                             {{ project.sample_size }}
                         </span>
-                        <span class="text-gray-400">Sample Size</span>
+                        <span class="text-gray-500">Sample Size</span>
                     </li>
                     <li class="nav-item row">
                         <span>
                             {{ project.reports.total_clicks }}
                         </span>
-                        <span class="text-gray-400">Total Clicks</span>
+                        <span class="text-gray-500">Total Clicks</span>
                     </li>
                     <li class="nav-item row">
                         <span>
                             {{ project.reports.complete }}
                         </span>
-                        <span class="text-gray-400"> Completes</span>
+                        <span class="text-gray-500"> Completes</span>
                     </li>
                     <li class="nav-item row">
                         <span>
                             {{ project.reports.terminate }}
                         </span>
-                        <span class="text-gray-400">Terminates</span>
+                        <span class="text-gray-500">Terminates</span>
                     </li>
                     <li class="nav-item row">
                         <span>
                             {{ project.reports.quotafull }}
                         </span>
-                        <span class="text-gray-400">Quotafull</span>
+                        <span class="text-gray-500">Quotafull</span>
                     </li>
                     <li class="nav-item row">
                         <span>
                             {{ project.reports.security_terminate }}
                         </span>
-                        <span class="text-gray-400">Security Terminates</span>
+                        <span class="text-gray-500">Security Terminates</span>
                     </li>
                     <li class="nav-item row">
                         <span>
                             {{ project.reports.incomplete }}
                         </span>
-                        <span class="text-gray-400">Incompletes</span>
+                        <span class="text-gray-500">Incompletes</span>
                     </li>
                     <li class="nav-item row">
                         <span>
                             {{ project.reports.total_ir }}
                         </span>
-                        <span class="text-gray-400">Incidence Ratio</span>
+                        <span class="text-gray-500">Incidence Ratio</span>
                     </li>
                 </ul>
             </div>

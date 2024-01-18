@@ -5,14 +5,9 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
-// import "vue3-toastify/dist/index.css";
 import Loading from "vue-loading-overlay";
-import { toast } from "vue3-toastify";
 import utils from "../../utils";
 import NoRecordMessage from "../../Components/NoRecordMessage.vue";
-
-// import { copyText } from "vue3-clipboard";
-
 export default defineComponent({
     props: ["suppliers"],
     data() {
@@ -101,7 +96,7 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-400 " v-if="suppliers.data.length > 0">
+                        <tbody class="fw-semibold text-gray-500 " v-if="suppliers.data.length > 0">
                             <tr v-for="(supplier, index) in suppliers?.data" :key="index">
                                 <td>
                                     <Link :href="'/supplier/' + supplier.id"

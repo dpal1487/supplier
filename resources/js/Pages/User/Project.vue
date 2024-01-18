@@ -135,7 +135,7 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-400" v-if="surveys?.data?.length > 0">
+                        <tbody class="fw-semibold text-gray-500" v-if="surveys?.data?.length > 0">
                             <tr v-for="(survey, index) in surveys.data" :key="index">
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ survey.project_id }}</td>

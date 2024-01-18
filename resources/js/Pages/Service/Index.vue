@@ -99,7 +99,7 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-400" v-if="services.data.length > 0">
+                        <tbody class="fw-semibold text-gray-500" v-if="services.data.length > 0">
                             <tr v-for="(service, index) in services.data" :key="index">
                                 <td v-if="service.image">
                                     <div class="symbol symbol-50px me-5">

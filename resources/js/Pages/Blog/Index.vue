@@ -122,7 +122,7 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-400" v-if="blogs.data.length > 0">
+                        <tbody class="fw-semibold text-gray-500" v-if="blogs.data.length > 0">
                             <tr v-for="(blog, index) in blogs.data" :key="index">
                                 <td v-if="blog.image">
                                     <div class="symbol symbol-50px me-5">

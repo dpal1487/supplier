@@ -167,6 +167,10 @@ export default defineComponent({
                         <input type="file" @change="formSubmit" id="importId" class="d-none" />
                     </span>
                 </label>
+
+                <a target="_blank" :href="`/project/${project.id}/finalids`" v-if="project.finalids.length > 0"
+                    class="btn btn-danger m-1 btn-sm"><i class="bi bi-graph-down-arrow"></i>Export Final Id's
+                </a>
                 <a target="_blank" :href="`/project/${project.id}/report`" class="btn btn-primary m-1 btn-sm"><i
                         class="bi bi-graph-down-arrow"></i>Export Report
                 </a>
@@ -377,9 +381,10 @@ export default defineComponent({
                                     Device Type
                                 </th>
                                 <td class="fs-6 fw-bold text-gray-800">
-                                    <span class="badge badge-success mx-1 text-capitalize rounded-pill" v-if="project.device_type" v-for="(type, index) in JSON.parse(
-                                        project.device_type
-                                    )">{{ type }}</span>
+                                    <span class="badge badge-success mx-1 text-capitalize rounded-pill"
+                                        v-if="project.device_type" v-for="(type, index) in JSON.parse(
+                                            project.device_type
+                                        )">{{ type }}</span>
                                 </td>
                             </tr>
                             <tr>

@@ -113,7 +113,6 @@ export default defineComponent({
                     <span class="badge badge-danger" v-else>Inactive</span>
                 </div>
             </div>
-            <!--begin:Action-->
             <div class="flex-1 text-end" v-if="$page.props.user.role.role.slug != 'user'">
                 <button class="btn btn-icon btn-outline btn-light btn-circle me-5" :id="`dropdown-${project_link.id}`"
                     data-bs-toggle="dropdown">
@@ -122,9 +121,6 @@ export default defineComponent({
                 <div class="text-left dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
                     :aria-labelled:by="`dropdown-${project_link.id}`">
                     <div class="menu-item px-3">
-                        <!-- <Link :href="`/mapping/${project_link.id}/edit`" class="menu-link"><i
-                            class="bi bi-pencil me-2"></i>Edit
-                        </Link> -->
                         <span type="button" class="menu-link"
                             @click="$emit('editProjectLink', { id: project_link?.id, pageName: 'editPage' })"><i
                                 class="bi bi-pencil me-2"></i>Edit
@@ -142,12 +138,9 @@ export default defineComponent({
                     </div>
                 </div>
             </div>
-            <!--end:Action-->
         </div>
         <div class="separator separator-dashed my-4"></div>
         <ul class="nav d-flex justify-content-between fw-bold text-center">
-            <!--begin::Item-->
-
             <li class="nav-item row">
                 <span v-if="$page.props.user.role.role.slug != 'user'">
                     <input type="text"
@@ -159,55 +152,49 @@ export default defineComponent({
                 <span v-else>
                     {{ project_link.sample_size }}
                 </span>
-                <span class="text-gray-400">Sample Size</span>
+                <span class="text-gray-500">Sample Size</span>
             </li>
-            <!--end::Item-->
-            <!--begin::Item-->
             <li class="nav-item row">
                 <span>
                     {{ project_link.reports.total_clicks }}
                 </span>
-                <span class="text-gray-400">Total Clicks</span>
+                <span class="text-gray-500">Total Clicks</span>
             </li>
-            <!--end::Item-->
-            <!--begin::Item-->
             <li class="nav-item row">
                 <span>
                     {{ project_link.reports.complete }}
                 </span>
-                <span class="text-gray-400">Completes</span>
+                <span class="text-gray-500">Completes</span>
             </li>
-            <!--end::Item-->
-            <!--begin::Item-->
             <li class="nav-item row">
                 <span>
                     {{ project_link.reports.terminate }}
                 </span>
-                <span class="text-gray-400">Terminates</span>
+                <span class="text-gray-500">Terminates</span>
             </li>
             <li class="nav-item row">
                 <span>
                     {{ project_link.reports.quotafull }}
                 </span>
-                <span class="text-gray-400">Quotafull</span>
+                <span class="text-gray-500">Quotafull</span>
             </li>
             <li class="nav-item row">
                 <span>
                     {{ project_link.reports.security_terminate }}
                 </span>
-                <span class="text-gray-400">Security Terminates</span>
+                <span class="text-gray-500">Security Terminates</span>
             </li>
             <li class="nav-item row">
                 <span>
                     {{ project_link.reports.incomplete }}
                 </span>
-                <span class="text-gray-400">Incompletes</span>
+                <span class="text-gray-500">Incompletes</span>
             </li>
             <li class="nav-item row">
                 <span>
                     {{ project_link.reports.total_ir }}
                 </span>
-                <span class="text-gray-400">Incidence Ratio</span>
+                <span class="text-gray-500">Incidence Ratio</span>
             </li>
         </ul>
     </div>

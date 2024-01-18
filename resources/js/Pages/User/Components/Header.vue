@@ -48,7 +48,7 @@ export default defineComponent({
                                 </a>
                             </div>
                             <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
-                                <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
+                                <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
                                     <span class="svg-icon svg-icon-4 me-1">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -62,7 +62,7 @@ export default defineComponent({
                                         </svg>
                                     </span><span> {{ user?.first_name + " " + user?.last_name }}</span></a>
 
-                                <a href="" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
+                                <a href="" class="d-flex align-items-center text-gray-500 text-hover-primary mb-2">
                                     <span class="svg-icon svg-icon-4 me-1">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -94,7 +94,7 @@ export default defineComponent({
                                         </span>
                                         <div class="fs-2 fw-bold">{{ user?.header?.total_project }}</div>
                                     </div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Total</div>
+                                    <div class="fw-semibold fs-6 text-gray-500">Total</div>
                                 </div>
                                 <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                     <div class="d-flex align-items-center">
@@ -110,7 +110,7 @@ export default defineComponent({
                                         </span>
                                         <div class="fs-2 fw-bold">{{ user?.header?.complete }}</div>
                                     </div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Completes</div>
+                                    <div class="fw-semibold fs-6 text-gray-500">Completes</div>
                                 </div>
                                 <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                     <div class="d-flex align-items-center">
@@ -127,7 +127,7 @@ export default defineComponent({
                                         <div class="fs-2 fw-bold">
                                             {{ user?.header?.terminate }}</div>
                                     </div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Terminates</div>
+                                    <div class="fw-semibold fs-6 text-gray-500">Terminates</div>
                                 </div>
                                 <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                     <div class="d-flex align-items-center">
@@ -143,7 +143,7 @@ export default defineComponent({
                                         </span>
                                         <div class="fs-2 fw-bold">{{ user?.header?.quotafull }}</div>
                                     </div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Quotafull</div>
+                                    <div class="fw-semibold fs-6 text-gray-500">Quotafull</div>
                                 </div>
                             </div>
                         </div>

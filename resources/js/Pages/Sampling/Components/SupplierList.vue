@@ -33,10 +33,10 @@ export default defineComponent({
         };
     },
     components: {
-    Link,
-    Loading,
-    CopyLinkButton
-},
+        Link,
+        Loading,
+        CopyLinkButton
+    },
     methods: {
         async updateStatus(id, e) {
             this.isLoading = true;
@@ -78,27 +78,22 @@ export default defineComponent({
                     <span>${{ project?.cpi }}/-CPI</span>
                 </div>
                 <div class="flex-1">
-                     <CopyLinkButton :link="project?.supplier_link" v-if="$page.props.user.role.role.slug != 'user'"
-                                tooltip="Copy project link" />
-                            <CopyLinkButton :link="$page.props.ziggy.url +
-                                '/surveyRoute/init/' +
-                                project?.id +
-                                '/' +
-                                $page.props.user.id" v-else />
+                    <CopyLinkButton :link="project?.supplier_link" v-if="$page.props.user.role.role.slug != 'user'"
+                        tooltip="Copy project link" />
+                    <CopyLinkButton :link="$page.props.ziggy.url +
+                        '/surveyRoute/init/' +
+                        project?.id +
+                        '/' +
+                        $page.props.user.id" v-else />
                 </div>
                 <div class="flex-1 text-end" v-if="$page.props.user.role.role.slug != 'user'">
                     <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
                         <input class="form-check-input h-20px w-30px" type="checkbox" @input="
-                            updateStatus(
-                                project?.supplier?.id,
-                                $event.target.checked
-                            )
-                            " :checked="project?.supplier?.status == 1 ? true : false
-        " />
+                            updateStatus(project?.supplier?.id, $event.target.checked)"
+                            :checked="project?.supplier?.status == 1 ? true : false" />
                         <label class="form-check-label"> Status </label>
                     </div>
                 </div>
-                <!--begin:Action-->
                 <div class="flex-1 text-end" v-if="$page.props.user.role.role.slug != 'user'">
                     <button class="btn btn-icon btn-outline btn-light btn-circle me-5" :id="`dropdown-${project?.id}`"
                         data-bs-toggle="dropdown">
@@ -117,64 +112,56 @@ export default defineComponent({
                         </div>
                     </div>
                 </div>
-                <!--end:Action-->
             </div>
             <div class="separator separator-dashed my-4"></div>
             <ul class="nav d-flex justify-content-between fw-bold text-center">
-                <!--begin::Item-->
                 <li class="nav-item row">
                     <span>
                         {{ project?.sample_size }}
                     </span>
-                    <span class="text-gray-400">Sample Size</span>
+                    <span class="text-gray-500">Sample Size</span>
                 </li>
-                <!--end::Item-->
-                <!--begin::Item-->
                 <li class="nav-item row">
                     <span>
                         {{ project?.reports?.total_clicks }}
                     </span>
-                    <span class="text-gray-400">Total Clicks</span>
+                    <span class="text-gray-500">Total Clicks</span>
                 </li>
-                <!--end::Item-->
-                <!--begin::Item-->
                 <li class="nav-item row">
                     <span>
                         {{ project?.reports?.complete }}
                     </span>
-                    <span class="text-gray-400"> Completes</span>
+                    <span class="text-gray-500"> Completes</span>
                 </li>
-                <!--end::Item-->
-                <!--begin::Item-->
                 <li class="nav-item row">
                     <span>
                         {{ project?.reports?.terminate }}
                     </span>
-                    <span class="text-gray-400">Terminates</span>
+                    <span class="text-gray-500">Terminates</span>
                 </li>
                 <li class="nav-item row">
                     <span>
                         {{ project?.reports?.quotafull }}
                     </span>
-                    <span class="text-gray-400">Quotafull</span>
+                    <span class="text-gray-500">Quotafull</span>
                 </li>
                 <li class="nav-item row">
                     <span>
                         {{ project?.reports?.security_terminate }}
                     </span>
-                    <span class="text-gray-400">Security Terminates</span>
+                    <span class="text-gray-500">Security Terminates</span>
                 </li>
                 <li class="nav-item row">
                     <span>
                         {{ project?.reports?.incomplete }}
                     </span>
-                    <span class="text-gray-400">Incompletes</span>
+                    <span class="text-gray-500">Incompletes</span>
                 </li>
                 <li class="nav-item row">
                     <span>
                         {{ project?.reports?.total_ir }}
                     </span>
-                    <span class="text-gray-400">Incidence Ratio</span>
+                    <span class="text-gray-500">Incidence Ratio</span>
                 </li>
             </ul>
         </div>

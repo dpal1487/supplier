@@ -109,7 +109,7 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-400" v-if="answers.data.length > 0">
+                        <tbody class="fw-semibold text-gray-500" v-if="answers.data.length > 0">
                             <tr v-for="(answer, index) in answers.data" :key="index">
                                 <td class="text-gray-800 fs-5 fw-bold mb-1">
                                     {{ answer.question?.question_key }}

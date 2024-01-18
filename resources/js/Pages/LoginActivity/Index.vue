@@ -99,7 +99,7 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-400" v-if="login_activities.data.length > 0">
+                        <tbody class="fw-semibold text-gray-500" v-if="login_activities.data.length > 0">
                             <tr v-for="(login_activity, index) in login_activities.data" :key="index">
                                 <td class="text-gray-800 fs-5 fw-bold mb-1">
                                     {{ login_activity?.name }}

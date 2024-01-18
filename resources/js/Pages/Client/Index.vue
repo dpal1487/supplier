@@ -112,7 +112,7 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-400" v-if="clients.data.length > 0">
+                        <tbody class="fw-semibold text-gray-500" v-if="clients.data.length > 0">
                             <tr v-for="(client, index) in clients.data" :key="index">
                                 <td>
                                     <Link :href="'/client/' + client.id"

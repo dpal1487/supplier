@@ -121,7 +121,7 @@ export default defineComponent({
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody class="fw-semibold text-gray-400" v-if="activity_types.data.length > 0">
+                                <tbody class="fw-semibold text-gray-500" v-if="activity_types.data.length > 0">
                                     <tr v-for="(activity_type, index) in activity_types.data" :key="index">
                                         <td>{{ index + 1 }}</td>
                                         <td>{{ activity_type?.text }}</td>

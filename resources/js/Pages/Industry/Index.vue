@@ -134,7 +134,7 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-400" v-if="industries.data.length > 0">
+                        <tbody class="fw-semibold text-gray-500" v-if="industries.data.length > 0">
                             <tr v-for="(industry, index) in industries.data" :key="index">
                                 <td v-if="industry.image">
                                     <div class="symbol symbol-50px me-5">

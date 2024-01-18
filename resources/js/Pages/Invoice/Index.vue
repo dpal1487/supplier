@@ -253,13 +253,13 @@ export default defineComponent({
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-700 fw-bold fs-7 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600" v-if="invoices.data.length > 0">
+                        <tbody class="fw-semibold text-gray-500" v-if="invoices.data.length > 0">
                             <tr v-for="(invoice, index) in invoices.data" :key="index">
                                 <td>
                                     <a target="_blank" class="text-gray-800 text-hover-primary fs-6 fw-bold"

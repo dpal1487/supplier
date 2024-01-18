@@ -35,13 +35,13 @@ export default defineComponent({
         };
     },
     components: {
-    AppLayout,
-    Link,
-    Head,
-    Pagination,
-    Multiselect,
-    NoRecordMessage
-},
+        AppLayout,
+        Link,
+        Head,
+        Pagination,
+        Multiselect,
+        NoRecordMessage
+    },
     methods: {
         search() {
             Inertia.get(
@@ -131,7 +131,7 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-400" v-if="surveys?.data?.length > 0">
+                        <tbody class="fw-semibold text-gray-500" v-if="surveys?.data?.length > 0">
                             <tr v-for="(survey, index) in surveys.data" :key="index">
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ survey.id }} </td>
@@ -158,10 +158,10 @@ export default defineComponent({
                             </tr>
                         </tbody>
 
-                        <tbody class="fw-semibold text-gray-400" v-else>
+                        <tbody class="fw-semibold text-gray-600" v-else>
                             <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
                                 <td colspan="10" class="text-center h-full">
-                                  <NoRecordMessage />
+                                    <NoRecordMessage />
                                 </td>
                             </tr>
                         </tbody>

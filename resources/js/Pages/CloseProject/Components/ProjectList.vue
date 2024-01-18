@@ -100,56 +100,50 @@ export default defineComponent({
                         </div>
                     </div>
                 </div>
-                <!--end:Action-->
             </div>
             <div class="separator separator-dashed my-4"></div>
             <ul class="nav d-flex justify-content-between fw-bold text-center">
-                <!--begin::Item-->
                 <li class="nav-item row">
                     <span>
                         {{ project.reports.total_clicks }}
                     </span>
-                    <span class="text-gray-400">Total Clicks</span>
+                    <span class="text-gray-500">Total Clicks</span>
                 </li>
-                <!--end::Item-->
-                <!--begin::Item-->
                 <li class="nav-item row">
                     <span>
                         {{ project.reports.completes }}
                     </span>
-                    <span class="text-gray-400"> Completes</span>
+                    <span class="text-gray-500"> Completes</span>
                 </li>
-                <!--end::Item-->
-                <!--begin::Item-->
                 <li class="nav-item row">
                     <span>
                         {{ project.reports.terminates }}
                     </span>
-                    <span class="text-gray-400">Terminates</span>
+                    <span class="text-gray-500">Terminates</span>
                 </li>
                 <li class="nav-item row">
                     <span>
                         {{ project.reports.quotafull }}
                     </span>
-                    <span class="text-gray-400">Quotafull</span>
+                    <span class="text-gray-500">Quotafull</span>
                 </li>
                 <li class="nav-item row">
                     <span>
                         {{ project.reports.security_terminates }}
                     </span>
-                    <span class="text-gray-400">Security Terminates</span>
+                    <span class="text-gray-500">Security Terminates</span>
                 </li>
                 <li class="nav-item row">
                     <span>
                         {{ project.reports.incompletes }}
                     </span>
-                    <span class="text-gray-400">Incompletes</span>
+                    <span class="text-gray-500">Incompletes</span>
                 </li>
                 <li class="nav-item row">
                     <span>
                         {{ project.reports.total_ir }}
                     </span>
-                    <span class="text-gray-400">Incidence Ratio</span>
+                    <span class="text-gray-500">Incidence Ratio</span>
                 </li>
             </ul>
         </div>

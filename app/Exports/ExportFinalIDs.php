@@ -27,7 +27,7 @@ class ExportFinalIDs implements FromQuery, WithMapping, WithHeadings
         return [
             'Project ID',
             'Project Name',
-            'Client ID',
+            'Vender Name',
             'Respondent ID',
             'Username',
             'Starting IP',
@@ -43,7 +43,7 @@ class ExportFinalIDs implements FromQuery, WithMapping, WithHeadings
         return [
             $final->respondent?->project?->project_id,
             $final->respondent?->project?->project_name,
-            $final->respondent?->project?->client?->name,
+            $final->respondent?->supplier?->supplier_name,
             $final->respondent?->id,
             $final->respondent?->user ? $final->respondent?->user?->first_name . ' ' . $final->respondent?->user->last_name : $final->respondent?->user_id,
             $final->respondent?->starting_ip,

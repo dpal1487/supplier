@@ -17,20 +17,14 @@ export default defineComponent({
 <template>
     <div class="card mb-5 mb-xl-5">
         <div class="card-body pt-9 pb-0">
-            <!--begin::Details-->
             <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
-                <!--begin::Info-->
                 <div class="flex-grow-1">
-                    <!--begin::Title-->
                     <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
-                        <!--begin::User-->
                         <div class="d-flex flex-column">
-                            <!--begin::Name-->
                             <div class="d-flex align-items-center mb-2">
                                 <a href="" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{
                                     supplier?.supplier_name }}</a>
                                 <a href="">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen026.svg-->
                                     <span class="svg-icon svg-icon-1 svg-icon-primary">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
                                             viewBox="0 0 24 24">
@@ -42,15 +36,10 @@ export default defineComponent({
                                                 fill="white" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->
                                 </a>
                             </div>
-                            <!--end::Name-->
-                            <!--begin::Info-->
-
                             <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
-                                <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
-                                    <!--begin::Svg Icon | path: icons/duotune/communication/com006.svg-->
+                                <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
                                     <span class="svg-icon svg-icon-4 me-1">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -63,11 +52,8 @@ export default defineComponent({
                                             <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon--><span> {{ supplier?.supplier_name }} </span></a>
-
-
-                                <a href="" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
-                                    <!--begin::Svg Icon | path: icons/duotune/communication/com011.svg-->
+                                    <span> {{ supplier?.supplier_name }} </span></a>
+                                <a href="" class="d-flex align-items-center text-gray-500 text-hover-primary mb-2">
                                     <span class="svg-icon svg-icon-4 me-1">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -89,17 +75,17 @@ export default defineComponent({
                                 <div
                                     class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3 text-center">
                                     <div class="fs-2 fw-bold">{{ supplier?.header?.total_projects }}</div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Total Projects</div>
+                                    <div class="fw-semibold fs-6 text-gray-500">Total Projects</div>
                                 </div>
                                 <div
                                     class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3 text-center">
                                     <div class="fs-2 fw-bold">{{ supplier?.header?.live_projects }}</div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Live Projects</div>
+                                    <div class="fw-semibold fs-6 text-gray-500">Live Projects</div>
                                 </div>
                                 <div
                                     class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3 text-center">
                                     <div class="fs-2 fw-bold">{{ supplier?.header?.completed_projects }}</div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Total Completes</div>
+                                    <div class="fw-semibold fs-6 text-gray-500">Total Completes</div>
                                 </div>
                             </div>
                         </div>

@@ -81,7 +81,7 @@ export default defineComponent({
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="fw-semibold text-gray-400">
+                            <tbody class="fw-semibold text-gray-500">
                                 <tr v-for="(
                                         respondent, index
                                     ) in respondents.data" :key="index">

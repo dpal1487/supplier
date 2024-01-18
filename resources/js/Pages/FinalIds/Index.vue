@@ -55,7 +55,6 @@ export default defineComponent({
             };
             const formData = new FormData();
             formData.append("file", file);
-            // console.log(formData);
             this.isLoading = true;
             axios
                 .post(`/project/${id}/importid`, formData, config)
@@ -117,7 +116,7 @@ export default defineComponent({
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 w-100 text-uppercase">
+                            <tr class="text-gray-500 fw-bold fs-7 w-100 text-uppercase">
                                 <th class="min-w-120px" v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
@@ -134,14 +133,6 @@ export default defineComponent({
                                     <a target="_blank" :href="`/final-id/${finalid.id}/export`"
                                         class="btn btn-primary m-1 btn-sm"><i class="bi bi-graph-down-arrow"></i>Export Data
                                     </a>
-                                    <!-- <label class="btn btn-primary btn-sm" for="importId">
-                                        <span class="d-flex align-items-center">
-                                            <i class="bi bi-file-earmark-arrow-down"></i>
-                                            <span>Import ID's</span>
-                                            <input type="file" @change="($event) => formSubmit($event, finalid.id)"
-                                                id="importId" class="d-none" />
-                                        </span>
-                                    </label> -->
                                 </td>
                             </tr>
                         </tbody>
