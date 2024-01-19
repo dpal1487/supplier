@@ -3,7 +3,7 @@ import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import useVuelidate from "@vuelidate/core";
-import { required, numeric, url } from "@vuelidate/validators";
+import { required, numeric, url, helpers } from "@vuelidate/validators";
 import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
@@ -13,8 +13,6 @@ import SectionLoader from "../../../../Components/SectionLoader.vue";
 import { Inertia } from "@inertiajs/inertia";
 import axios from "axios";
 import { toast } from "vue3-toastify";
-
-
 export default defineComponent({
     setup() {
         return { v$: useVuelidate() };
@@ -54,6 +52,10 @@ export default defineComponent({
                 project_link: {
                     required,
                     url,
+                    RespondentID: helpers.withMessage(
+                        () => `Invalid RespondentID this should be RespondentID `,
+                        (value) => value.includes("RespondentID"), url
+                    ),
                 },
                 project_country: {
                 },
@@ -109,7 +111,7 @@ export default defineComponent({
                                 toast.success(response.data.message)
                                 Inertia.get('/project/' + this.form.project_id)
                             } else {
-                                toast.info(response.data.message)
+                                toast.error(response.data.message)
                             }
                             if (response.data.error) {
                                 toast.error(response.data.error)

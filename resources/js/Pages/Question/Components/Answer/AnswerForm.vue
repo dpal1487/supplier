@@ -69,55 +69,43 @@ export default defineComponent({
 </script>
 <template>
     <JetValidationErrors />
-    <form @submit.prevent="submit" class="my-auto pb-5">
+    <form @submit.prevent="submit" class="my-auto">
         <!--end::Heading-->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <h2>General</h2>
+        <div class="row">
+            <div class="fv-row col-6 mb-5">
+                <jet-label for="question" value="Question" />
+                <jet-input id="question" type="text" readonly v-model="v$.form.question_name.$model" :class="v$.form.question_name.$errors.length > 0
+                    ? 'is-invalid'
+                    : ''
+                    " placeholder="Question" />
+                <div v-for="(error, index) of v$.form.question_name.$errors" :key="index">
+                    <input-error :message="error.$message" />
                 </div>
             </div>
-            <div class="card-body">
-                <div class="row g-5 col-md-12">
 
-                    <div class="fv-row col-6">
-                        <jet-label for="question" value="Question" />
-                        <jet-input id="question" type="text" v-model="v$.form.question_name.$model" :class="v$.form.question_name.$errors.length > 0
-                            ? 'is-invalid'
-                            : ''
-                            " placeholder="Question" />
-                        <div v-for="(error, index) of v$.form.question_name.$errors" :key="index">
-                            <input-error :message="error.$message" />
-                        </div>
-                    </div>
-                    <div class="fv-row col-6">
-                        <jet-label for="answer" value="Answer" />
-                        <jet-input id="answer" type="text" v-model="v$.form.answer.$model" :class="v$.form.answer.$errors.length > 0
-                            ? 'is-invalid'
-                            : ''
-                            " placeholder="Answer" />
-                        <div v-for="(error, index) of v$.form.answer.$errors" :key="index">
-                            <input-error :message="error.$message" />
-                        </div>
-                    </div>
-                    <div class="fv-row col-6">
-                        <jet-label for="order_by" value="Order By" />
-                        <Multiselect :can-clear="false" :options="order_by" label="name" valueProp="id"
-                            class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                            v-model="v$.form.order_by.$model" track-by="name" :searchable="true" :class="v$.form.order_by.$errors.length > 0
-                                ? 'is-invalid'
-                                : ''
-                                " />
-                        <div v-for="(error, index) of v$.form.order_by.$errors" :key="index">
-                            <input-error :message="error.$message" />
-                        </div>
-                    </div>
+            <div class="fv-row col-6">
+                <jet-label for="answer" value="Answer" />
+                <jet-input id="answer" type="text" v-model="v$.form.answer.$model" :class="v$.form.answer.$errors.length > 0
+                    ? 'is-invalid'
+                    : ''
+                    " placeholder="Answer" />
+                <div v-for="(error, index) of v$.form.answer.$errors" :key="index">
+                    <input-error :message="error.$message" />
                 </div>
             </div>
+            <div class="fv-row col-6">
+                <jet-label for="order_by" value="Order By" />
+                <Multiselect :can-clear="false" :options="order_by" label="name" valueProp="id"
+                    class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                    v-model="v$.form.order_by.$model" track-by="name" :searchable="true" :class="v$.form.order_by.$errors.length > 0
+                        ? 'is-invalid'
+                        : ''
+                        " />
+                <div v-for="(error, index) of v$.form.order_by.$errors" :key="index">
+                    <input-error :message="error.$message" />
+                </div>
+            </div>
+            <slot name="action"></slot>
         </div>
-
-        <!--begin::Actions-->
-        <slot name="action"></slot>
-        <!--end::Actions-->
     </form>
 </template>

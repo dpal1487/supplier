@@ -19,9 +19,11 @@ use App\Models\Respondent;
 use App\Models\State;
 use App\Models\SupplierProject;
 use App\Notifications\ActionNotification;
+use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class MappingController extends Controller
 {
@@ -127,6 +129,15 @@ class MappingController extends Controller
 
     public function update(Request $request, $id)
     {
+
+        $stringToCheck = $request->input('project_link'); // Replace 'your_string_key' with the actual key in your request
+
+        $containsRespondentID = Str::contains($stringToCheck, 'RespondentID');
+
+
+        // return $containsRespondentID;
+
+
         $request->validate([
             'project_name' => 'required',
             'cpi' => 'required',
@@ -139,26 +150,33 @@ class MappingController extends Controller
         ]);
         $zipcode = preg_replace('/\s+/', ' , ',  $request->project_zipcode);
 
-        if ($project = ProjectLink::find($id)) {
-            ProjectLink::where('id', $id)->update([
-                // 'user_id' => Auth::user()->id,
-                'cpi' => $request->cpi,
-                'project_name' => $request->project_name,
-                'loi' => $request->loi,
-                'ir' => $request->ir,
-                'project_link' => $request->project_link,
-                'sample_size' => $request->sample_size,
-                'notes' => $request->notes,
-                'country_id' => $request->project_country,
-                'state' => implode(' , ', $request->project_state),
-                'city' => implode(' , ', $request->project_city),
-                'zipcode' => $zipcode,
-                'status' => $request->status,
-            ]);
-            return response()->json(updateMessage('Project Link'));
-            // return redirect("/project/{$project->project_id}")->with('flash', updateMessage('Project Link'));
+        if ($containsRespondentID) {
+
+            if ($project = ProjectLink::find($id)) {
+                ProjectLink::where('id', $id)->update([
+                    // 'user_id' => Auth::user()->id,
+                    'cpi' => $request->cpi,
+                    'project_name' => $request->project_name,
+                    'loi' => $request->loi,
+                    'ir' => $request->ir,
+                    'project_link' => $request->project_link,
+                    'sample_size' => $request->sample_size,
+                    'notes' => $request->notes,
+                    'country_id' => $request->project_country,
+                    'state' => implode(' , ', $request->project_state),
+                    'city' => implode(' , ', $request->project_city),
+                    'zipcode' => $zipcode,
+                    'status' => $request->status,
+                ]);
+                return response()->json(updateMessage('Project Link'));
+                // return redirect("/project/{$project->project_id}")->with('flash', updateMessage('Project Link'));
+            }
+            return response()->json(errorMessage());
         }
-        return redirect()->back()->withErrors(errorMessage());
+        return response()->json([
+            'success' => false,
+            'message' => 'Project link RespondentID mismatch'
+        ]);
     }
     public function projectLinkSuppliers($id)
     {

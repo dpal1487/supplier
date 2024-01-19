@@ -152,12 +152,6 @@ export default defineComponent({
                                                 </button>
                                             </li>
                                             <li class="menu-item px-3">
-                                                <Link
-                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/question/${question.id}`"><i class="bi bi-eye"></i>View
-                                                </Link>
-                                            </li>
-                                            <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
                                                     question.id, index
                                                 )

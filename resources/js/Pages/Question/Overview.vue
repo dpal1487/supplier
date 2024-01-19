@@ -31,7 +31,6 @@ export default defineComponent({
             },
             title: 'Question Overview',
             tbody: [
-                "Question",
                 "Answer",
                 "Order By",
                 "Action",
@@ -40,15 +39,15 @@ export default defineComponent({
         }
     },
     components: {
-    AppLayout,
-    Header,
-    Link,
-    Head,
-    AnswerForm,
-    Pagination,
-    JetValidationErrors,
-    NoRecordMessage
-},
+        AppLayout,
+        Header,
+        Link,
+        Head,
+        AnswerForm,
+        Pagination,
+        JetValidationErrors,
+        NoRecordMessage
+    },
     methods: {
         submit(form) {
             this.form = form;
@@ -95,28 +94,21 @@ export default defineComponent({
             <li class="breadcrumb-item">
                 <Link href="/questions" class="text-muted text-hover-primary">Questions</Link>
             </li>
-            <li class="breadcrumb-item">
-                <span class="bullet bg-gray-400 w-5px h-2px"></span>
-            </li>
-            <li class="breadcrumb-item text-muted text-capitalize ">
-                {{ question?.data?.question_key }}
-            </li>
         </template>
         <Header :question="question?.data" :answers="answers" />
         <div class="card mb-5 mb-xl-10">
             <div class="card-header">
                 <div class="card-title m-0">
                     <h3 class="fw-bold m-0">Manage Question </h3>
-
                 </div>
-                <button class="btn btn-primary btn-sm align-self-center" v-if="!isEdit"
-                    @click="this.isAdd = true, this.form = {}"><i class="bi bi-plus-circle "></i>Add A New Answer
+                <button class="btn btn-primary btn-sm align-self-center" v-if="(!isEdit && !isAdd)"
+                    @click="isAdd = true, this.form = {}"><i class="bi bi-plus-circle "></i>Add A New Answer
                 </button>
             </div>
-            <div class="card-body">
+            <div class="card-body mx-10">
                 <div class="row" v-if="isEdit || isAdd">
-                    <div class="col-12">
-                        <!-- <JetValidationErrors /> -->
+                    <div class="col-10">
+                        <JetValidationErrors />
                         <AnswerForm @submitted="submit" :answer="form" :question="question.data">
                             <template #action>
                                 <div class="d-flex justify-content-end">
@@ -137,9 +129,9 @@ export default defineComponent({
                         </AnswerForm>
                     </div>
                 </div>
-                <div class="row" v-else>
+                <div class="row " v-else>
                     <div class="table-responsive">
-                        <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
+                        <table class="table align-middle table-row-dashed fs-6">
                             <thead>
                                 <tr class="text-gray-700 fw-bold fs-6 text-uppercase">
                                     <th v-for="(th, index) in tbody" :key="index">
@@ -149,10 +141,6 @@ export default defineComponent({
                             </thead>
                             <tbody class="fw-semibold text-gray-500" v-if="answers.data.length > 0">
                                 <tr v-for="(answer, index) in answers.data" :key="index">
-
-                                    <td class="text-gray-800 fs-5 fw-bold mb-1 text-capitalize">
-                                        {{ answer.question_key?.question_key }}
-                                    </td>
                                     <td>{{ answer.answer }}</td>
                                     <td v-if="(answer.order_by == 1)">Ascending</td>
                                     <td v-else="( answer.order_by == 0 )">Descending</td>
@@ -177,14 +165,17 @@ export default defineComponent({
                                                 <li class="menu-item px-3">
                                                     <button
                                                         class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                        @click="toggleModal(true, answer)">Edit
+                                                        @click="toggleModal(true, answer)">
+                                                        <i class="bi bi-pencil me-2"></i>
+                                                        Edit
                                                     </button>
                                                 </li>
 
                                                 <li class="menu-item px-3">
                                                     <button @click="confirmDelete(answer.id, index)"
                                                         class="btn btn-sm dropdown-item align-items-center justify-content-center">
-                                                        Delete
+                                                        <i class="bi bi-trash3 me-2"></i>
+                                                            Delete
                                                     </button>
                                                 </li>
                                             </ul>
