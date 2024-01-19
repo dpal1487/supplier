@@ -28,14 +28,14 @@ export default defineComponent({
         };
     },
     components: {
-    AppLayout,
-    Link,
-    Head,
-    Pagination,
-    Multiselect,
-    Loading,
-    NoRecordMessage
-},
+        AppLayout,
+        Link,
+        Head,
+        Pagination,
+        Multiselect,
+        Loading,
+        NoRecordMessage
+    },
     methods: {
 
         async confirmDelete(id, index) {
@@ -118,7 +118,13 @@ export default defineComponent({
                         </thead>
                         <tbody class="fw-semibold text-gray-500" v-if="testimonials.data.length > 0">
                             <tr v-for="(testimonial, index) in testimonials.data" :key="index">
-                                <td class="text-capitalize">{{ testimonial.name }}</td>
+
+                                <td>
+                                    <Link class=" text-gray-800 text-hover-primary fs-5 fw-bold mb-1 text-capitalize"
+                                        :href="`/testimonial/${testimonial.id}`">
+                                    {{ testimonial.name }}
+                                    </Link>
+                                </td>
                                 <td v-html="testimonial.testimonial"></td>
                                 <td>
                                     <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
@@ -151,13 +157,7 @@ export default defineComponent({
                                                 <i class="bi bi-pencil me-2"></i>Edit
                                                 </Link>
                                             </li>
-                                            <li class="menu-item px-3">
-                                                <Link
-                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/testimonial/${testimonial.id}`"><i
-                                                    class="bi bi-view-list me-2"></i>View
-                                                </Link>
-                                            </li>
+
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(

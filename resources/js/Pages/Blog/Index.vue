@@ -32,14 +32,14 @@ export default defineComponent({
         };
     },
     components: {
-    AppLayout,
-    Link,
-    Head,
-    Pagination,
-    Multiselect,
-    Loading,
-    NoRecordMessage
-},
+        AppLayout,
+        Link,
+        Head,
+        Pagination,
+        Multiselect,
+        Loading,
+        NoRecordMessage
+    },
     methods: {
 
         async confirmDelete(id, index) {
@@ -125,14 +125,19 @@ export default defineComponent({
                         <tbody class="fw-semibold text-gray-500" v-if="blogs.data.length > 0">
                             <tr v-for="(blog, index) in blogs.data" :key="index">
                                 <td v-if="blog.image">
+                                    <Link :href="`/blog/${blog.id}`">
                                     <div class="symbol symbol-50px me-5">
                                         <img alt="Logo" :src="blog.image?.url">
                                     </div>
+                                    </Link>
                                 </td>
                                 <td v-else>
+                                    <Link :href="`/blog/${blog.id}`">
+
                                     <div class="symbol symbol-50px me-5">
                                         <img alt="Logo" src="/assets/images/comingsoon.png">
                                     </div>
+                                    </Link>
                                 </td>
                                 <td class="w-300px">{{ blog.title }}</td>
                                 <td class="w-450px" v-html="blog?.content"></td>
@@ -163,12 +168,6 @@ export default defineComponent({
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
                                                     :href="`/blog/${blog.id}/edit`"><i class="bi bi-pencil me-2"></i>Edit
-                                                </Link>
-                                            </li>
-                                            <li class="menu-item px-3">
-                                                <Link
-                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/blog/${blog.id}`"><i class="bi bi-view-list me-2"></i>View
                                                 </Link>
                                             </li>
                                             <li class="menu-item px-3">

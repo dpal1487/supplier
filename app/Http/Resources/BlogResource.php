@@ -19,6 +19,7 @@ class BlogResource extends JsonResource
             'title' => $this->title,
             'is_published' => $this->is_published,
             'content' => $this->content,
+            'image' => new ImageResource($this->image),
         ];
     }
 }

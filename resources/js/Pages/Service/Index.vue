@@ -28,14 +28,14 @@ export default defineComponent({
         };
     },
     components: {
-    AppLayout,
-    Link,
-    Head,
-    Pagination,
-    Multiselect,
-    Loading,
-    NoRecordMessage
-},
+        AppLayout,
+        Link,
+        Head,
+        Pagination,
+        Multiselect,
+        Loading,
+        NoRecordMessage
+    },
     methods: {
 
         async confirmDelete(id, index) {
@@ -102,14 +102,18 @@ export default defineComponent({
                         <tbody class="fw-semibold text-gray-500" v-if="services.data.length > 0">
                             <tr v-for="(service, index) in services.data" :key="index">
                                 <td v-if="service.image">
+                                    <Link :href="`/service/${service.id}`">
                                     <div class="symbol symbol-50px me-5">
                                         <img alt="Logo" :src="service.image?.url">
                                     </div>
+                                    </Link>
                                 </td>
                                 <td v-else>
+                                    <Link :href="`/service/${service.id}`">
                                     <div class="symbol symbol-50px me-5">
                                         <img alt="Logo" src="/assets/images/comingsoon.png">
                                     </div>
+                                    </Link>
                                 </td>
                                 <td>{{ service.name }}</td>
                                 <td class="text-capitalize">{{ service.page }}</td>
@@ -138,13 +142,7 @@ export default defineComponent({
                                                 Edit
                                                 </Link>
                                             </li>
-                                            <li class="menu-item px-3">
-                                                <Link
-                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/service/${service.id}`"><i
-                                                    class="bi bi-view-list me-2"></i>View
-                                                </Link>
-                                            </li>
+
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
