@@ -86,7 +86,7 @@ export default defineComponent({
                 supplier: this.supplier_project?.supplier?.id,
                 project_status: this.supplier_project?.status || 1,
                 add_more: false,
-                notes: this.supplier_project?.notes || ''
+                notes: this.supplier_project?.notes || '',
             }),
         };
     },
@@ -237,12 +237,12 @@ export default defineComponent({
                     </div>
                 </div>
             </div>
-            <div class="fv-row col-12" v-if=" (route().current() != 'sampling.edit') ">
+            <div class="fv-row col-12" v-if="(route().current() != 'sampling.edit')">
                 <div class="form-check">
-                    
+
                     <input class="form-check-input" v-model="form.add_more" type="checkbox" value="" id="addMore" />
                     <label class="form-check-label" for="addMore">
-                        Add More Supplier 
+                        Add More Supplier
                     </label>
                 </div>
             </div>

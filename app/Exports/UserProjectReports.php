@@ -23,6 +23,8 @@ class UserProjectReports implements FromQuery, WithMapping, WithHeadings
             'Starting IP',
             'End IP',
             'Status',
+            "DEVICE",
+            "BROWSER",
             'Duration',
             'Created At',
         ];
@@ -36,6 +38,8 @@ class UserProjectReports implements FromQuery, WithMapping, WithHeadings
             $final->starting_ip,
             $final->end_ip,
             ucfirst($final->status),
+            $final->device,
+            $final->client_browser,
             $final->created_at->diff($final->updated_at)->format('%H:%i:%s'),
             $final->created_at,
         ];

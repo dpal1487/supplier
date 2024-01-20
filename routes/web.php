@@ -61,7 +61,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     // Route::group(['middleware' => ['auth', 'role:user']], function () {
     Route::controller(ProjectController::class)->group(function () {
 
-        Route::get('/projects', 'index')->name('projects');
+        Route::get('/projects', 'index')->name('projects.index');
 
         Route::get('project/create', 'create')->name('project.create');
 
@@ -105,7 +105,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     // });
 
     Route::group(['middleware' => 'role:admin,account'], function () {
-        Route::get('login_activities', [LoginActivityController::class, 'loginActivity'])->name('login_activities');
+        Route::get('login_activities', [LoginActivityController::class, 'loginActivity'])->name('login_activities.index');
         Route::controller(ClientController::class)->group(function () {
             Route::get('clients', 'index')->name('clients.index');
             Route::get('client/create', 'create')->name('client.create');

@@ -57,7 +57,6 @@ class ClientController extends Controller
             'account_email' => '',
             'mobile' => 'required|numeric|min:10',
             'tax_number' => '',
-            'description' => 'required',
         ]);
         $client = Client::create(
             [

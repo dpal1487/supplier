@@ -157,8 +157,8 @@ export default defineComponent({
                             class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
                         Discard
                         </Link>
-                        <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
-                            <div v-show="form.processing" class="spinner-border spinner-border-sm">
+                        <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': processing }">
+                            <div v-show="processing" class="spinner-border spinner-border-sm">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
                             <span v-if="id">Save Changes</span>

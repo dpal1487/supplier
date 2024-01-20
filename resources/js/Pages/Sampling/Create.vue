@@ -37,7 +37,7 @@ export default defineComponent({
                         this.isEdit = false;
                     },
                     onError: (data) => {
-                        console.log(data);
+                        // console.log(data);
                     },
                 });
         },

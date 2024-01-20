@@ -40,7 +40,7 @@ export default defineComponent({
         return {
             isEdit: false,
             processing: false,
-            title: "Supplier Redirect",
+            title: "Redirect",
             form: this.$inertia.form({
                 id: this.redirect?.data?.id || '',
                 supplier_id: this.supplier?.data?.id || '',
@@ -167,7 +167,7 @@ export default defineComponent({
                                 <div class="d-flex justify-content-end gap-5">
                                     <button type="button" class="btn btn-secondary"
                                         @click="this.isEdit = false">Discard</button>
-                                    
+
 
                                         <button type="submit" class="btn btn-primary"
                                             :class="{ 'text-white-50': processing }">

@@ -128,8 +128,7 @@ export default defineComponent({
                     </div>
                     <div class="menu-item px-3">
                         <Link title="Add Supplier" :href="`/sampling/${project_link.id}/create`" class="menu-link"><i
-                            class="bi bi-plus-circle me-2"></i>Add
-                        Supplier
+                            class="bi bi-plus-circle me-2"></i>Supplier
                         </Link>
                     </div>
                     <div class="menu-item px-3">

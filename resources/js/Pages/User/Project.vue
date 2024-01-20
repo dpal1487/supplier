@@ -23,6 +23,7 @@ export default defineComponent({
                 "DURATION",
                 "DATE/TIME",
                 "BROWSER",
+                "Device",
                 "STATUS",
             ],
             status: [
@@ -106,7 +107,7 @@ export default defineComponent({
                                     fill="currentColor"></path>
                             </svg>
                         </span>
-                        <input type="text" v-model="form.q" class="form-control form-control-solid w-200px ps-14"
+                        <input type="text" v-model="form.q" class="form-control form-control-solid w-200px ps-12"
                             placeholder="Search" />
                     </div>
 
@@ -145,6 +146,7 @@ export default defineComponent({
                                 <td>{{ survey.duration }}</td>
                                 <td>{{ survey.created_at }}</td>
                                 <td>{{ survey.client_browser }}</td>
+                                <td>{{ survey.device }}</td>
                                 <td>
                                     <div v-if="(survey.status == 'terminate')" class="border-pill badge badge-light-danger">
                                         Terminate</div>

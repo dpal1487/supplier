@@ -78,16 +78,9 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item text-muted">
-                <Link class="text-muted text-hover-primary" :href="`/project/${project.id}/suppliers`">
+                <Link class="text-muted text-hover-primary" :href="`/project/${project?.id}/suppliers`">
                 Suppliers
                 </Link>
-            </li>
-
-            <li class="breadcrumb-item">
-                <span class="bullet bg-gray-400 w-5px h-2px"></span>
-            </li>
-            <li class="breadcrumb-item text-muted">
-                {{ project.project_name }}
             </li>
         </template>
         <div class="row mb-5">
@@ -96,15 +89,14 @@ export default defineComponent({
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
-                                
-                                
-                                <sampling-form :suppliers="suppliers.data" :project="project" :supplier_project="supplier_project.data"
-                                    @submitted="submit" :action="redirect_to">
+                                <sampling-form :suppliers="suppliers.data" :project="project"
+                                    :supplier_project="supplier_project.data" @submitted="submit" :action="redirect_to">
                                     <template #action>
                                         <div class="d-flex justify-content-end mt-4">
                                             <!--begin::Button-->
-                                            <Link class="btn btn-secondary me-5" :href="`/project/${project.project_id}/suppliers`"
-                                                role="button">Discard</Link>
+                                            <Link class="btn btn-secondary me-5"
+                                                :href="`/project/${project?.project_id}/suppliers`" role="button">Discard
+                                            </Link>
                                             <!--begin::Button-->
                                             <button @click="this.form.action = 'update'" :disabled="form.processing"
                                                 class="btn btn-primary" :class="{ 'text-white-50': form.processing }">

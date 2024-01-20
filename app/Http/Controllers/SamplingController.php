@@ -22,7 +22,7 @@ class SamplingController extends Controller
     }
     public function create(Request $request, $id)
     {
-        $this->suppliers = SupplierResource::collection(Supplier::orderBy('supplier_name', 'asc')->where('status',1)->get());
+        $this->suppliers = SupplierResource::collection(Supplier::orderBy('supplier_name', 'asc')->where('status', 1)->get());
         $project = ProjectLink::find($id);
         if ($project) {
             $projects = SupplierProject::where(['project_link_id' => $id])->paginate(10);
@@ -35,12 +35,6 @@ class SamplingController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -83,23 +77,6 @@ class SamplingController extends Controller
         return redirect()->back()->withErrors(['Supplier already added.']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Request $request, $id)
     {
         $this->suppliers = SupplierResource::collection(Supplier::orderBy('supplier_name', 'asc')->get());
@@ -143,7 +120,9 @@ class SamplingController extends Controller
         ])) {
             if (!empty($request->add_more)) {
                 return redirect("/sampling/$request->supplier/edit")->with('flash', updateMessage('Supplier'));
-            } else {
+            } else if ($request->page === 'sampling_form_page') {
+                return redirect("/supplier/$request->supplier/projects")->with('flash', updateMessage('Supplier'));
+            } {
                 return redirect("/project/$request->project_id/suppliers")->with('flash', updateMessage('Supplier'));
             }
         }

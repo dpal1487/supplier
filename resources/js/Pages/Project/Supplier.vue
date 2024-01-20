@@ -83,7 +83,7 @@ export default defineComponent({
                 </form>
             </div>
         </div>
-        <SupplierList :projects="supplier_projects.data" action="project.supplier" v-if="supplier_projects.data.length" />
+        <SupplierList :projects="supplier_projects.data" v-if="supplier_projects.data.length" />
         <div class="d-flex justify-content-center align-content-center" v-else>
             <div class="text-center py-10">
                 <img src="/assets/images/emptyrespondent.png" style="height: 100px" />

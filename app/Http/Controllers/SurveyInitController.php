@@ -48,7 +48,7 @@ class SurveyInitController extends Controller
                             'starting_ip' => $request->ip(),
                             'supplier_project_id' => $pid,
                             'device' => $agent->device(),
-                            'client_browser' => $agent->device(),
+                            'client_browser' => $agent->browser(),
                         ]);
                         if (!empty($projectLink->city)) {
                             if (in_array($data->cityName, $projectCityArray)) {

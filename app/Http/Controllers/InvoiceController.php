@@ -31,7 +31,7 @@ class InvoiceController extends Controller
         $invoices = new Invoice();
         $invoiceReport = $invoices;
         if (!empty($request->q)) {
-            $invoices = $invoices->where('id', 'like', '%' . $request->q . '%');
+            $invoices = $invoices->where('invoice_number', 'like', '%' . $request->q . '%');
         }
         if (!empty($request->status)) {
             $invoices = $invoices->where('status', '=', $request->status);

@@ -9,7 +9,7 @@ import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import useVuelidate from "@vuelidate/core";
-import { required, numeric, url } from "@vuelidate/validators";
+import { required, numeric, url, helpers } from "@vuelidate/validators";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { toast } from "vue3-toastify";
@@ -64,7 +64,11 @@ export default defineComponent({
                     numeric,
                 },
                 project_link: {
-                    required, url
+                    required, url,
+                    RespondentID: helpers.withMessage(
+                        () => `Invalid RespondentID this should be RespondentID `,
+                        (value) => value.includes("RespondentID"), url
+                    ),
                 },
                 project_country: {
                 },
@@ -352,7 +356,6 @@ export default defineComponent({
                         <div class="row mb-3">
                             <div class="col-md-6 col-sm-12">
                                 <jet-label for="project-start" value="Project start date" />
-                                {{ form.start_date }}
                                 <VueDatePicker v-model="v$.form.start_date.$model" :enable-time-picker="false"
                                     :clearable="false" auto-apply
                                     input-class-name="form-control form-control-lg form-control-solid fw-normal" :class="v$.form.start_date.$errors.length > 0

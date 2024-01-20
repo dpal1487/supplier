@@ -152,7 +152,6 @@ export default defineComponent({
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row mb-5">
-                                        {{ thumbnail?.url }}
                                         <DragDropFile :image="this.form.image" :onchange="uploadImage"
                                             :remove="removeSelectedAvatar" :selectedImage="thumbnail?.url"
                                             :errors="v$.form.image.$errors" :isUploading="thumbnail?.isLoading" />

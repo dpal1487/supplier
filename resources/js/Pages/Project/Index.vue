@@ -24,8 +24,6 @@ export default defineComponent({
                 { label: 'Project Id DESC', value: 'project_id_desc', },
                 { label: 'Project Name ASC', value: 'project_name_asc', },
                 { label: 'Project Name DESC', value: 'project_name_desc', },
-                // { label: 'Client Name ASC', value: 'client_name_asc', },
-                // { label: 'Client Name DESC', value: 'client_name_desc', }
             ],
         };
     },
@@ -50,7 +48,7 @@ export default defineComponent({
         },
         orderBy() {
             this.isLoading = true;
-            Inertia.get(route('projects', { order_by: this.selectOrderBy }),
+            Inertia.get(route('projects.index', { order_by: this.selectOrderBy }),
                 {
                     onFinish(response) {
                         this.isLoading = false;

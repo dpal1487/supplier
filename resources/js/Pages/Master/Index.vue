@@ -23,6 +23,7 @@ export default defineComponent({
                 "END IP",
                 "DURATION",
                 "DATE/TIME",
+                "DEVICE",
                 "BROWSER",
                 "STATUS",
             ],
@@ -141,6 +142,7 @@ export default defineComponent({
                                 <td>{{ survey.end_ip }}</td>
                                 <td>{{ survey.duration }}</td>
                                 <td>{{ survey.created_at }}</td>
+                                <td>{{ survey.device }}</td>
                                 <td>{{ survey.client_browser }}</td>
                                 <td>
                                     <div v-if="(survey.status == 'terminate')"

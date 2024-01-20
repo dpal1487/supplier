@@ -53,7 +53,7 @@ export default defineComponent({
         return {
             isEdit: false,
             processing: false,
-            title: "Supplier Overview",
+            title: "Overview",
             form: this.$inertia.form({
                 id: this.supplier?.data?.id || '',
                 supplier_name: this.supplier?.data?.supplier_name || '',

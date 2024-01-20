@@ -73,13 +73,11 @@ export default defineComponent({
             </li>
         </template>
         <Header :supplier="supplier?.data" />
-        <!--begin::details View-->
         <div class="card">
             <form class="card-header align-items-center" @submit.prevent="search()">
                 <div class="card-title">
                     <h2>{{ title }}</h2>
                 </div>
-                <!--end::Search-->
                 <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                     <div class="d-flex align-items-center position-relative">
                         <span class="svg-icon svg-icon-1 position-absolute ms-4">
@@ -92,17 +90,17 @@ export default defineComponent({
                                     fill="currentColor"></path>
                             </svg>
                         </span>
-                        <input type="text" v-model="form.q" class="form-control form-control-solid w-200px ps-14"
+                        <input type="text" v-model="form.q" class="form-control form-control-solid form-control-sm w-200px ps-14"
                             placeholder="Search " />
                     </div>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary btn-sm">
                         Search
                     </button>
                 </div>
             </form>
         </div>
         <div v-if="suppliers.data.length > 0">
-            <SupplierList :projects="suppliers.data" action="supplier.project" />
+            <SupplierList :projects="suppliers.data" />
         </div>
         <div class="d-flex justify-content-center align-content-center pt-10 pb-10" v-else>
             <div class="text-center py-10">

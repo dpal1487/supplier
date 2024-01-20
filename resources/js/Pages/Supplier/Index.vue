@@ -26,14 +26,14 @@ export default defineComponent({
         };
     },
     components: {
-    AppLayout,
-    Link,
-    Head,
-    Pagination,
-    Multiselect,
-    Loading,
-    NoRecordMessage
-},
+        AppLayout,
+        Link,
+        Head,
+        Pagination,
+        Multiselect,
+        Loading,
+        NoRecordMessage
+    },
     methods: {
         async confirmDelete(index) {
             this.isLoading = true;
@@ -98,7 +98,7 @@ export default defineComponent({
                         </thead>
                         <tbody class="fw-semibold text-gray-500 " v-if="suppliers.data.length > 0">
                             <tr v-for="(supplier, index) in suppliers?.data" :key="index">
-                                <td>
+                                <td class="w-250px">
                                     <Link :href="'/supplier/' + supplier.id"
                                         class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1 text-capitalize ">{{
                                             supplier?.supplier_name }}</Link>

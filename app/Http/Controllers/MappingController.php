@@ -57,6 +57,9 @@ class MappingController extends Controller
 
     public function store(Request $request, $id)
     {
+        $stringToCheck = $request->input('project_link'); // Replace 'your_string_key' with the actual key in your request
+        $containsRespondentID = Str::contains($stringToCheck, 'RespondentID');
+
         $request->validate([
             'project_name' => 'required',
             'cpi' => 'required',
@@ -66,34 +69,39 @@ class MappingController extends Controller
             'sample_size' => 'required|numeric',
         ]);
         $zipcode = preg_replace('/\s+/', ' , ',  $request->project_zipcode);
+        if ($containsRespondentID) {
+            if (ProjectLink::create([
+                'project_id' => $id,
+                'user_id' => Auth::user()->id,
+                'cpi' => $request->cpi,
+                'project_name' => $request->project_name,
+                'loi' => $request->loi,
+                'ir' => $request->ir,
+                'project_link' => $request->project_link,
+                'sample_size' => $request->sample_size,
+                'notes' => $request->notes,
+                'country_id' => $request->project_country,
+                'state' => implode(' , ', $request->project_state),
+                'city' => implode(' , ', $request->project_city),
+                'zipcode' => $zipcode,
+                'status' => $request->status,
+            ])) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Project link successfully added.'
+                ]);
 
-        if (ProjectLink::create([
-            'project_id' => $id,
-            'user_id' => Auth::user()->id,
-            'cpi' => $request->cpi,
-            'project_name' => $request->project_name,
-            'loi' => $request->loi,
-            'ir' => $request->ir,
-            'project_link' => $request->project_link,
-            'sample_size' => $request->sample_size,
-            'notes' => $request->notes,
-            'country_id' => $request->project_country,
-            'state' => implode(' , ', $request->project_state),
-            'city' => implode(' , ', $request->project_city),
-            'zipcode' => $zipcode,
-            'status' => $request->status,
-        ])) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Project link successfully added.'
-            ]);
-
-            // if ($request->add_more) {
-            //     return redirect()->back()->with('flash', createMessage('Project Link'));
-            // }
-            // return redirect("/project/" . $id)->with('flash', createMessage('Project Link'));
+                // if ($request->add_more) {
+                //     return redirect()->back()->with('flash', createMessage('Project Link'));
+                // }
+                // return redirect("/project/" . $id)->with('flash', createMessage('Project Link'));
+            }
+            return redirect()->back()->withErrors(errorMessage());
         }
-        return redirect()->back()->withErrors(errorMessage());
+        return response()->json([
+            'success' => false,
+            'message' => 'Project link should be RespondentID'
+        ]);
     }
 
     public function show($id)
@@ -129,15 +137,8 @@ class MappingController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $stringToCheck = $request->input('project_link'); // Replace 'your_string_key' with the actual key in your request
-
         $containsRespondentID = Str::contains($stringToCheck, 'RespondentID');
-
-
-        // return $containsRespondentID;
-
-
         $request->validate([
             'project_name' => 'required',
             'cpi' => 'required',
@@ -175,7 +176,7 @@ class MappingController extends Controller
         }
         return response()->json([
             'success' => false,
-            'message' => 'Project link RespondentID mismatch'
+            'message' => 'Project link should be RespondentID'
         ]);
     }
     public function projectLinkSuppliers($id)

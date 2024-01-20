@@ -13,114 +13,126 @@ export default defineComponent({
             navigations: [
                 {
                     link: "/",
+                    route: 'dashboard',
                     title: "Dashboard",
                     icon: "bi bi-pie-chart-fill",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/master",
+                    route: 'master.index',
                     title: "Master",
                     icon: "bi bi-pie-chart-fill",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/projects",
+                    route: 'projects.index',
                     title: "Projects",
                     icon: "bi bi-card-heading",
-                    role: ["pm", "account","admin", "user"],
+                    role: ["pm", "account", "admin", "user"],
                 },
                 {
                     link: "/clients",
+                    route: 'clients.index',
                     title: "Clients",
                     icon: "bi bi-journal-code",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/suppliers",
+                    route: 'suppliers.index',
                     title: "Suppliers",
                     icon: "bi bi-collection-fill",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/invoices",
+                    route: 'invoice.index',
                     title: "Invoices",
                     icon: "bi bi-receipt",
                     role: ["account", "admin"],
                 },
                 {
                     link: "/users",
+                    route: 'users.index',
                     title: "Users",
                     icon: "bi bi-person-badge-fill",
                     role: ["pm", "admin"],
                 },
                 {
-                    link: "/close-projects",
-                    title: "Close Projects",
-                    icon: "bi bi-card-heading",
-                    role: [""],
-                },
-                {
                     link: "/final-id",
+                    route: 'final-id.index',
                     title: "Final ID",
                     icon: "bi bi-card-heading",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/service",
+                    route: 'service.index',
                     title: "Services",
                     icon: "bi bi-diagram-3",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/testimonial",
+                    route: 'testimonial.index',
                     title: "Testimonial",
                     icon: "bi bi-clipboard2-pulse",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/blog",
+                    route: 'blog.index',
                     title: "Blogs",
                     icon: "bi bi-file-post",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/questions",
+                    route: 'questions.index',
                     title: "Questions",
                     icon: "bi bi-question-square",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/answers",
+                    route: 'answers.index',
                     title: "Answers",
                     icon: "bi bi-book",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/industries",
+                    route: 'industries.index',
                     title: "Industries",
                     icon: "bi bi-rss-fill",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/activity_types",
+                    route: 'activity_types.index',
                     title: "Activity Types",
                     icon: "bi bi-book",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/login_activities",
+                    route: 'login_activities.index',
                     title: "Login Activities",
                     icon: "bi bi-person-check",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/role",
+                    route: 'role.index',
                     title: "Role",
                     icon: "bi bi-people",
                     role: ["pm", "admin"],
                 },
                 {
                     link: "/permissions",
+                    route: 'permission.index',
                     title: "Permissions",
                     icon: "bi bi-people",
                     role: ["pm", "admin"],
@@ -170,10 +182,10 @@ export default defineComponent({
                 <div class="scroll customscrollbar my-5 h-600px">
                     <div class="menu menu-column menu-rounded menu-sub-indention px-3">
                         <div class="menu-item m-0" v-for="(navigation, index) in navigations" :key="index">
-                            <Link class="menu-link m-0" v-if="navigation?.role?.includes(
-                                $page?.props?.ziggy?.user?.role?.role?.slug
-                            )
-                                " :href="navigation.link">
+                            <Link
+                                :class="` ${navigation.route === route().current() ? 'menu-link m-0 active' : 'menu-link m-0'} `"
+                                v-if="navigation?.role?.includes($page?.props?.ziggy?.user?.role?.role?.slug)"
+                                :href="navigation.link">
                             <i :class="`${navigation.icon} mx-2 fs-2`"></i>
                             {{ navigation.title }}
                             </Link>

@@ -2,42 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NotificationEvent;
-use App\Events\SendMessage;
-use App\Exports\ExportFinalIDs;
+use App\Models\{Client, Country, Project, Supplier, Respondent, ProjectLink, ProjectStatus, CloseRespondent, SupplierProject, City, FinalId, State, ProjectActivity};
+use App\Http\Resources\{ActivityProjectResource, CityResource, CountryResource, ProjectResource, ClientListResource, ProjectLinkResource, ProjectListResource, SupplierListResource, ProjectStatusResource, StateResource, SupplierProjectResource};
+use App\Events\{NotificationEvent, SendMessage,};
+use App\Exports\{ExportFinalIDs, ProjectReport, ExportIdExport};
 use Inertia\Inertia;
-use App\Models\Client;
-use App\Models\Country;
-use App\Models\Project;
-use App\Models\Supplier;
 use App\Imports\IdImport;
-use App\Models\Respondent;
-use App\Models\ProjectLink;
 use Illuminate\Http\Request;
-use App\Models\ProjectStatus;
-use App\Exports\ProjectReport;
-use App\Exports\ExportIdExport;
-use App\Http\Resources\ActivityProjectResource;
-use App\Http\Resources\CityResource;
-use App\Models\CloseRespondent;
-use App\Models\SupplierProject;
-use App\Models\ProjectActivity;
-use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Http\Resources\CountryResource;
-use App\Http\Resources\ProjectResource;
-use App\Http\Resources\ClientListResource;
-use App\Http\Resources\ProjectLinkResource;
-use App\Http\Resources\ProjectListResource;
-use App\Http\Resources\SupplierListResource;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
-use App\Http\Resources\ProjectStatusResource;
-use App\Http\Resources\StateResource;
-use App\Http\Resources\SupplierProjectResource;
-use App\Models\City;
-use App\Models\FinalId;
-use App\Models\State;
 use App\Notifications\ActionNotification;
+use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -139,6 +115,9 @@ class ProjectController extends Controller
         $id = IdGenerator::generate(['table' => 'projects', 'field' => 'project_id', 'length' => 10, 'prefix' => 'ARS' . date('ym')]);
         $zipcode = preg_replace('/\s+/', ' , ',  $request->project_zipcode);
 
+        $stringToCheck = $request->input('project_link'); // Replace 'your_string_key' with the actual key in your request
+        $containsRespondentID = Str::contains($stringToCheck, 'RespondentID');
+
         $request->validate([
             'project_name' => 'required|unique:projects,project_name',
             'client' => 'required',
@@ -157,59 +136,63 @@ class ProjectController extends Controller
         if (!Client::where(['id' => $request->client])->get() && !Country::find($request->project_country)) {
             return redirect()->back()->withErrors(errorMessage());
         }
-        if ($project = Project::create([
-            'project_id' => $id,
-            'project_name' => $request->project_name,
-            'client_id' => $request->client,
-            'user_id' => Auth::user()->id,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'device_type' => json_encode($request->device_type),
-            'project_type' => $request->project_type,
-            'target' => $request->target,
-            'status' => $request->project_status,
-        ])) {
-            if (ProjectLink::create([
-                'project_id' => $project->id,
-                'user_id' => Auth::user()->id,
-                'cpi' => $request->project_cpi,
+        if ($containsRespondentID) {
+            if ($project = Project::create([
+                'project_id' => $id,
                 'project_name' => $request->project_name,
-                'loi' => $request->project_length,
-                'ir' => $request->project_ir,
-                'project_link' => $request->project_link,
-                'sample_size' => $request->sample_size,
-                'notes' => $request->notes,
+                'client_id' => $request->client,
+                'user_id' => Auth::user()->id,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
-                'country_id' => $request->project_country,
-                'state' => implode(' , ', $request->project_state),
-                'city' => implode(' , ', $request->project_city),
-                'zipcode' => $zipcode,
-                'status' => 1,
+                'device_type' => json_encode($request->device_type),
+                'project_type' => $request->project_type,
+                'target' => $request->target,
+                'status' => $request->project_status,
             ])) {
-                $activity = ProjectActivity::create([
-                    "project_id" => $project->project_id,
-                    "type_id" => "status",
-                    "text" => $request->project_name . ' was created',
-                    "user_id"   => Auth::user()->id,
+                if (ProjectLink::create([
+                    'project_id' => $project->id,
+                    'user_id' => Auth::user()->id,
+                    'cpi' => $request->project_cpi,
+                    'project_name' => $request->project_name,
+                    'loi' => $request->project_length,
+                    'ir' => $request->project_ir,
+                    'project_link' => $request->project_link,
+                    'sample_size' => $request->sample_size,
+                    'notes' => $request->notes,
+                    'start_date' => $request->start_date,
+                    'end_date' => $request->end_date,
+                    'country_id' => $request->project_country,
+                    'state' => implode(' , ', $request->project_state),
+                    'city' => implode(' , ', $request->project_city),
+                    'zipcode' => $zipcode,
+                    'status' => 1,
+                ])) {
+                    $activity = ProjectActivity::create([
+                        "project_id" => $project->project_id,
+                        "type_id" => "status",
+                        "text" => $request->project_name . ' was created',
+                        "user_id"   => Auth::user()->id,
 
-                ]);
-                broadcast(new SendMessage($project));
-                broadcast(new NotificationEvent([
-                    'user_id' => auth()->user()->id,
-                    'message' => 'Project - ' . $project->project_name . ' with id - ' . $project->project_id . ' was created by ' . $this->user_details() . '.',
-                    'type' => 'notification',
-                    'title' => 'Project - ' . $project->project_id
-                ]));
-                auth()->user()->notify(new ActionNotification($project, auth()->user(), $request->project_name . ' was created'));
+                    ]);
+                    broadcast(new SendMessage($project));
+                    broadcast(new NotificationEvent([
+                        'user_id' => auth()->user()->id,
+                        'message' => 'Project - ' . $project->project_name . ' with id - ' . $project->project_id . ' was created by ' . $this->user_details() . '.',
+                        'type' => 'notification',
+                        'title' => 'Project - ' . $project->project_id
+                    ]));
+                    auth()->user()->notify(new ActionNotification($project, auth()->user(), $request->project_name . ' was created'));
 
-                if (!empty($request->add_more)) {
-                    return redirect("/project/create")->with('flash', createMessage('Project'));
+                    if (!empty($request->add_more)) {
+                        return redirect("/project/create")->with('flash', createMessage('Project'));
+                    }
+                    return redirect("/project/$project->id")->with('flash', createMessage('Project'));
                 }
-                return redirect("/project/$project->id")->with('flash', createMessage('Project'));
+                return redirect()->back()->withErrors(errorMessage());
             }
             return redirect()->back()->withErrors(errorMessage());
         }
+        return redirect()->back()->withErrors(['success' => false, 'message' => 'Project link should be RespondentID']);
     }
 
     public function projectClone(Request $request)
@@ -499,7 +482,7 @@ class ProjectController extends Controller
                 'supplier_projects' => SupplierProjectResource::collection($projects->get()),
                 'clients' => $this->clients,
                 'status' => $this->status,
-                'suppliers' => $this->suppliers
+                'suppliers' => $this->suppliers,
             ]);
         }
         return redirect()->back();

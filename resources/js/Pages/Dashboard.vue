@@ -88,15 +88,9 @@ export default defineComponent({
                             <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Invoiced Projects</span>
                         </div>
                     </div>
-
-
                 </div>
             </div>
-
-
-
         </div>
-
         <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
             <div>
                 <div class="card">
@@ -109,7 +103,7 @@ export default defineComponent({
                         <div class="table-responsive">
                             <table class="table table-row-dashed align-middle">
                                 <thead>
-                                    <tr class="text-gray-700 fw-bold fs-7 text-uppercase text-center">
+                                    <tr class="text-gray-700 fw-bold fs-7 text-uppercase">
                                         <th>PROJECT ID</th>
                                         <th>PROJECT NAME</th>
                                         <th>PROJECT TYPE</th>
@@ -117,7 +111,7 @@ export default defineComponent({
                                         <th>STATUS</th>
                                     </tr>
                                 </thead>
-                                <tbody class="text-center">
+                                <tbody class="">
                                     <tr v-for="(project, index) in projects.latest_projects?.data" :key="index"
                                         class="text-gray-500  fw-semibold">
                                         <td>{{ project?.project_id }}</td>

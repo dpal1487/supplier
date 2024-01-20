@@ -25,7 +25,7 @@ export default defineComponent({
 
         return { doCopy };
     },
-    props: ["projects", "action"],
+    props: ["projects"],
     data() {
         return {
             isLoading: false,

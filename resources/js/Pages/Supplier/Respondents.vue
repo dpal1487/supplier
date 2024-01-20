@@ -16,7 +16,7 @@ export default defineComponent({
     data() {
         return {
             form: {},
-            title: "Supplier Respondents",
+            title: "Respondents",
             tbody: [
                 "Project Name",
                 "RESPONDENT ID",

@@ -153,9 +153,13 @@ class UserController extends Controller
     {
         $surveys = Respondent::where('user_id', $id)->orderBy('created_at', 'desc');
         $user = User::find($id);
-        if ($request->q) {
-            $surveys = $surveys->whereHas('project', function ($query) use ($request) {
-                $query->where('project_name', 'like', "%$request->q%");
+        if (!empty($request->q)) {
+            $surveys = $surveys->where(function ($query) use ($request) {
+                $query->whereHas('project', function ($projectQuery) use ($request) {
+                    $projectQuery->where('project_name', 'like', "%$request->q%");
+                })->orWhereHas('user', function ($userQuery) use ($request) {
+                    $userQuery->where('first_name', 'like', "%$request->q%")->orWhere('last_name', 'like', "%$request->q%");
+                });
             });
         }
         if ($request->status != 'all' && $request->status !== null) {
