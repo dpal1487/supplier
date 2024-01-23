@@ -33709,7 +33709,6 @@ html:not([data-theme=dark]) .theme-light-bg-body {
 .card .card-header .card-title {
     display: flex;
     align-items: center;
-    margin: 0.5rem;
     margin-left: 0;
 }
 
@@ -39223,6 +39222,7 @@ code:not([class*=language-]) {
     background-color: var(--kt-input-solid-bg);
     color: var(--kt-input-solid-color);
     transition: color 0.2s ease;
+    border-color:var(--bs-gray-100);
 }
 
 .form-control.form-control-solid::placeholder {
@@ -39668,11 +39668,11 @@ code:not([class*=language-]) {
     min-height: inherit;
 }
 
-.table tr:first-child,
-.table th:first-child,
-.table td:first-child {
-    padding-left: 0;
-}
+// .table tr:first-child,
+// .table th:first-child,
+// .table td:first-child {
+//     padding-left: 0;
+// }
 
 .table tr:last-child,
 .table th:last-child,

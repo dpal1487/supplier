@@ -19,12 +19,6 @@ export default defineComponent({
             fullPage: true,
             title: "Projects",
             selectOrderBy: null,
-            order_by: [
-                { label: 'Project Id ASC', value: 'project_id_asc', },
-                { label: 'Project Id DESC', value: 'project_id_desc', },
-                { label: 'Project Name ASC', value: 'project_name_asc', },
-                { label: 'Project Name DESC', value: 'project_name_desc', },
-            ],
         };
     },
     components: {
@@ -75,22 +69,21 @@ export default defineComponent({
             </div>
         </template>
         <div class="card">
-            <div class="mx-1 p-4 d-flex flex-wrap align-items-center justify-content-between">
-                <form @submit.prevent="search" class="d-flex flex-wrap flex-grow-1 gap-5 gap-md-5 justify-content-start">
-                    <div class="d-flex align-items-center position-relative">
-                        <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
-                                    transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
-                                <path
-                                    d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                    fill="currentColor"></path>
-                            </svg>
-                        </span>
-                        <input type="text" v-model="form.q" class="form-control form-control-solid w-250px ps-14"
-                            placeholder="Search Project" />
-                    </div>
-                    <div class="w-100 mw-200px  ">
+                <form @submit.prevent="search" class="card-header justify-content-start p-5 gap-2 gap-md-5">
+                      <div class="d-flex align-items-center position-relative w-100 mw-200px">
+                    <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
+                                transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
+                            <path
+                                d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </span>
+                    <input type="text" v-model="form.q" class="form-control form-control-solid ps-14"
+                        placeholder="Search Client" />
+                </div>
+                    <div class="w-100 mw-200px">
                         <Multiselect :can-clear="false" :options="status.data" label="label" valueProp="value"
                             class="form-control form-control-solid" placeholder="Select Status" v-model="form.status" />
                     </div>
@@ -98,13 +91,8 @@ export default defineComponent({
                         <Multiselect :can-clear="false" :options="clients.data" label="display_name" valueProp="id"
                             class="form-control form-control-solid" placeholder="Select Client" v-model="form.client" />
                     </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="submit" class="btn btn-primary w-200px">Search</button>
                 </form>
-                <div class="w-100 mw-200px mx-5 justify-content-end">
-                    <Multiselect :can-clear="false" :options="order_by" label="label" valueProp="value" @select="orderBy()"
-                        class="form-control form-control-solid" placeholder="Order By" v-model="selectOrderBy" />
-                </div>
-            </div>
         </div>
         <!-- {{ projects }} -->
         <div v-if="projects.data.length > 0">

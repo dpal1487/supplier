@@ -4,7 +4,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 
 export default defineComponent({
-    props: ['invoice'],
+    props: ["invoice"],
     data() {
         return {
             title: `${this.invoice.data.invoice_number}`,
@@ -25,13 +25,10 @@ export default defineComponent({
             window.print();
 
             document.body.innerHTML = originalContents;
-        }
+        },
     },
-    created() {
-
-    }
+    created() {},
 });
-
 </script>
 
 <template>
@@ -42,7 +39,9 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/invoices" class="text-muted text-hover-primary">Invoices</Link>
+                <Link href="/invoices" class="text-muted text-hover-primary"
+                    >Invoices</Link
+                >
             </li>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
@@ -53,8 +52,12 @@ export default defineComponent({
         </template>
         <template #toolbar>
             <div class="d-flex align-items-center gap-2 gap-lg-3">
-                <Link :href="`/invoice/${invoice.data.id}/edit`" class="btn btn-sm fw-bold btn-primary">
-                <i class="bi bi-pencil"></i>Edit Invoice</Link>
+                <Link
+                    :href="`/invoice/${invoice.data.id}/edit`"
+                    class="btn btn-sm fw-bold btn-primary"
+                >
+                    <i class="bi bi-pencil"></i>Edit Invoice</Link
+                >
             </div>
         </template>
         <div class="app-content flex-column-fluid">
@@ -65,81 +68,193 @@ export default defineComponent({
                             <div class="mt-n1">
                                 <div class="d-flex flex-stack pb-10">
                                     <!-- <Link href="/"> -->
-                                    <img alt="Logo" src="/assets/images/logo-light.png" style="height:100px;">
+                                    <img
+                                        alt="Logo"
+                                        src="/assets/images/logo-light.png"
+                                        style="height: 100px"
+                                    />
                                     <!-- </Link> -->
                                 </div>
                                 <div class="m-0">
-                                    <div class="fw-bold fs-3 text-gray-800 mb-8">Invoice #{{ invoice.data.invoice_number }}
+                                    <div
+                                        class="fw-bold fs-3 text-gray-800 mb-8"
+                                    >
+                                        Invoice #{{
+                                            invoice.data.invoice_number
+                                        }}
                                     </div>
                                     <div class="row g-5 mb-11">
                                         <div class="col-sm-6">
-                                            <div class="fw-semibold fs-4 text-gray-600 mb-1">Issue Date:</div>
-                                            <div class="fw-bold fs-4 text-gray-800">{{ invoice.data.issue_date }}</div>
+                                            <div
+                                                class="fw-semibold fs-4 text-gray-600 mb-1"
+                                            >
+                                                Issue Date:
+                                            </div>
+                                            <div
+                                                class="fw-bold fs-4 text-gray-800"
+                                            >
+                                                {{ invoice.data.issue_date }}
+                                            </div>
                                         </div>
                                         <div class="col-sm-6">
-                                            <div class="fw-semibold fs-4 text-gray-600 mb-1">Due Date:</div>
-                                            <div class="fw-bold fs-4 text-gray-800 d-flex align-items-center flex-wrap">
-                                                <span class="pe-2">{{ invoice.data.due_date }}</span>
+                                            <div
+                                                class="fw-semibold fs-4 text-gray-600 mb-1"
+                                            >
+                                                Due Date:
+                                            </div>
+                                            <div
+                                                class="fw-bold fs-4 text-gray-800 d-flex align-items-center flex-wrap"
+                                            >
+                                                <span class="pe-2">{{
+                                                    invoice.data.due_date
+                                                }}</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row g-5 mb-12">
                                         <div class="col-sm-6">
-                                            <div class="fw-semibold fs-4 text-gray-600 mb-1">From:</div>
-                                            <div class="fw-bold fs-4 text-gray-800 mb-5">A.R Solution</div>
-                                            <div class="fw-semibold fs-4 text-gray-600 mb-5">
+                                            <div
+                                                class="fw-semibold fs-4 text-gray-600 mb-1"
+                                            >
+                                                From:
+                                            </div>
+                                            <div
+                                                class="fw-bold fs-4 text-gray-800 mb-5"
+                                            >
+                                                A.R Solution
+                                            </div>
+                                            <div
+                                                class="fw-semibold fs-4 text-gray-600 mb-5"
+                                            >
                                                 {{ invoice.data.from_address }}
                                             </div>
-                                            <div class="fw-semibold fs-4 text-gray-600">
+                                            <div
+                                                class="fw-semibold fs-4 text-gray-600"
+                                            >
                                                 GSTIN : 07CAYPR9267G1ZN
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
-                                            <div class="fw-semibold fs-4 text-gray-600 mb-1">To:</div>
-                                            <div class="fw-bold fs-4 text-gray-800 mb-5">{{ invoice.data?.client?.name }}
+                                            <div
+                                                class="fw-semibold fs-4 text-gray-600 mb-1"
+                                            >
+                                                To:
                                             </div>
-                                            <div class="fw-semibold text-gray-600 fs-4 mb-5 text-uppercase">
+                                            <div
+                                                class="fw-bold fs-4 text-gray-800 mb-5"
+                                            >
+                                                {{ invoice.data?.client?.name }}
+                                            </div>
+                                            <div
+                                                class="fw-semibold text-gray-600 fs-4 mb-5 text-uppercase"
+                                            >
                                                 {{ invoice.data.to_address }}
                                             </div>
 
-                                            <div class="fw-semibold fs-4 text-gray-600"
-                                                v-if="invoice.data?.client?.tax_number && invoice.data?.client?.tax_number != 'null'">
-                                                GSTIN : {{ invoice.data?.client?.tax_number }}
+                                            <div
+                                                class="fw-semibold fs-4 text-gray-600"
+                                                v-if="
+                                                    invoice.data?.client
+                                                        ?.tax_number &&
+                                                    invoice.data?.client
+                                                        ?.tax_number != 'null'
+                                                "
+                                            >
+                                                GSTIN :
+                                                {{
+                                                    invoice.data?.client
+                                                        ?.tax_number
+                                                }}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="flex-grow-1">
                                         <div class="table-responsive mb-0">
-                                            <table class="table table-bordered bordered border">
+                                            <table
+                                                class="table table-bordered bordered border"
+                                            >
                                                 <thead class="text-center">
-                                                    <tr class="bg-gray-300 fs-6 fw-bold text-gray-800">
-                                                        <th class="col-3 text-start ps-5">Project Name</th>
-                                                        <th class="col-3">CPI</th>
-                                                        <th class="col-3">Quantity</th>
-                                                        <th class="col-3 text-end pe-5">Amount</th>
+                                                    <tr
+                                                        class="bg-gray-300 fs-6 fw-bold text-gray-800"
+                                                    >
+                                                        <th
+                                                            class="col-3 text-start ps-5"
+                                                        >
+                                                            Project Name
+                                                        </th>
+                                                        <th class="col-3">
+                                                            CPI
+                                                        </th>
+                                                        <th class="col-3">
+                                                            Quantity
+                                                        </th>
+                                                        <th
+                                                            class="col-3 text-end pe-5"
+                                                        >
+                                                            Amount
+                                                        </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="text-center">
-                                                    <tr class="fw-bold text-gray-700 fs-5"
-                                                        v-for="(item, index) in invoice.data.items" :key="index">
-                                                        <td class="text-start ps-5">
-                                                            {{ item.project_name }}
+                                                    <tr
+                                                        class="fw-bold text-gray-700 fs-5"
+                                                        v-for="(
+                                                            item, index
+                                                        ) in invoice.data.items"
+                                                        :key="index"
+                                                    >
+                                                        <td
+                                                            class="text-start ps-5"
+                                                        >
+                                                            {{
+                                                                item.project_name
+                                                            }}
                                                         </td>
-                                                        <td>{{ invoice.data.currency.symbol }} {{ item.cpi }}
+                                                        <td>
+                                                            {{
+                                                                invoice.data
+                                                                    .currency
+                                                                    .symbol
+                                                            }}
+                                                            {{ item.cpi }}
                                                         </td>
-                                                        <td>{{ item.quantity }}</td>
-                                                        <td class="text-end text-dark fw-bolder pe-5">
-                                                            {{ invoice.data.currency.symbol }} {{ (item.cpi *
-                                                                item.quantity).toFixed(2) }}
+                                                        <td>
+                                                            {{ item.quantity }}
+                                                        </td>
+                                                        <td
+                                                            class="text-end text-dark fw-bolder pe-5"
+                                                        >
+                                                            {{
+                                                                invoice.data
+                                                                    .currency
+                                                                    .symbol
+                                                            }}
+                                                            {{
+                                                                (
+                                                                    item.cpi *
+                                                                    item.quantity
+                                                                ).toFixed(2)
+                                                            }}
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td colspan="3"
-                                                            class="border-0 text-right px-10 text-gray-950 fw-bold fs-6">
+                                                        <td
+                                                            colspan="3"
+                                                            class="border-0 text-right px-10 text-gray-950 fw-bold fs-6"
+                                                        >
                                                             Sub Total
                                                         </td>
-                                                        <td class="border-0 text-right pe-5 text-gray-950 fw-bold fs-6">
-                                                            {{ invoice.data.currency.symbol }} {{ invoice.data.total_amount
+                                                        <td
+                                                            class="border-0 text-right pe-5 text-gray-950 fw-bold fs-6"
+                                                        >
+                                                            {{
+                                                                invoice.data
+                                                                    .currency
+                                                                    .symbol
+                                                            }}
+                                                            {{
+                                                                invoice.data
+                                                                    .total_amount
                                                             }}
                                                         </td>
                                                     </tr>
@@ -148,130 +263,294 @@ export default defineComponent({
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row my-5">
-                                    <div class="col-5">
-                                        <div class="d-flex  my-2">
-                                            <div class="fw-semibold w-200px pe-10 text-gray-600 fs-4">
-                                                Account Holder
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="row">
+                                            <div class="d-flex my-2">
+                                                <div
+                                                    class="fw-semibold w-200px pe-10 text-gray-600 fs-4"
+                                                >
+                                                    Account Holder
+                                                </div>
+                                                <div
+                                                    class="fw-bold fs-4 text-gray-800 flex-root text-start"
+                                                >
+                                                    A.R Solution
+                                                </div>
                                             </div>
-                                            <div class="fw-bold fs-4 text-gray-800  flex-root text-start">
-                                                A.R Solution
+                                            <div class="d-flex my-2">
+                                                <div
+                                                    class="fw-semibold w-200px pe-10 text-gray-600 fs-4"
+                                                >
+                                                    Account Number
+                                                </div>
+                                                <div
+                                                    class="fw-bold fs-4 flex-root text-gray-800 text-start"
+                                                >
+                                                    097863300000931
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="d-flex  my-2">
-                                            <div class="fw-semibold w-200px pe-10 text-gray-600 fs-4">
-                                                Account Number
+                                            <div class="d-flex my-2">
+                                                <div
+                                                    class="fw-semibold w-200px pe-10 text-gray-600 fs-4"
+                                                >
+                                                    IFSC
+                                                </div>
+                                                <div
+                                                    class="fw-bold fs-4 flex-root text-gray-800"
+                                                >
+                                                    YESB0000978
+                                                </div>
                                             </div>
-                                            <div class="fw-bold fs-4 flex-root text-gray-800 text-start">
-                                                097863300000931
-                                            </div>
-                                        </div>
-                                        <div class="d-flex  my-2">
-                                            <div class="fw-semibold w-200px pe-10 text-gray-600 fs-4">
-                                                IFSC
-                                            </div>
-                                            <div class="fw-bold fs-4 flex-root text-gray-800">
-                                                YESB0000978
-                                            </div>
-                                        </div>
-                                        <div class="d-flex  my-2">
-                                            <div class="fw-semibold w-200px pe-10 text-gray-600 fs-4">
-                                                Account Type
-                                            </div>
-                                            <div class="fw-bold fs-4 flex-root text-gray-800">
-                                                Current
+                                            <div class="d-flex my-2">
+                                                <div
+                                                    class="fw-semibold w-200px pe-10 text-gray-600 fs-4"
+                                                >
+                                                    Account Type
+                                                </div>
+                                                <div
+                                                    class="fw-bold fs-4 flex-root text-gray-800"
+                                                >
+                                                    Current
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-7">
+                                    <div class="col-6">
                                         <div v-if="invoice.data.client">
-                                            <div class="d-flex ">
-                                                <div class="fw-semibold w-250px  text-gray-700 fs-4">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div
+                                                    class="fw-semibold w-250px text-gray-700 fs-4"
+                                                >
                                                     Net payable amount :
                                                 </div>
-                                                <div class="fw-bold fs-4 text-gray-800  flex-root text-start"
-                                                    v-if="invoice?.data?.client?.tax_number != 'null'">
-                                                    {{ invoice?.data?.currency.symbol }}
-                                                    {{ invoice?.data?.total_amount }} X {{ invoice?.data?.conversion_rate }}
-                                                    INR
-                                                    =
-                                                    INR
-                                                    {{ Number((invoice?.data?.total_amount *
-                                                        invoice?.data?.conversion_rate))
-                                                        + Number(parseFloat((invoice?.data?.total_amount *
-                                                            invoice?.data?.conversion_rate) / 118 *
-                                                            invoice?.data?.tax_rate).toFixed(2)) }}
                                                 </div>
-                                                <div class="fw-bold fs-4 text-gray-800  flex-root" v-else>
-                                                    {{ invoice?.data?.currency.symbol }}
-                                                    {{ invoice?.data?.total_amount }} X {{ invoice?.data?.conversion_rate }}
-                                                    INR
-                                                    =
-                                                    INR
-                                                    {{ (invoice?.data?.total_amount *
-                                                        invoice?.data?.conversion_rate).toFixed(2)
+                                                <div class="col-6" v-if="
+                                                        invoice?.data?.client
+                                                            ?.tax_number !=
+                                                        'null'
+                                                    ">
+                                                <div
+                                                    class="fw-bold fs-4 text-gray-800 flex-root text-end"
+
+                                                >
+                                                    {{
+                                                        invoice?.data?.currency
+                                                            .symbol
+                                                    }}
+                                                    {{
+                                                        invoice?.data
+                                                            ?.total_amount
+                                                    }}
+                                                    X
+                                                    {{
+                                                        invoice?.data
+                                                            ?.conversion_rate
+                                                    }}
+                                                    INR = INR
+                                                    {{
+                                                        Number(
+                                                            invoice?.data
+                                                                ?.total_amount *
+                                                                invoice?.data
+                                                                    ?.conversion_rate
+                                                        ) +
+                                                        Number(
+                                                            parseFloat(
+                                                                ((invoice?.data
+                                                                    ?.total_amount *
+                                                                    invoice
+                                                                        ?.data
+                                                                        ?.conversion_rate) /
+                                                                    118) *
+                                                                    invoice
+                                                                        ?.data
+                                                                        ?.tax_rate
+                                                            ).toFixed(2)
+                                                        )
                                                     }}
                                                 </div>
+                                                </div>
+                                                <div class="col-6" v-else>
+                                                <div
+                                                    class="fw-bold fs-4 text-gray-800 flex-root text-end"
+
+                                                >
+                                                    {{
+                                                        invoice?.data?.currency
+                                                            .symbol
+                                                    }}
+                                                    {{
+                                                        invoice?.data
+                                                            ?.total_amount
+                                                    }}
+                                                    X
+                                                    {{
+                                                        invoice?.data
+                                                            ?.conversion_rate
+                                                    }}
+                                                    INR = INR
+                                                    {{
+                                                        (
+                                                            invoice?.data
+                                                                ?.total_amount *
+                                                            invoice?.data
+                                                                ?.conversion_rate
+                                                        ).toFixed(2)
+                                                    }}
+                                                </div>
+                                                </div>
                                             </div>
-                                            <div v-if="invoice?.data?.client?.tax_number != 'null'">
+                                            <div
+                                                v-if="
+                                                    invoice?.data?.client
+                                                        ?.tax_number != 'null'
+                                                "
+                                            >
                                                 <div class="d-flex my-2">
-                                                    <div class="fw-semibold w-250px  text-gray-700 fs-4">Invoice value
-                                                        before GST :
+                                                    <div
+                                                        class="fw-semibold w-250px text-gray-700 fs-4"
+                                                    >
+                                                        Invoice value before GST
+                                                        :
                                                     </div>
-                                                    <div class="fw-bold text-gray-800 fs-4 mx-1">
-                                                        INR {{ (
-                                                            invoice?.data?.total_amount *
-                                                            invoice?.data?.conversion_rate).toFixed(2) }}
+                                                    <div
+                                                        class="fw-bold fs-4 text-gray-800 flex-root text-end"
+                                                    >
+                                                        INR
+                                                        {{
+                                                            (
+                                                                invoice?.data
+                                                                    ?.total_amount *
+                                                                invoice?.data
+                                                                    ?.conversion_rate
+                                                            ).toFixed(2)
+                                                        }}
                                                     </div>
                                                 </div>
                                                 <div class="d-flex my-2">
-                                                    <div class="fw-semibold w-250px  text-gray-700 fs-4">GST value at
-                                                        {{ invoice?.data?.tax_rate }}% :
+                                                    <div
+                                                        class="fw-semibold w-250px text-gray-700 fs-4"
+                                                    >
+                                                        GST value at
+                                                        {{
+                                                            invoice?.data
+                                                                ?.tax_rate
+                                                        }}% :
                                                     </div>
-                                                    <div class="fw-bold text-gray-800 fs-4 mx-1">
-                                                        INR {{
-                                                            parseFloat((
-                                                                invoice?.data?.total_amount *
-                                                                invoice?.data?.conversion_rate).toFixed(2) / 118 *
-                                                                invoice?.data?.tax_rate).toFixed(2) }}
+                                                    <div
+                                                        class="fw-bold fs-4 text-gray-800 flex-root text-end"
+                                                    >
+                                                        INR
+                                                        {{
+                                                            parseFloat(
+                                                                ((
+                                                                    invoice
+                                                                        ?.data
+                                                                        ?.total_amount *
+                                                                    invoice
+                                                                        ?.data
+                                                                        ?.conversion_rate
+                                                                ).toFixed(2) /
+                                                                    118) *
+                                                                    invoice
+                                                                        ?.data
+                                                                        ?.tax_rate
+                                                            ).toFixed(2)
+                                                        }}
                                                     </div>
                                                 </div>
                                                 <div class="d-flex my-2">
-                                                    <div class="fw-semibold w-250px  text-gray-700 fs-4">Invoice value
-                                                        with
-                                                        GST :
+                                                    <div
+                                                        class="fw-semibold w-250px text-gray-700 fs-4"
+                                                    >
+                                                        Invoice value with GST :
                                                     </div>
-                                                    <div class="fw-bold text-gray-800 fs-4 mx-1">
-                                                        INR {{ Number((invoice?.data?.total_amount *
-                                                            invoice?.data?.conversion_rate))
-                                                            + Number(parseFloat((invoice?.data?.total_amount *
-                                                                invoice?.data?.conversion_rate) / 118 *
-                                                                invoice?.data?.tax_rate).toFixed(2)) }}
+                                                    <div
+                                                        class="fw-bold fs-4 text-gray-800 flex-root text-end"
+                                                    >
+                                                        INR
+                                                        {{
+                                                            Number(
+                                                                invoice?.data
+                                                                    ?.total_amount *
+                                                                    invoice
+                                                                        ?.data
+                                                                        ?.conversion_rate
+                                                            ) +
+                                                            Number(
+                                                                parseFloat(
+                                                                    ((invoice
+                                                                        ?.data
+                                                                        ?.total_amount *
+                                                                        invoice
+                                                                            ?.data
+                                                                            ?.conversion_rate) /
+                                                                        118) *
+                                                                        invoice
+                                                                            ?.data
+                                                                            ?.tax_rate
+                                                                ).toFixed(2)
+                                                            )
+                                                        }}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="d-flex " v-else>
-                                            <div class="fw-semibold w-250px  text-gray-700 fs-4">
+                                        <div class="d-flex" v-else>
+                                            <div
+                                                class="fw-semibold w-250px text-gray-700 fs-4"
+                                            >
                                                 Net payable amount :
                                             </div>
-                                            <div class="fw-bold fs-4 text-gray-800  flex-root">
-                                                {{ invoice?.data?.currency.symbol }}
-                                                {{ invoice?.data?.total_amount }} X {{ invoice?.data?.conversion_rate }}
-                                                INR
-                                                =
-                                                INR
-                                                {{ (invoice?.data?.total_amount *
-                                                    invoice?.data?.conversion_rate).toFixed(2)
+                                            <div
+                                                class="fw-bold fs-4 text-gray-800 flex-root text-end"
+                                            >
+                                                {{
+                                                    invoice?.data?.currency
+                                                        .symbol
+                                                }}
+                                                {{
+                                                    invoice?.data?.total_amount
+                                                }}
+                                                X
+                                                {{
+                                                    invoice?.data
+                                                        ?.conversion_rate
+                                                }}
+                                                INR = INR
+                                                {{
+                                                    (
+                                                        invoice?.data
+                                                            ?.total_amount *
+                                                        invoice?.data
+                                                            ?.conversion_rate
+                                                    ).toFixed(2)
                                                 }}
                                             </div>
                                         </div>
-                                        <div class="my-5 text-dark fw-bolder border-top  fs-2 text-start ">
+                                        <div
+                                            class="my-5 text-dark fw-bolder border-top fs-2 text-start"
+                                        >
                                             <div class="mt-5">
                                                 Notes / Terms
-                                                <div class="text-gray-800 fw-semibold  fs-4 text-start">
-                                                    1 {{ invoice?.data?.currency.name }} to {{
-                                                        invoice?.data?.conversion_rate }} INR ({{ invoice?.data?.date }})
+                                                <div
+                                                    class="text-gray-800 fw-semibold fs-4 text-start"
+                                                >
+                                                    1
+                                                    {{
+                                                        invoice?.data?.currency
+                                                            .name
+                                                    }}
+                                                    to
+                                                    {{
+                                                        invoice?.data
+                                                            ?.conversion_rate
+                                                    }}
+                                                    INR ({{
+                                                        invoice?.data?.date
+                                                    }})
                                                 </div>
                                             </div>
                                         </div>
@@ -279,27 +558,50 @@ export default defineComponent({
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center border-top pt-10">
+                        <div
+                            class="d-flex justify-content-between align-items-center border-top pt-10"
+                        >
                             <div class="mw-400px">
                                 <div class="d-flex flex-stack mb-3">
-                                    <div class="text-end fw-bold fs-4 text-gray-800">
+                                    <div
+                                        class="text-end fw-bold fs-4 text-gray-800"
+                                    >
                                         Contact Details
                                     </div>
                                 </div>
                                 <div class="d-flex flex-stack mb-3">
-                                    <div class="fw-semibold pe-10 text-gray-600 fs-4">Contact Number : </div>
-                                    <div class="text-end fw-bold fs-4 text-gray-800">+91 75038-76258</div>
+                                    <div
+                                        class="fw-semibold pe-10 text-gray-600 fs-4"
+                                    >
+                                        Contact Number :
+                                    </div>
+                                    <div
+                                        class="text-end fw-bold fs-4 text-gray-800"
+                                    >
+                                        +91 75038-76258
+                                    </div>
                                 </div>
                                 <div class="d-flex flex-stack mb-3">
-                                    <div class="fw-semibold pe-10 text-gray-600 fs-4">Contact Email : </div>
-                                    <div class="text-end fw-bold fs-4 text-gray-800">rahul.kumar@alrestion.com
+                                    <div
+                                        class="fw-semibold pe-10 text-gray-600 fs-4"
+                                    >
+                                        Contact Email :
+                                    </div>
+                                    <div
+                                        class="text-end fw-bold fs-4 text-gray-800"
+                                    >
+                                        rahul.kumar@alrestion.com
                                     </div>
                                 </div>
                             </div>
                             <div class="mw-400px">
                                 <div class="d-flex flex-stack">
                                     <!-- <Link href="/"> -->
-                                    <img alt="Logo" src="/assets/images/logo-light.png" style="height:100px;">
+                                    <img
+                                        alt="Logo"
+                                        src="/assets/images/logo-light.png"
+                                        style="height: 100px"
+                                    />
                                     <!-- </Link> -->
                                 </div>
                             </div>
@@ -309,8 +611,9 @@ export default defineComponent({
             </div>
         </div>
         <div class="d-flex justify-content-end mt-5">
-            <button class="btn btn-success" @click="printDiv('printableArea')"><i class="bi bi-filetype-pdf"></i>Save
-                PDF</button>
+            <button class="btn btn-success" @click="printDiv('printableArea')">
+                <i class="bi bi-filetype-pdf"></i>Save PDF
+            </button>
         </div>
     </AppLayout>
 </template>

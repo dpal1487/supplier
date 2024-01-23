@@ -82,7 +82,7 @@ export default defineComponent({
         <Head title="Clients" />
         <div class="card">
             <form @submit.prevent="search" class="card-header justify-content-start p-5 gap-2 gap-md-5">
-                <div class="d-flex align-items-center position-relative">
+                <div class="d-flex align-items-center position-relative w-200px">
                     <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24" viewBox="0 0 24 24"
                             fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
@@ -92,13 +92,14 @@ export default defineComponent({
                                 fill="currentColor"></path>
                         </svg>
                     </span>
-                    <input type="text" v-model="form.q" class="form-control form-control-solid w-250px ps-14"
+                    <input type="text" v-model="form.q" class="form-control form-control-solid ps-14"
                         placeholder="Search Client" />
-                    <Multiselect :options="$page.props.ziggy.status" label="name" value-prop="value" v-model="form.status"
-                        class="form-control form-control-solid w-150px mx-2" placeholder="Select Status" />
                 </div>
-
-                <button type="submit" class="btn btn-primary">
+                <div class="w-200px">
+                    <Multiselect :options="$page.props.ziggy.status" label="name" value-prop="value" v-model="form.status"
+                        class="form-control form-control-solid" placeholder="Select Status" />
+                </div>
+                <button type="submit" class="btn btn-primary w-200px">
                     Search
                 </button>
             </form>
