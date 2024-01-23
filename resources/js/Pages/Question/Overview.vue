@@ -85,7 +85,6 @@ export default defineComponent({
 </script>
 <template>
     <Head :title="isEdit ? 'Edit Answer' : `Add New Answer`" />
-
     <AppLayout :title="title">
         <template #breadcrumb>
             <li class="breadcrumb-item">
@@ -102,10 +101,10 @@ export default defineComponent({
                     <h3 class="fw-bold m-0">Manage Question </h3>
                 </div>
                 <button class="btn btn-primary btn-sm align-self-center" v-if="(!isEdit && !isAdd)"
-                    @click="isAdd = true, this.form = {}"><i class="bi bi-plus-circle "></i>Add A New Answer
+                    @click="isAdd = true, this.form = {}"><i class="bi bi-plus-circle "></i>Add New Answer
                 </button>
             </div>
-            <div class="card-body mx-10">
+            <div class="card-body">
                 <div class="row" v-if="isEdit || isAdd">
                     <div class="col-10">
                         <JetValidationErrors />

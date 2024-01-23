@@ -75,7 +75,6 @@ export default defineComponent({
                 </button>
             </div>
         </template>
-
         <Head :title="title" />
         <AnswerForm :show="isModalOpen" @hidemodal="hideAnswerForm" :id="activeId" :questions="questions" />
         <div class="card">

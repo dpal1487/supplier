@@ -36,7 +36,7 @@ export default defineComponent({
                                                 separator=',' :autoinit='true' />
                                         </div>
                                     </div>
-                                    <div class="fw-bold fs-6 text-gray-900">Answwers</div>
+                                    <div class="fw-bold fs-6 text-gray-900">Answers</div>
                                 </div>
                             </div>
                         </div>
