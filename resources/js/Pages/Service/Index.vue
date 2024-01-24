@@ -5,8 +5,6 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
-import Swal from "sweetalert2";
-import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import utils from "../../utils";
 import NoRecordMessage from "../../Components/NoRecordMessage.vue";
@@ -68,7 +66,6 @@ export default defineComponent({
 
         <Head title="Service" />
         <div class="card">
-            <div>
                 <form class="card-header justify-content-start p-5 gap-3" @submit.prevent="search()">
                     <div class="d-flex align-items-center position-relative">
                         <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
@@ -87,9 +84,8 @@ export default defineComponent({
                         Search
                     </button>
                 </form>
-            </div>
 
-            <div class="card-body pt-0">
+            <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                         <thead>
@@ -167,8 +163,20 @@ export default defineComponent({
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="services.meta">
-                    <Pagination :links="services.meta.links" />
+            </div>
+            <div class="card-footer">
+                <div class="row" v-if="services.data.length > 0">
+                    <div
+                        class="col-sm-12 d-flex align-items-center justify-content-between"
+                        v-if="services.meta"
+                    >
+                        <span class="fw-bold text-gray-700">
+                            Showing {{ services.meta.from }} to
+                            {{ services.meta.to }} of
+                            {{ services.meta.total }} entries
+                        </span>
+                        <Pagination :links="services.meta.links" />
+                    </div>
                 </div>
             </div>
         </div>

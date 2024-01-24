@@ -86,7 +86,7 @@ export default defineComponent({
                 </div>
                 <button type="submit" class="btn btn-primary w-100 mw-200px">Search</button>
             </form>
-            <div class="card-body pt-0">
+            <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                         <thead>
@@ -152,8 +152,9 @@ export default defineComponent({
                     </table>
                 </div>
             </div>
-            <div class="row mb-5 mx-5" v-if="suppliers.data.length > 0">
-                <div class="col-sm-12 d-flex align-items-center justify-content-between mb-5" v-if="suppliers.meta">
+            <div class="card-footer">
+                <div class="row" v-if="suppliers.data.length > 0">
+                <div class="col-sm-12 d-flex align-items-center justify-content-between" v-if="suppliers.meta">
                     <span class="fw-bold text-gray-700">
                         Showing {{ suppliers.meta.from }} to
                         {{ suppliers.meta.to }} of
@@ -161,6 +162,7 @@ export default defineComponent({
                     </span>
                     <Pagination :links="suppliers.meta.links" />
                 </div>
+            </div>
             </div>
         </div>
     </app-layout>

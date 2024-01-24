@@ -23,10 +23,10 @@ export default defineComponent({
         <div class="card-body pt-5 pb-0">
             <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
                 <div class="flex-grow-1">
-                    <div class="fs-2 fw-bold mb-5">
+                    <div class="fs-2 fw-bold mb-3">
                         <span class="text-gray-700 text-capitalize">{{ question?.question_key }}</span>
                     </div>
-                    <div class="d-flex flex-wrap flex-stack mx-3">
+                    <div class="d-flex flex-wrap flex-stack">
                         <div class="d-flex flex-column flex-grow-1">
                             <div class="d-flex flex-wrap">
                                 <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 mb-2">

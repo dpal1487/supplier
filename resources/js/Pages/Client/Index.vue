@@ -103,7 +103,7 @@ export default defineComponent({
                     Search
                 </button>
             </form>
-            <div class="card-body pt-0">
+            <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                         <thead>
@@ -170,14 +170,16 @@ export default defineComponent({
                     </table>
                 </div>
             </div>
-            <div class="row mb-5 mx-5" v-if="clients.data.length > 0">
-                <div class="col-sm-12 d-flex align-items-center justify-content-between mb-5" v-if="clients.meta">
+            <div class="card-footer">
+            <div class="row" v-if="clients.data.length > 0">
+                <div class="col-sm-12 d-flex align-items-center justify-content-between" v-if="clients.meta">
                     <span class="fw-bold text-gray-700">
                         Showing {{ clients.meta.from }} to {{ clients.meta.to }}
                         of {{ clients.meta.total }} entries
                     </span>
                     <Pagination :links="clients.meta.links" />
                 </div>
+            </div>
             </div>
         </div>
     </app-layout>

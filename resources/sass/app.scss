@@ -2069,7 +2069,7 @@ progress {
 }
 
 .table> :not(caption)>*>* {
-    padding: 0.75rem 0.75rem;
+    padding: 0.75rem 1.5rem;
     background-color: var(--bs-table-bg);
     border-bottom-width: 1px;
     box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
@@ -33788,7 +33788,7 @@ html:not([data-theme=dark]) .theme-light-bg-body {
 }
 
 .card .card-footer {
-    padding: 2rem 2.25rem;
+    padding: 1rem;
     color: var(--kt-card-cap-color);
     background-color: var(--kt-card-cap-bg);
     border-top: 1px solid var(--kt-card-border-color);
@@ -39674,11 +39674,11 @@ code:not([class*=language-]) {
 //     padding-left: 0;
 // }
 
-.table tr:last-child,
-.table th:last-child,
-.table td:last-child {
-    padding-right: 0;
-}
+// .table tr:last-child,
+// .table th:last-child,
+// .table td:last-child {
+//     padding-right: 0;
+// }
 
 .table tfoot tr:last-child,
 .table tbody tr:last-child {

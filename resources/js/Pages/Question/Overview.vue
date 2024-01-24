@@ -98,13 +98,13 @@ export default defineComponent({
         <div class="card mb-5 mb-xl-10">
             <div class="card-header">
                 <div class="card-title m-0">
-                    <h3 class="fw-bold m-0">Manage Question </h3>
+                    <h3 class="fw-bold m-0">Manage Question</h3>
                 </div>
                 <button class="btn btn-primary btn-sm align-self-center" v-if="(!isEdit && !isAdd)"
                     @click="isAdd = true, this.form = {}"><i class="bi bi-plus-circle "></i>Add New Answer
                 </button>
             </div>
-            <div class="card-body">
+            <div class="card-body p-0">
                 <div class="row" v-if="isEdit || isAdd">
                     <div class="col-10">
                         <JetValidationErrors />

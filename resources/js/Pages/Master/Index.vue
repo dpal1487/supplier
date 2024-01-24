@@ -122,7 +122,7 @@ export default defineComponent({
                     Report</a>
                 </div>
             </form>
-            <div class="card-body pt-0">
+            <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                         <thead>
@@ -169,7 +169,8 @@ export default defineComponent({
                         </tbody>
                     </table>
                 </div>
-                <div class="row" v-if="surveys?.data?.length > 0">
+                <div class="card-footer">
+                    <div class="row" v-if="surveys?.data?.length > 0">
                     <div class="col-sm-12 d-flex align-items-center justify-content-between" v-if="surveys.meta">
                         <span class="fw-bold text-gray-700">
                             Showing {{ surveys.meta.from }} to {{ surveys.meta.to }}
@@ -177,6 +178,7 @@ export default defineComponent({
                         </span>
                         <Pagination :links="surveys.meta.links" />
                     </div>
+                </div>
                 </div>
             </div>
         </div>

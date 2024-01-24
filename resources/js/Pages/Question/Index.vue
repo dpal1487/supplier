@@ -84,7 +84,6 @@ export default defineComponent({
 
         <Head title="Question" />
         <div class="card">
-            <div>
                 <form class="card-header justify-content-start p-5 gap-3" @submit.prevent="search()">
                     <div class="d-flex align-items-center position-relative">
                         <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
@@ -103,8 +102,7 @@ export default defineComponent({
                         Search
                     </button>
                 </form>
-            </div>
-            <div class="card-body pt-0">
+            <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-6 gy-5 text-left">
                         <thead>
@@ -174,8 +172,21 @@ export default defineComponent({
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="questions.meta">
-                    <Pagination :links="questions.meta.links" />
+            </div>
+
+            <div class="card-footer">
+                <div class="row" v-if="questions.data.length > 0">
+                    <div
+                        class="col-sm-12 d-flex align-items-center justify-content-between"
+                        v-if="questions.meta"
+                    >
+                        <span class="fw-bold text-gray-700">
+                            Showing {{ questions.meta.from }} to
+                            {{ questions.meta.to }} of
+                            {{ questions.meta.total }} entries
+                        </span>
+                        <Pagination :links="questions.meta.links" />
+                    </div>
                 </div>
             </div>
         </div>
