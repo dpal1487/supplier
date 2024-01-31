@@ -53,9 +53,19 @@ class MasterController extends Controller
                 ->whereDate('created_at', '<=', $request->to_date);
         }
         $surveys = $surveys->paginate(200)->appends(request()->query());
+      	$data = array();
+      	foreach($users as $user)
+        {
+          $data[] = array(
+          	'full_name' => $user->first_name." ".$user->last_name,
+            'id'=> $user->id
+          );
+        }
         return Inertia::render('Master/Index', [
             'surveys' => MasterResource::collection($surveys),
-            'users' => UserResource::collection($users)
+            'users' => [
+            'data'=>$data
+            ]
         ]);
     }
     public function exportReport(Request $request)

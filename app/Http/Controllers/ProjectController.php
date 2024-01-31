@@ -39,20 +39,6 @@ class ProjectController extends Controller
     }
     public function index(Request $request)
     {
-        if (!empty($request->order_by)) {
-            if ($request->order_by == 'project_id_asc') {
-                $projects = Project::orderBy('project_id', 'asc');
-            }
-            if ($request->order_by == 'project_id_desc') {
-                $projects = Project::orderBy('project_id', 'desc');
-            }
-            if (!empty($request->order_by == 'project_name_asc')) {
-                $projects = Project::orderBy('project_name', 'asc');
-            }
-            if (!empty($request->order_by == 'project_name_desc')) {
-                $projects = Project::orderBy('project_name', 'desc');
-            }
-        } else {
             $projects = Project::orderBy('updated_at', 'desc');
             if (Auth::user()->role->role->slug == 'user') {
                 $projects = $projects->where(['status' => 'live']);
@@ -60,14 +46,16 @@ class ProjectController extends Controller
             if (!empty($request->q)) {
                 $projects = $projects->where('project_name', 'like', "%{$request->q}%")->orWhere('project_id', 'like', "%{$request->q}%");
             }
+      		if(!$request->status){
+              	$projects = $projects->whereNotIn('status',['close']);
+             }
             if (!empty($request->status)) {
-                $projects = $projects->where('status', $request->status);
+              
+              $projects = $projects->where('status', $request->status);
             }
             if (!empty($request->client)) {
                 $projects = $projects->where('client_id', $request->client);
             }
-        }
-
         $projects = $projects->paginate(20)->appends(request()->query());
 
         return Inertia::render('Project/Index', [
