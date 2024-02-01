@@ -165,11 +165,47 @@ export default defineComponent({
             })
         },
         updateDate() {
-            if (this.form.due_date !== "") {
-                const currentDate = new Date(this.form.due_date);
-                currentDate.setDate(currentDate.getDate() + parseInt(this.form.selectedDays));
-                const formattedDate = currentDate.toISOString().split('T')[0];
-                this.form.due_date = formattedDate;
+            if (this.form.issue_date !== "") {
+                const currentDate = new Date(this.form.issue_date);
+                const selectedDays = parseInt(this.form.selectedDays);
+
+                // Check if currentDate is a valid date
+                if (!isNaN(currentDate.getTime())) {
+                    const year = currentDate.getFullYear();
+                    const month = currentDate.getMonth();
+                    let daysInMonth;
+
+                    // Calculate days in the month
+                    if (month === 1) { // February
+                        daysInMonth = new Date(year, month + 1, 0).getDate();
+                        console.log(daysInMonth)
+                    } else {
+                        daysInMonth = new Date(year, month + 1, 0).getDate();
+                        console.log(daysInMonth)
+
+                    }
+
+                    // Check for leap year and adjust February's days
+                    if (month === 2 && daysInMonth === 28 && (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0))) {
+                        daysInMonth = 29; // Leap year
+                    }
+
+                    currentDate.setDate(currentDate.getDate() + selectedDays);
+
+                    // Check if the new day exceeds the month's days
+                    if (currentDate.getDate() > daysInMonth) {
+                        currentDate.setDate(daysInMonth);
+                    }
+
+                    // Format the new due date
+                    const formattedDate = currentDate.toISOString().split('T')[0];
+                    console.log("Formatted Date: ", formattedDate);
+
+                    this.form.due_date = formattedDate;
+                } else {
+                    // Handle invalid date if necessary
+                    console.error("Invalid date format");
+                }
             }
         },
     },
@@ -477,7 +513,8 @@ export default defineComponent({
                                 </div>
                             </div>
                             <div class="mb-5">
-                                <label class="form-label fw-bold fs-6 text-gray-700" for="daysDropdown">Choose days:</label>
+                                <label class="form-label fw-bold fs-6 text-gray-700" for="daysDropdown">Select Due
+                                    Interval:</label>
                                 <select class="form-control form-control-solid" v-model="form.selectedDays"
                                     @change="updateDate">
                                     <option value="0">0 days</option>

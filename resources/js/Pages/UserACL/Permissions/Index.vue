@@ -43,7 +43,6 @@ export default defineComponent({
             else if (value) {
                 this.showModal = true;
                 this.isEdit = false;
-
             }
             else {
                 this.showModal = false;
@@ -99,7 +98,7 @@ export default defineComponent({
                     <table class="table align-middle table-row-dashed fs-6 gy-5 text-left">
                         <thead>
                             <tr class="text-gray-600 fw-bold fs-7 text-uppercase">
-                                <th v-for="(th, index) in tbody" :key="index" >
+                                <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
@@ -108,7 +107,8 @@ export default defineComponent({
                             <tr v-for="(permission, index) in permissions.data" :key="index">
                                 <td>{{ permission.name }}</td>
                                 <td>{{ permission.description }}</td>
-                                <td v-if="permission.role" class="text-uppercase">{{ permission.role?.map(r => r.name).join(' / ') }}</td>
+                                <td v-if="permission.role" class="text-uppercase">{{ permission.role?.map(r =>
+                                    r.name).join(' / ') }}</td>
                                 <td v-else>non</td>
                                 <td class="d-flex">
                                     <button class="btn btn-icon btn-active-light-primary w-30px h-30px mx-2"

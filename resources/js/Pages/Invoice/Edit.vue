@@ -74,6 +74,7 @@ export default defineComponent({
                 type: "Invoice",
                 issue_date: this.invoice.data.issue_date || "",
                 due_date: this.invoice.data.due_date || "",
+                interval_date: this.invoice.data.due_date,
                 selectedDays: this.invoice.data?.selected_days || 0,
                 conversion_rate: this.invoice.data.conversion_rate || "",
                 total_amount: this.invoice.data.total_amount || "",
@@ -163,15 +164,49 @@ export default defineComponent({
             })
         },
         updateDate() {
-            if (this.form.due_date !== "") {
+
+
+            if (this.form.issue_date !== "") {
                 if (this.form.selectedDays == 0) {
-                    this.form.due_date = this.invoice.data.due_date
-                }
-                else {
-                    const currentDate = new Date(this.form.due_date);
-                    currentDate.setDate(currentDate.getDate() + parseInt(this.form?.selectedDays));
-                    const formattedDate = currentDate.toISOString().split('T')[0];
-                    this.form.due_date = formattedDate;
+                    this.form.due_date = this.invoice.data.due_date;
+                } else {
+                    const currentDate = new Date(this.form.issue_date);
+                    const selectedDays = parseInt(this.form.selectedDays);
+                    // Check if currentDate is a valid date
+                    if (!isNaN(currentDate.getTime())) {
+                        const year = currentDate.getFullYear();
+                        const month = currentDate.getMonth();
+                        let daysInMonth;
+                        // Calculate days in the month
+                        if (month === 1) { // February
+                            daysInMonth = new Date(year, month + 1, 0).getDate();
+                        } else {
+                            daysInMonth = new Date(year, month + 1, 0).getDate();
+                        }
+                        // Check for leap year and adjust February's days
+                        if (month === 2 && daysInMonth === 28 && (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0))) {
+                            daysInMonth = 29; // Leap year
+                        }
+                        currentDate.setDate(currentDate.getDate() + selectedDays);
+                        // Check if the new day exceeds the month's days
+                        if (currentDate.getDate() > daysInMonth) {
+                            currentDate.setDate(daysInMonth);
+                        }
+                        // Format the new due date
+                        const formattedDate = currentDate.toISOString().split('T')[0];
+                        console.log("Formatted Date: ", formattedDate);
+
+                        const originalDueDate = new Date(this.invoice.data.due_date);
+                        const differenceInMilliseconds = currentDate - originalDueDate;
+                        const differenceInDays = Math.abs(Math.floor(differenceInMilliseconds / (24 * 60 * 60 * 1000)));
+
+                        console.log("Difference in days: ", differenceInDays);
+                        this.form.difference_date = differenceInDays;
+                        this.form.due_date = formattedDate;
+                    } else {
+                        // Handle invalid date if necessary
+                        console.error("Invalid date format");
+                    }
                 }
             }
         },
@@ -482,6 +517,17 @@ export default defineComponent({
                                 </div>
                             </div>
                             <div class="mb-5">
+                                <label class="form-label fw-bold fs-6 text-gray-700" for="daysDropdown">Select Due
+                                    Interval:</label>
+                                <select class="form-control form-control-solid" v-model="form.selectedDays"
+                                    @change="updateDate">
+                                    <option value="0">0 days</option>
+                                    <option value="15">15 days</option>
+                                    <option value="30">30 days</option>
+                                    <option value="45">45 days</option>
+                                </select>
+                            </div>
+                            <div class="mb-5">
                                 <label class="form-label fw-bold fs-6 text-gray-700">Due Date</label>
                                 <input type="date" v-model="v$.form.due_date.$model" class="form-control form-control-solid"
                                     :class="v$.form.due_date.$errors.length > 0
@@ -492,16 +538,7 @@ export default defineComponent({
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
-                            <div class="mb-5">
-                                <label class="form-label fw-bold fs-6 text-gray-700" for="daysDropdown">Choose days:</label>
-                                <select class="form-control form-control-solid" v-model="form.selectedDays"
-                                    @change="updateDate">
-                                    <option value="0">0 days</option>
-                                    <option value="15">15 days</option>
-                                    <option value="30">30 days</option>
-                                    <option value="45">45 days</option>
-                                </select>
-                            </div>
+
                             <div class="separator separator-dashed mb-8"></div>
                             <div class="mb-0">
                                 <button type="submit" href="#" class="btn btn-primary w-100" id="kt_invoice_submit_button">

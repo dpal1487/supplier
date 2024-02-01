@@ -74,11 +74,18 @@ export default defineComponent({
     },
     async mounted() {
         if (this.id !== '') {
-            this.isLoading = true;
-            const response = await axios.get(`/permission/${this.id}/edit`);
-            this.form.name = response?.data?.permission.name;
-            this.form.description = response?.data?.permission.description
-            this.form.id = this.id;
+            if (this.isEdit == false) {
+                this.form.name = '';
+                this.form.description = '';
+                this.form.id = '';
+            }
+            else {
+                this.isLoading = true;
+                const response = await axios.get(`/permission/${this.id}/edit`);
+                this.form.name = response?.data?.permission.name;
+                this.form.description = response?.data?.permission.description
+                this.form.id = this.id;
+            }
             this.isLoading = false;
         }
     }

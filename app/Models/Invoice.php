@@ -9,11 +9,14 @@ class Invoice extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'client_id', 'invoice_number', 'issue_date', 'add_days', 'due_date', 'from_address', 'to_address', 'currency_id', 'type', 'tax_rate', 'client', 'conversion_rate', 'notes', 'status', 'total_amount'
+        'client_id', 'invoice_number', 'issue_date', 'add_days', 'due_date', 'interval_date' , 'from_address', 'to_address', 'currency_id', 'type', 'tax_rate', 'client', 'conversion_rate', 'notes', 'status', 'total_amount'
     ];
     protected static function boot()
     {
         parent::boot();
+        static::deleting(function ($invoice) {
+            $invoice->items()->delete();
+        });
     }
     public function client()
     {

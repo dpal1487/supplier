@@ -20,6 +20,9 @@ class Supplier extends Model
         static::creating(function (Model $model) {
             $model->setAttribute($model->getKeyName(), Uuid::uuid4());
         });
+        static::deleting(function ($supplier) {
+            $supplier->supplier_redirect->delete();
+        });
     }
     public function country()
     {

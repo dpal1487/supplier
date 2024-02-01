@@ -57,7 +57,8 @@ export default defineComponent({
     <Head :title="title" />
 
     <AppLayout :title="title">
-        <UserRoleForm v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)" :role="role_id" page="role_view"/>
+        <UserRoleForm v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)" :role="role_id"
+            page="role_view" />
 
         <template #breadcrumb>
             <li class="breadcrumb-item">
@@ -104,9 +105,9 @@ export default defineComponent({
                 </div>
                 <div class="col-12 col-lg-8">
                     <div class="card">
-                        <div class="card-header justify-content-between align-items-center gap-5 ">
-                            <div class="card-title ">
-                                <h2 class="d-flex align-items-center">Users Assigned
+                        <div class="card-header justify-content-between align-items-center g-5 ">
+                            <div class="card-title mt-2">
+                                <h2 class="d-flex align-items-center ">Users Assigned
                                     <span class="text-gray-600 fs-5 ms-2">({{ users?.meta?.total }})</span>
                                 </h2>
                             </div>
@@ -133,67 +134,50 @@ export default defineComponent({
                             </form>
                         </div>
                         <div class="card-body pt-0">
-                            <div class="dataTables_wrapper dt-bootstrap4 no-footer">
-                                <div class="table-responsive">
-                                    <table class="table align-middle table-row-dashed fs-6 gy-5 mb-0 no-footer">
-                                        <thead>
-                                            <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
-                                                <th class="min-w-150px sorting" tabindex="0"
-                                                    aria-controls="kt_roles_view_table" rowspan="1" colspan="1"
-                                                    aria-label="User: activate to sort column ascending"
-                                                    style="width: 313.5px;">User</th>
-                                                <th class="min-w-125px sorting" tabindex="0"
-                                                    aria-controls="kt_roles_view_table" rowspan="1" colspan="1"
-                                                    aria-label="Joined Date: activate to sort column ascending"
-                                                    style="width: 240.281px;">Joined Date</th>
-                                                <th class="text-end min-w-100px sorting_disabled" rowspan="1" colspan="1"
-                                                    aria-label="Actions" style="width: 148.125px;">
-                                                    Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="fw-semibold text-gray-600">
-                                            <tr v-for="user in users.data">
-                                                <td class="d-flex align-items-center">
-                                                    <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-                                                        <Link href="../users/view.html">
-                                                        <div class="symbol-label">
-                                                            <img src="/assets/media/avatars/300-6.jpg" alt="Emma Smith"
-                                                                class="w-100">
-                                                        </div>
-                                                        </Link>
-                                                    </div>
-                                                    <div class="d-flex flex-column">
-                                                        <Link :href="`/user/${user.id}`"
-                                                            class="text-gray-800 text-hover-primary mb-1">
-                                                        {{ user?.full_name }}
-                                                        </Link>
-                                                        <span>{{ user?.email }}</span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    {{ user?.join_date }}
-                                                </td>
-                                                <td class="text-end">
-                                                    <Link class="btn btn-sm btn-light menu-dropdown"
-                                                        :href="`/user/${user.id}/edit`"><i
-                                                        class="bi bi-pencil me-2"></i>Edit
+                            <div class="table-responsive">
+                                <table class="table align-middle table-row-dashed fs-6 gy-5 mb-0 no-footer">
+                                    <thead>
+                                        <tr class="text-start text-muted text-gray-700 fw-bold fs-7 text-uppercase gs-0">
+                                            <th class="min-w-150px">User</th>
+                                            <th class="min-w-150px">Joined Date</th>
+                                            <th class="text-end min-w-150px">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="fw-semibold text-gray-500">
+                                        <tr v-for="user in users.data">
+                                            <td class="d-flex align-items-center">
+                                                <div class="d-flex flex-column">
+                                                    <Link :href="`/user/${user.id}`"
+                                                        class="text-gray-800 fw-bold text-hover-primary mb-1">
+                                                    {{ user?.full_name }}
                                                     </Link>
-
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                                    <span>{{ user?.email }}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {{ user?.join_date }}
+                                            </td>
+                                            <td class="text-end min-w-150px">
+                                                <Link class="btn btn-sm btn-light menu-dropdown"
+                                                    :href="`/user/${user.id}/edit`"><i class="bi bi-pencil me-2"></i>Edit
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                    </div>
-                    <div class="row m-5" v-if="users?.meta">
-                        <div class="col-sm-12 d-flex align-items-center justify-content-between mb-5">
-                            <span class="fw-bold text-gray-700">
-                                Showing {{ users?.meta?.from }} to {{ users?.meta?.to }}
-                                of {{ users?.meta?.total }} entries
-                            </span>
-                            <Pagination :links="users?.meta?.links" />
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-sm-12 d-flex align-items-center justify-content-between" v-if="users.meta">
+                                    <span class="fw-bold text-gray-700">
+                                        Showing {{ users.meta.from }} to
+                                        {{ users.meta.to }} of
+                                        {{ users.meta.total }} entries
+                                    </span>
+                                    <Pagination :links="users.meta.links" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

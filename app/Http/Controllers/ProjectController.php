@@ -39,23 +39,23 @@ class ProjectController extends Controller
     }
     public function index(Request $request)
     {
-            $projects = Project::orderBy('updated_at', 'desc');
-            if (Auth::user()->role->role->slug == 'user') {
-                $projects = $projects->where(['status' => 'live']);
-            }
-            if (!empty($request->q)) {
-                $projects = $projects->where('project_name', 'like', "%{$request->q}%")->orWhere('project_id', 'like', "%{$request->q}%");
-            }
-      		if(!$request->status){
-              	$projects = $projects->whereNotIn('status',['close']);
-             }
-            if (!empty($request->status)) {
-              
-              $projects = $projects->where('status', $request->status);
-            }
-            if (!empty($request->client)) {
-                $projects = $projects->where('client_id', $request->client);
-            }
+        $projects = Project::orderBy('updated_at', 'desc');
+        if (Auth::user()->role->role->slug == 'user') {
+            $projects = $projects->where(['status' => 'live']);
+        }
+        if (!empty($request->q)) {
+            $projects = $projects->where('project_name', 'like', "%{$request->q}%")->orWhere('project_id', 'like', "%{$request->q}%");
+        }
+        if (!$request->status) {
+            $projects = $projects->whereNotIn('status', ['close']);
+        }
+        if (!empty($request->status)) {
+
+            $projects = $projects->where('status', $request->status);
+        }
+        if (!empty($request->client)) {
+            $projects = $projects->where('client_id', $request->client);
+        }
         $projects = $projects->paginate(20)->appends(request()->query());
 
         return Inertia::render('Project/Index', [
@@ -344,15 +344,14 @@ class ProjectController extends Controller
     public function destroy($id)
     {
         $project = Project::where('id', $id)->first();
-        if (Project::where('id', $id)->delete()) {
-            $activity = ProjectActivity::create([
+        if ($project->delete()) {
+            ProjectActivity::create([
                 "project_id" => $project->project_id,
                 "type_id" => "status",
                 "text" => $project->project_name . ' was deleted',
                 "user_id"   => Auth::user()->id,
             ]);
             broadcast(new SendMessage($this->project($id)));
-
             broadcast(new NotificationEvent([
                 'user_id' => auth()->user()->id,
                 'message' => 'Project - ' . $this->project($id)?->project_name . ' with id - ' . $this->project($id)?->project_id . ' was deleted by ' . $this->user_details() . '.',
@@ -360,8 +359,6 @@ class ProjectController extends Controller
                 'title' => 'Project - ' . $this->project($id)?->project_id
             ]));
             auth()->user()->notify(new ActionNotification($project,  Auth::user(), $project?->project_name . ' was deleted'));
-
-            ProjectLink::where('project_id', $id)->delete();
             return response()->json(deleteMessage('Project'));
         }
         return response()->json(errorMessage());

@@ -47359,7 +47359,7 @@ code:not([class*=language-]) {
     ul,
     pre,
     div {
-        scrollbar-width: thin;
+        scrollbar-width: none;
         scrollbar-color: var(--kt-scrollbar-color) transparent;
     }
     main::-webkit-scrollbar,
@@ -54446,22 +54446,23 @@ html:not([data-theme=dark]) {
 }
 
 .customscrollbar::-webkit-scrollbar {
-    width: .3rem;
+    width: .2rem !important;
 }
 
 .customscrollbar::-webkit-scrollbar-track {
-    background-color: transparent;
+    background-color: transparent !important;
 }
 
 .customscrollbar::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    border-radius: 1.5rem;
-    width:1px;
+    background-color: transparent !important;
+    border-radius: .5rem !important;
+    width:1px !important;
 }
 
 .multiselect__content {
     max-height: 200px !important;
     min-width: 150px;
     background-color: var(--kt-input-solid-bg);
+    border: var(--kt-input-solid-bg);
     /* Height ko customize kare */
 }

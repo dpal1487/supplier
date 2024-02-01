@@ -33,6 +33,9 @@ class Project extends Model
         static::creating(function (Model $model) {
             $model->setAttribute($model->getKeyName(), Uuid::uuid4());
         });
+        static::deleting(function ($project) {
+            $project->project()->delete();
+        });
     }
     public function client()
     {
@@ -50,7 +53,7 @@ class Project extends Model
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
-   
+
     public function total()
     {
         return $this->hasMany(Respondent::class, 'project_id', 'id');

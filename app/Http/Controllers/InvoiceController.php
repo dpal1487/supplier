@@ -166,6 +166,7 @@ class InvoiceController extends Controller
         $invoice = Invoice::where('id', $id)->update([
             'issue_date' => $request->issue_date,
             'due_date' => $request->due_date,
+            'interval_date' => $request->interval_date,
             'add_days' => $request->selectedDays,
             'from_address' => $request->from_address,
             'to_address' => $request->to_address,

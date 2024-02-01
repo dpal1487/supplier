@@ -3,17 +3,30 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Carbon\Carbon;
 
 class InvoiceListResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
-     */
+
     public function toArray($request)
     {
+        $dateDifferenceInDays = '';
+        $beforeOrAfter = '';
+        if (!empty($this->interval_date)) {
+            $dueDate = Carbon::parse($this->due_date);
+            $intervalDate = Carbon::parse($this->interval_date);
+            if ($dueDate->lt($intervalDate)) {
+                // $intervalDate is before $dueDate
+                $beforeOrAfter = 'before';
+            } elseif ($dueDate->gt($intervalDate)) {
+                // $intervalDate is after $dueDate
+                $beforeOrAfter = 'after';
+            } else {
+                // The dates are equal
+                $beforeOrAfter = 'equal';
+            }
+            $dateDifferenceInDays = $dueDate->diffInDays($intervalDate);
+        }
         return [
             'id' => $this->id,
             'client' => $this->client,
@@ -21,6 +34,8 @@ class InvoiceListResource extends JsonResource
             'type' => $this->type,
             'issue_date' => $this->issue_date,
             'due_date' => $this->due_date,
+            'interval_date' => $dateDifferenceInDays ?  $dateDifferenceInDays . ' Days' : '',
+            'diffrence_date' => $beforeOrAfter,
             'total_amount' => round($this->total_amount, 2),
             'tax_rate' => $this->tax_rate,
             'conversion_rate' => $this->conversion_rate,

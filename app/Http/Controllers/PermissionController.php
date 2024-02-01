@@ -18,10 +18,7 @@ class PermissionController extends Controller
 
         if (!empty($request->q)) {
             $permissions = $permissions->where('name', 'like', "%$request->q");
-            // return $permissions->get();
         }
-        // return PermissionResource::collection($permissions->get());
-        // return $permissions->roles()->get();
         return Inertia::render('UserACL/Permissions/Index', [
             'permissions' => PermissionResource::collection($permissions->paginate(10)->appends($request->all())),
         ]);

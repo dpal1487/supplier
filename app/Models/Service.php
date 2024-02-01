@@ -9,6 +9,17 @@ class Service extends Model
 {
     use HasFactory;
     protected $fillable = ['name', 'slug', 'descriptions', 'page'];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($service) {
+            if ($service->image) {
+                $service->image->delete();
+                unlink($service->image->path . '/' . $service->image->name);
+            }
+        });
+    }
     public function image()
     {
         return $this->hasOne(Image::class, 'entity_id', 'id')->where('entity_type', 'service');

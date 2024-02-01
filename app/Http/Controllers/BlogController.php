@@ -15,11 +15,7 @@ use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index(Request $request)
     {
         $blogs = new Blog();
@@ -136,17 +132,11 @@ class BlogController extends Controller
         ], 400);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Blog  $blog
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Blog $blog)
     {
         if ($blog->delete()) {
-            return response()->json(['success' => true, 'message' => 'Blog has been deleted successfully.']);
+            return response()->json(deleteMessage('Blog'));
         }
-        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
+        return response()->json(errorMessage());
     }
 }

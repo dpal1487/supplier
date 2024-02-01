@@ -9,11 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
-use App\Traits\HasPermissionsTrait;
 use App\Models\{
     Role,
     Permission,
-    UsersRole,
     User
 };
 
@@ -31,7 +29,6 @@ class RoleController extends Controller
     }
     public function index()
     {
-
         $roles = Role::all();
         return Inertia::render('UserACL/RoleList', [
             'roles' => RoleResource::collection($roles),
@@ -109,10 +106,7 @@ class RoleController extends Controller
             $permissions = $request->input('permissions');
             if (!empty($permissions)) {
                 $permissionIds = Permission::whereIn('name', $permissions)->pluck('id');
-
-                // return (count($role->permissions) != 0);
                 if (count($role->permissions) == 0) {
-                    // return $role->permissions;
                     $role->permissions()->attach($permissionIds);
                 }
                 $role->permissions()->sync($permissionIds);

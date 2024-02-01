@@ -18,9 +18,9 @@ export default defineComponent({
     <app-layout title="Dashboard">
         <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
             <div class="col-md-2">
-                <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end "
-                    style=" background-color: #298356;background-image:url('/assets/media/patterns/vector-1.png') ;">
-                    <div class="card-header py-5">
+                <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end"
+                    style=" background-color: #298356;background-image:url('/assets/media/patterns/vector-1.png') ; height: 100%;">
+                    <div class="card-header p-5">
                         <div class="card-title d-flex flex-column">
                             <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ projects.live_projects }}</span>
                             <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Live Projects</span>
@@ -30,8 +30,8 @@ export default defineComponent({
             </div>
             <div class="col-md-2">
                 <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end "
-                    style="background-color: #7f41f1;background-image:url('/assets/media/patterns/vector-1.png');">
-                    <div class="card-header py-5">
+                    style="background-color: #7f41f1;background-image:url('/assets/media/patterns/vector-1.png'); height: 100%;">
+                    <div class="card-header p-5">
                         <div class="card-title d-flex flex-column">
                             <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ projects.inactive_projects }}</span>
                             <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Hold Projects</span>
@@ -42,8 +42,8 @@ export default defineComponent({
 
             <div class="col-md-2 ">
                 <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end"
-                    style="background-color: #F1416C;background-image:url('/assets/media/patterns/vector-1.png') ;">
-                    <div class="card-header py-5">
+                    style="background-color: #F1416C;background-image:url('/assets/media/patterns/vector-1.png') ; height: 100%;">
+                    <div class="card-header p-5">
                         <div class="card-title d-flex flex-column">
                             <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ projects.cancelled_projects }}</span>
                             <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Cancelled Projects</span>
@@ -55,8 +55,8 @@ export default defineComponent({
             </div>
             <div class="col-md-2">
                 <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end "
-                    style="background-color: #f18741;background-image:url('/assets/media/patterns/vector-1.png');">
-                    <div class="card-header py-5">
+                    style="background-color: #f18741;background-image:url('/assets/media/patterns/vector-1.png');height: 100%;">
+                    <div class="card-header p-5">
                         <div class="card-title d-flex flex-column">
                             <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ projects.closed_projects }}</span>
                             <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Closed Projects</span>
@@ -66,8 +66,8 @@ export default defineComponent({
             </div>
             <div class="col-md-2">
                 <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end "
-                    style="background-color: #41cef1;background-image:url('/assets/media/patterns/vector-1.png') ;">
-                    <div class="card-header py-5">
+                    style="background-color: #41cef1;background-image:url('/assets/media/patterns/vector-1.png') ;height: 100%;">
+                    <div class="card-header p-5">
                         <div class="card-title d-flex flex-column">
                             <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ projects.archived_projects }}</span>
                             <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Archived Projects</span>
@@ -80,8 +80,8 @@ export default defineComponent({
             <div class="col-md-2">
 
                 <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end "
-                    style="background-color: #dc41f1;background-image:url('/assets/media/patterns/vector-1.png') ;">
-                    <div class="card-header py-5">
+                    style="background-color: #dc41f1;background-image:url('/assets/media/patterns/vector-1.png') ;height: 100%;">
+                    <div class="card-header p-5">
                         <div class="card-title d-flex flex-column">
                             <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ projects.invoiced_projects }}</span>
                             <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Invoiced Projects</span>

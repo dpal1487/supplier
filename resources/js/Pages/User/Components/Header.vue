@@ -29,7 +29,7 @@ export default defineComponent({
                 <div class="flex-grow-1">
                     <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
                         <div class="d-flex flex-column">
-                            <div class="d-flex align-items-center mb-2">
+                            <div class="d-flex align-items-center mb-2 text-capitalize">
                                 <a href="" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{
                                     user?.first_name }}
                                     {{ user?.last_name }}</a>

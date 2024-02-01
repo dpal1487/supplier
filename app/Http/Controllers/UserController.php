@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\UserProjectReports;
 use App\Http\Resources\RespondentResource;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\UserShowResource;
 use App\Models\Respondent;
 use App\Models\Role;
 use App\Models\Survey;
@@ -94,7 +95,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
         return Inertia::render('User/Overview', [
-            'user' => new UserResource($user),
+            'user' => new UserShowResource($user),
             'role' => $this->role,
         ]);
     }
@@ -167,7 +168,7 @@ class UserController extends Controller
         }
         return Inertia::render('User/Project', [
             'surveys' => RespondentResource::collection($surveys->paginate(20)->appends(request()->query())),
-            'user' => new UserResource($user),
+            'user' => new UserShowResource($user),
             'role' => $this->role,
         ]);
     }

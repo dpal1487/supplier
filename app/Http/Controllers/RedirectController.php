@@ -22,7 +22,7 @@ class RedirectController extends Controller
         if (in_array($request->segment(2), $this->status)) {
             if ($this->respondent = Respondent::where(['id' => $request->uid])->first()) {
                 if (Respondent::where(['id' => $request->uid, 'status' => null])->first()) {
-                    Respondent::where(['id' => $request->uid])->update(['status' => $request->segment(2),'end_ip'=>$request->ip()]);
+                    Respondent::where(['id' => $request->uid])->update(['status' => $request->segment(2), 'end_ip' => $request->ip()]);
                 }
                 if ($this->project = SupplierProject::where(['id' => $this->respondent->supplier_project_id])->first()) {
                     if ($request->segment(2) == 'complete') {
@@ -104,7 +104,7 @@ class RedirectController extends Controller
             } else {
 
                 if (!Respondent::where(['user_id' => $request->uid, 'status' => $request->segment(2), 'project_id' => $request->pid])->first()) {
-                    Respondent::create(['user_id' => $request->uid, 'status' => $request->segment(2), 'project_id' => $request->pid,'end_ip'=>$request->ip()]);
+                    Respondent::create(['user_id' => $request->uid, 'status' => $request->segment(2), 'project_id' => $request->pid, 'end_ip' => $request->ip()]);
                     if ($request->segment(2) == 'complete') {
                         $this->data = array(
                             'headTitle' => 'Completed',

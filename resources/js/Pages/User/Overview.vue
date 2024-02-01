@@ -125,12 +125,6 @@ export default defineComponent({
             <li class="breadcrumb-item text-muted">
                 {{ title }}
             </li>
-            <li class="breadcrumb-item">
-                <span class="bullet bg-gray-400 w-5px h-2px"></span>
-            </li>
-            <li class="breadcrumb-item text-muted">
-                {{ user?.data?.first_name }}
-            </li>
         </template>
         <Header :user="user.data" />
         <div class="card mb-5">
@@ -163,7 +157,7 @@ export default defineComponent({
                                                     <input-error :message="error.$message" />
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6  fv-plugins-icon-container">
+                                            <div class="col-lg-6 fv-plugins-icon-container">
                                                 <jet-input id="last_name" type="text" v-model="v$.form.last_name.$model"
                                                     :class="v$.form.last_name.$errors.length > 0
                                                         ? 'is-invalid'
@@ -194,7 +188,7 @@ export default defineComponent({
                                     <label class="col-lg-4 col-form-label fw-semibold fs-6">Role</label>
                                     <div class="col-lg-6">
                                         <div class="fv-plugins-icon-container">
-                                            <Multiselect :options="role.roles" label="name" valueProp="id"
+                                            <Multiselect :can-clear="false" :options="role.roles" label="name" valueProp="id"
                                                 :class="v$.form.role.$errors.length > 0 ? 'is-invalid form-control form-control-lg form-control-solid' : 'form-control form-control-lg form-control-solid'"
                                                 placeholder="Select Role" v-model="form.role" track-by="name"
                                                 :searchable="true" />
@@ -208,7 +202,7 @@ export default defineComponent({
                                     <label class="col-lg-4 col-form-label fw-semibold fs-6">Status</label>
                                     <div class="col-lg-6">
                                         <div class="fv-plugins-icon-container">
-                                            <Multiselect :options="status" label="name" valueProp="id"
+                                            <Multiselect :can-clear="false" :options="status" label="name" valueProp="id"
                                                 :class="v$.form.status.$errors.length > 0 ? 'is-invalid form-control form-control-lg form-control-solid' : 'form-control form-control-lg form-control-solid'"
                                                 placeholder="Select status" v-model="form.status" track-by="name"
                                                 :searchable="true" />
@@ -256,68 +250,40 @@ export default defineComponent({
                     </div>
                 </div>
                 <div v-else>
-                    <!--begin::Input group-->
                     <div class="card-body p-9">
-                        <!-- {{ user }} -->
-                        <!--begin::Row-->
                         <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-6 fw-bold fs-5 text-gray-800">Full Name</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
+                            <label class="col-6 fw-bold fs-5 text-gray-700">Full Name</label>
                             <div class="col-lg-6">
-                                <span class="fw-semibold fs-6 text-gray-800 ">{{ this.user?.data?.first_name }} {{
+                                <span class="fw-semibold fs-6 text-gray-500 ">{{ this.user?.data?.first_name }} {{
                                     this.user?.data?.last_name }}</span>
                             </div>
-                            <!--end::Col-->
                         </div>
-                        <!--end::Row-->
-                        <!--begin::Input group-->
                         <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-6 fw-bold fs-5 text-gray-800">Email</label>
-                            <!--end::Label-->
-
-                            <!--begin::Col-->
+                            <label class="col-6 fw-bold fs-5 text-gray-700">Email</label>
                             <div class="col-lg-6 fv-row">
-                                <span class="fw-semibold text-gray-800 fs-6">{{ this.user?.data?.email }}
+                                <span class="fw-semibold text-gray-500 fs-6">{{ this.user?.data?.email }}
                                 </span>
                             </div>
-                            <!--end::Col-->
                         </div>
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
                         <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-6 fw-bold fs-5 text-gray-800">Role</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
+                            <label class="col-6 fw-bold fs-5 text-gray-700">Role</label>
                             <div class="col-lg-6 fv-row">
-                                <span class="fw-semibold text-gray-800 fs-6">{{ this.user?.data?.role?.name }}
+                                <span class="fw-semibold text-gray-500 fs-6">{{ this.user?.data?.role?.name }}
                                 </span>
                             </div>
-                            <!--end::Col-->
                         </div>
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
                         <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-6 fw-bold fs-5 text-gray-800">Status</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
+                            <label class="col-6 fw-bold fs-5 text-gray-700">Status</label>
                             <div class="col-lg-6 fv-row">
                                 <span :class="`badge badge-light-${user?.data?.status == 1
                                     ? 'success'
                                     : 'danger'
                                     }`">{{ user?.data?.status ? 'Active' : 'Inactive' }}</span>
                             </div>
-                            <!--end::Col-->
                         </div>
-                        <!--end::Input group-->
                     </div>
                 </div>
             </div>
-            <!--end::Card body-->
         </div>
     </AppLayout>
 </template>

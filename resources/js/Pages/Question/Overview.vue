@@ -105,8 +105,8 @@ export default defineComponent({
                 </button>
             </div>
             <div class="card-body p-0">
-                <div class="row" v-if="isEdit || isAdd">
-                    <div class="col-10">
+                <div class="row m-5" v-if="isEdit || isAdd">
+                    <div class="col-10 mb-5">
                         <JetValidationErrors />
                         <AnswerForm @submitted="submit" :answer="form" :question="question.data">
                             <template #action>
@@ -128,7 +128,7 @@ export default defineComponent({
                         </AnswerForm>
                     </div>
                 </div>
-                <div class="row " v-else>
+                <div class="row mx-0" v-else>
                     <div class="table-responsive">
                         <table class="table align-middle table-row-dashed fs-6">
                             <thead>
@@ -143,7 +143,6 @@ export default defineComponent({
                                     <td>{{ answer.answer }}</td>
                                     <td v-if="(answer.order_by == 1)">Ascending</td>
                                     <td v-else="( answer.order_by == 0 )">Descending</td>
-
                                     <td>
                                         <div class="dropdown">
                                             <a href="#" class="btn btn-sm btn-light btn-active-light-primary"

@@ -153,16 +153,9 @@ class SupplierController extends Controller
     {
         $supplier = Supplier::where('id', $id)->first();
         if ($supplier->delete()) {
-            SupplierRedirect::where('supplier_id', $supplier->id)->delete();
-            return response()->json([
-                'success' => true,
-                'message' => 'Supplier Deleted Successfully'
-            ]);
+            return response()->json(deleteMessage('Supplier'));
         }
-        return response()->json([
-            'success' => false,
-            'message' => 'Something Went Wrong '
-        ]);
+        return response()->json(errorMessage());
     }
 
     public function changeStatus(Request $request)

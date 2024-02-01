@@ -49,13 +49,9 @@ class QuestionController extends Controller
             'language' => $request->language,
         ]);
         if ($question) {
-
             return response()->json(createMessage('Question'));
-            // return redirect('question')->with('flash', createMessage('Question'));
         }
         return response()->json(errorMessage());
-
-        // return redirect('question')->with('flash', errorMessage());
     }
 
     public function show($id)
@@ -88,8 +84,6 @@ class QuestionController extends Controller
 
         $data = Question::where(['id' => $request->id])->first();
         if ($data) {
-
-
             $question = $data->update([
                 'question_key' => $request->question_key,
                 'text' => $request->text,

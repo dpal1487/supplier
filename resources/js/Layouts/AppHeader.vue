@@ -4,6 +4,7 @@ import { Link } from "@inertiajs/inertia-vue3";
 import axios from "axios";
 import { Inertia } from "@inertiajs/inertia";
 import { toast } from "vue3-toastify";
+
 import _debounce from "lodash/debounce";
 export default defineComponent({
     props: ["sidebar", "isMobile"],
@@ -167,6 +168,9 @@ export default defineComponent({
                         <button @click="getNotifications(notificationDrop ? false : true)"
                             class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px position-relative">
                             <!-- <span class="badge badge-success mx-1 text-capitalize" >{{ notificationCount }}</span> -->
+                            <span
+                                class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink">
+                            </span>
                             <span class="svg-icon svg-icon-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-bell" viewBox="0 0 16 16">
@@ -390,20 +394,13 @@ export default defineComponent({
                             data-bs-toggle="dropdown">
                             <img src="/assets/media/avatars/300-1.jpg" alt="user" />
                         </div>
-
-                        <!--begin::User account menu-->
                         <div aria-labelled:by="dropdown-profile"
                             class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px">
-                            <!--begin::Menu item-->
                             <div class="menu-item px-3">
                                 <div class="menu-content d-flex align-items-center px-3">
-                                    <!--begin::Avatar-->
                                     <div class="symbol symbol-50px me-5">
                                         <img alt="Logo" src="/assets/media/avatars/300-1.jpg" />
                                     </div>
-                                    <!--end::Avatar-->
-
-                                    <!--begin::Username-->
                                     <div class="d-flex flex-column">
                                         <div class="fw-bold d-flex align-items-center fs-5">
                                             {{ $page.props.ziggy?.user.first_name }}
@@ -415,16 +412,9 @@ export default defineComponent({
                                             {{ $page.props.ziggy?.user.email }}
                                         </a>
                                     </div>
-                                    <!--end::Username-->
                                 </div>
                             </div>
-                            <!--end::Menu item-->
-
-                            <!--begin::Menu separator-->
                             <div class="separator my-2"></div>
-                            <!--end::Menu separator-->
-
-                            <!--begin::Menu item-->
                             <div class="menu-item px-5">
                                 <Link href="/account" class="menu-link px-5">
                                 My Profile
@@ -437,11 +427,20 @@ export default defineComponent({
                             </div>
                             <div class="menu-item px-5">
                                 <form method="post" @submit.prevent="logout">
-                                    <button type="submit" class="btn btn-sm" style="
-                                            border: transparent;
-                                            background-color: transparent;
-                                        ">
-                                        Logout
+                                    <button type="submit" class="menu-link px-5 w-100">
+                                        <span class="btn-label me-3">Logout</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            fill="#000000" width="14" height="14" version="1.1" id="Capa_1"
+                                            viewBox="0 0 384.971 384.971" xml:space="preserve">
+                                            <g>
+                                                <g id="Sign_Out">
+                                                    <path
+                                                        d="M180.455,360.91H24.061V24.061h156.394c6.641,0,12.03-5.39,12.03-12.03s-5.39-12.03-12.03-12.03H12.03    C5.39,0.001,0,5.39,0,12.031V372.94c0,6.641,5.39,12.03,12.03,12.03h168.424c6.641,0,12.03-5.39,12.03-12.03    C192.485,366.299,187.095,360.91,180.455,360.91z" />
+                                                    <path
+                                                        d="M381.481,184.088l-83.009-84.2c-4.704-4.752-12.319-4.74-17.011,0c-4.704,4.74-4.704,12.439,0,17.179l62.558,63.46H96.279    c-6.641,0-12.03,5.438-12.03,12.151c0,6.713,5.39,12.151,12.03,12.151h247.74l-62.558,63.46c-4.704,4.752-4.704,12.439,0,17.179    c4.704,4.752,12.319,4.752,17.011,0l82.997-84.2C386.113,196.588,386.161,188.756,381.481,184.088z" />
+                                                </g>
+                                            </g>
+                                        </svg>
                                     </button>
                                 </form>
                             </div>

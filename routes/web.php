@@ -294,6 +294,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 Route::get('/{id}', 'show')->name('invoice.show');
                 Route::get('{id}/edit', 'edit')->name('invoice.edit');
                 Route::post('{id}/update', 'update')->name('invoice.update');
+                Route::delete('destroy/{id}', 'destroy')->name('invoice.destroy');
+
             });
         });
         Route::get('invoice/{id}/currency-value', [CurrencyController::class, 'currenctValue'])->name('invoice.currency-value');
