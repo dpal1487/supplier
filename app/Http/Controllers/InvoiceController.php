@@ -96,7 +96,6 @@ class InvoiceController extends Controller
         try {
             Invoice::lockForUpdate()->get();
             $inv = 'INV-' . (str_pad((int)Invoice::orderBy('id', 'desc')->first()->id + 1, 4, '0', STR_PAD_LEFT));
-
             $invoice = Invoice::create([
                 'issue_date' => $request->issue_date,
                 'due_date' => $request->due_date,
