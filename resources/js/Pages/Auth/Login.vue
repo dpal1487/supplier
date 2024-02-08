@@ -33,13 +33,16 @@
             </div>
             <!--end::Input group--->
             <!--begin::Submit button-->
-            <div class="d-grid mb-10">
-                <primary-button :disabled="form.processing" :class="{ 'text-white-50': form.processing }">
+            <div class="d-grid mb-10" style=" place-content:center;">
+                <button type="submit" class="btn btn-primary w-100px" :disabled="form.processing"
+                    :class="{ 'text-white-50': form.processing }">
                     <div v-show="form.processing" class="spinner-border spinner-border-sm" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                    Log in
-                </primary-button>
+                    <span>
+                        Log in
+                    </span>
+                </button>
             </div>
             <!--end::Submit button-->
         </form>
@@ -50,9 +53,7 @@
 import { defineComponent } from "vue";
 import JetAuthenticationCard from "@/Jetstream/AuthenticationCard.vue";
 import JetAuthenticationCardLogo from "@/Jetstream/AuthenticationCardLogo.vue";
-import PrimaryButton from "@/Jetstream/Button.vue";
 import JetInput from "@/Jetstream/Input.vue";
-import JetCheckbox from "@/Jetstream/Checkbox.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
@@ -67,9 +68,7 @@ export default defineComponent({
         Head,
         JetAuthenticationCard,
         JetAuthenticationCardLogo,
-        PrimaryButton,
         JetInput,
-        JetCheckbox,
         JetLabel,
         JetValidationErrors,
         InputError,

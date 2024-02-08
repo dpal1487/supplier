@@ -12,6 +12,7 @@ import axios from 'axios';
 import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/css/index.css";
+import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 
 export default defineComponent({
     props: ['clients', 'currencies', 'status'],
@@ -96,7 +97,8 @@ export default defineComponent({
         JetInput,
         JetLabel,
         InputError,
-        Loading
+        Loading,
+        JetValidationErrors
     },
     inputFormat: {
         type: String,
@@ -178,29 +180,21 @@ export default defineComponent({
                     // Calculate days in the month
                     if (month === 1) { // February
                         daysInMonth = new Date(year, month + 1, 0).getDate();
-                        console.log(daysInMonth)
                     } else {
                         daysInMonth = new Date(year, month + 1, 0).getDate();
-                        console.log(daysInMonth)
-
                     }
 
                     // Check for leap year and adjust February's days
                     if (month === 2 && daysInMonth === 28 && (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0))) {
                         daysInMonth = 29; // Leap year
                     }
-
                     currentDate.setDate(currentDate.getDate() + selectedDays);
-
                     // Check if the new day exceeds the month's days
                     if (currentDate.getDate() > daysInMonth) {
                         currentDate.setDate(daysInMonth);
                     }
-
                     // Format the new due date
                     const formattedDate = currentDate.toISOString().split('T')[0];
-                    console.log("Formatted Date: ", formattedDate);
-
                     this.form.due_date = formattedDate;
                 } else {
                     // Handle invalid date if necessary
@@ -235,6 +229,7 @@ export default defineComponent({
             </li>
         </template>
         <div class="app-content flex-column-fluid">
+            <JetValidationErrors />
             <form @submit.prevent="submit()" class="d-flex flex-column flex-lg-row">
                 <div class="flex-lg-row-fluid mb-10 mb-lg-0 me-lg-7 me-xl-12">
                     <div class="card">

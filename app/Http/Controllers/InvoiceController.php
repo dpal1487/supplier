@@ -13,6 +13,7 @@ use App\Http\Resources\InvoiceResource;
 use App\Models\Currency;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
@@ -75,6 +76,7 @@ class InvoiceController extends Controller
     }
     public function store(Request $request)
     {
+
         $request->validate([
             'issue_date' => 'required',
             'due_date' => 'required',
@@ -88,37 +90,48 @@ class InvoiceController extends Controller
             'status' => 'required',
             'total_amount' => 'required'
         ]);
-        $inv = 'INV-' . (str_pad((int)Invoice::orderBy('id', 'desc')->first()->id + 1, 4, '0', STR_PAD_LEFT));
 
-        $invoice = Invoice::create([
-            'issue_date' => $request->issue_date,
-            'due_date' => $request->due_date,
-            'add_days' => $request->selectedDays,
-            'invoice_number' => $inv,
-            'from_address' => $request->from_address,
-            'to_address' => $request->to_address,
-            'type' => $request->type,
-            'tax_rate' => $request->tax_rate,
-            'client_id' => $request->client,
-            'conversion_rate' => $request->conversion_rate,
-            'currency_id' => $request->currency['id'],
-            'total_amount' => $request->total_amount,
-            'notes' => $request->notes,
-            'status' => $request->status,
-            'total_amount' => $request->total_amount,
-        ]);
-        foreach ($request->items as $value) {
-            $invoiceItem = InvoiceItem::create([
-                'invoice_id' => $invoice->id,
-                'project_name' => $value['project_name'],
-                'cpi' => $value['cpi'],
-                'quantity' => $value['quantity'],
+
+        DB::beginTransaction();
+        try {
+            Invoice::lockForUpdate()->get();
+            $inv = 'INV-' . (str_pad((int)Invoice::orderBy('id', 'desc')->first()->id + 1, 4, '0', STR_PAD_LEFT));
+
+            $invoice = Invoice::create([
+                'issue_date' => $request->issue_date,
+                'due_date' => $request->due_date,
+                'add_days' => $request->selectedDays,
+                'invoice_number' => $inv,
+                'from_address' => $request->from_address,
+                'to_address' => $request->to_address,
+                'type' => $request->type,
+                'tax_rate' => $request->tax_rate,
+                'client_id' => $request->client,
+                'conversion_rate' => $request->conversion_rate,
+                'currency_id' => $request->currency['id'],
+                'total_amount' => $request->total_amount,
+                'notes' => $request->notes,
+                'status' => $request->status,
+                'total_amount' => $request->total_amount,
             ]);
+            foreach ($request->items as $value) {
+                $invoiceItem = InvoiceItem::create([
+                    'invoice_id' => $invoice->id,
+                    'project_name' => $value['project_name'],
+                    'cpi' => $value['cpi'],
+                    'quantity' => $value['quantity'],
+                ]);
+            }
+            DB::commit();
+
+            if ($invoiceItem) {
+                return redirect('/invoices')->with('flash', createMessage('Invoice'));
+            }
+            return redirect()->back()->withErrors(errorMessage());
+        } catch (\Exception $e) {
+            // Handle any errors
+            DB::rollback();
         }
-        if ($invoiceItem) {
-            return redirect('/invoices')->with('flash', createMessage('Invoice'));
-        }
-        return redirect()->back()->withErrors(errorMessage());
     }
 
     public function edit($id)
