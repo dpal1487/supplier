@@ -114,12 +114,14 @@ class InvoiceController extends Controller
                 'total_amount' => $request->total_amount,
             ]);
             foreach ($request->items as $value) {
-                $invoiceItem = InvoiceItem::create([
-                    'invoice_id' => $invoice->id,
-                    'project_name' => $value['project_name'],
-                    'cpi' => $value['cpi'],
-                    'quantity' => $value['quantity'],
-                ]);
+                if (!empty($value['project_name'])) {
+                    $invoiceItem = InvoiceItem::create([
+                        'invoice_id' => $invoice->id,
+                        'project_name' => $value['project_name'],
+                        'cpi' => $value['cpi'],
+                        'quantity' => $value['quantity'],
+                    ]);
+                }
             }
             DB::commit();
 
@@ -194,12 +196,14 @@ class InvoiceController extends Controller
         ]);
         InvoiceItem::where('invoice_id', $id)->delete();
         foreach ($request->items as $value) {
-            $invoiceItem = InvoiceItem::create([
-                'invoice_id' => $id,
-                'project_name' => $value['project_name'],
-                'cpi' => $value['cpi'],
-                'quantity' => $value['quantity'],
-            ]);
+            if (!empty($value['project_name'])) {
+                $update = InvoiceItem::create([
+                    'invoice_id' => $invoice->id,
+                    'project_name' => $value['project_name'],
+                    'cpi' => $value['cpi'],
+                    'quantity' => $value['quantity'],
+                ]);
+            }
         }
         if ($invoice) {
             return redirect('/invoices')->with('flash', updateMessage('Invoice'));
