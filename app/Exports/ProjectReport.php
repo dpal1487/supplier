@@ -61,7 +61,7 @@ class ProjectReport implements FromQuery, WithMapping, WithHeadings
     }
     public function query()
     {
-        if (Project::where('status', 'close')->first()) {
+        if (Project::where(['id' => $this->id, 'status' => 'close'])->first()) {
             return CloseRespondent::where('project_id', $this->id);
         } else {
             return Respondent::where('project_id', $this->id);

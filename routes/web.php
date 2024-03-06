@@ -313,3 +313,4 @@ Route::group(['prefix' => 'survey'], function () {
 Route::group(['prefix' => 'redirect'], function () {
     Route::get('{slug}', [RedirectController::class, 'surveyEnd']);
 });
+

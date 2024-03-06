@@ -19,6 +19,14 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/';
     public const COMPANY = '/company';
+    /**
+     * The controller namespace for the application.
+     *
+     * When present, controller route declarations will automatically be prefixed with this namespace.
+     *
+     * @var string|null
+     */
+    protected $namespace = 'App\Http\Controllers';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
@@ -27,16 +35,56 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->mapApiRoutes();
+        $this->mapWebRoutes();
+        $this->mapPanelRoutes();
+        $this->mapMailRoutes();
+    }
+
+    /**
+     * Configure the rate limiters for the application.
+     *
+     * @return void
+     */
+
+
+    protected function mapWebRoutes()
+    {
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web.php'));
+    }
+
+    /**
+     * Define the "api" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapApiRoutes()
+    {
         $this->configureRateLimiting();
+        Route::prefix('api')
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/api.php'));
+    }
 
-        $this->routes(function () {
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('routes/api.php'));
+    protected function mapPanelRoutes()
+    {
+        Route::prefix('panel')
+            ->middleware('cors')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/panel.php'));
+    }
 
-            Route::middleware('web')
-                ->group(base_path('routes/web.php'));
-        });
+    protected function mapMailRoutes()
+    {
+        Route::prefix('mail')
+            ->middleware('cors')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/mail.php'));
     }
 
     /**
@@ -47,7 +95,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });
     }
 }
