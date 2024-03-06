@@ -2,6 +2,8 @@
 
 namespace App\Exports;
 
+use App\Models\CloseRespondent;
+use App\Models\Project;
 use App\Models\Respondent;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -59,6 +61,10 @@ class ProjectReport implements FromQuery, WithMapping, WithHeadings
     }
     public function query()
     {
-        return Respondent::where('project_id', $this->id);
+        if (Project::where('status', 'close')->first()) {
+            return CloseRespondent::where('project_id', $this->id);
+        } else {
+            return Respondent::where('project_id', $this->id);
+        }
     }
 }

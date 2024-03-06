@@ -32,14 +32,19 @@ class ImageController extends Controller
             $fileData = $this->uploadImage($path, $file);
             if ($request->image_id) {
                 $image = ImageModel::where('entity_id', $request->image_id)->first();
-                $imageUpdate = $image->update([
-                    'name' => $fileData['fileName'],
-                    'type' => $fileData['fileType'],
-                    'path' => $fileData['filePath'],
-                    'size' => $fileData['fileSize'],
-                    'entity_type' => $entity
-                ]);
-                return response()->json(['data' => new ImageResource($image), 'success' => true]);
+                if ($image) {
+                    if (file_exists($image->path)) {
+                        unlink($image->path . '/' . $image->name);
+                    }
+                    $imageUpdate = $image->update([
+                        'name' => $fileData['fileName'],
+                        'type' => $fileData['fileType'],
+                        'path' => $fileData['filePath'],
+                        'size' => $fileData['fileSize'],
+                        'entity_type' => $entity
+                    ]);
+                    return response()->json(['data' => new ImageResource($image), 'success' => true]);
+                }
             } else {
                 $image = ImageModel::create([
                     'name' => $fileData['fileName'],

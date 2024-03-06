@@ -18,12 +18,12 @@ export default defineComponent({
         }
     },
     components: {
-    AppLayout,
-    Head,
-    UserRoleForm,
-    Link,
-    ListPermissions
-},
+        AppLayout,
+        Head,
+        UserRoleForm,
+        Link,
+        ListPermissions
+    },
     methods: {
         toggleModal(value, role) {
             if (value, role) {
@@ -51,8 +51,8 @@ export default defineComponent({
 })
 </script>
 <template>
-    <Head :title="title" />
     <AppLayout :title="title">
+        <Head :title="title" />
         <UserRoleForm v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)" :role="role_id"
             page="role_list" />
         <template #breadcrumb>

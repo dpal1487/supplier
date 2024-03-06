@@ -33,7 +33,6 @@ export default defineComponent({
             this.isLoading = true;
             await utils.cloneProject(route('project.clone'), { id: id });
             this.isLoading = false;
-
         }
     },
     created() { },
