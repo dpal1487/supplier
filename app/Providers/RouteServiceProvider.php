@@ -26,7 +26,10 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string|null
      */
-    protected $namespace = 'App\Http\Controllers';
+    protected $namespace = 'App\\Http\\Controllers';
+    protected $namespacePanel = 'App\\Http\\Controllers\\Panel';
+    protected $namespaceApi = 'App\\Http\\Controllers\\Website';
+    protected $namespaceEmail = 'App\\Http\\Controllers\\Email';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
@@ -35,6 +38,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->configureRateLimiting();
         $this->mapApiRoutes();
         $this->mapWebRoutes();
         $this->mapPanelRoutes();
@@ -64,10 +68,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        $this->configureRateLimiting();
         Route::prefix('api')
             ->middleware('api')
-            ->namespace($this->namespace)
+            ->namespace($this->namespaceApi)
             ->group(base_path('routes/api.php'));
     }
 
@@ -75,7 +78,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix('panel')
             ->middleware('cors')
-            ->namespace($this->namespace)
+            ->namespace($this->namespacePanel)
             ->group(base_path('routes/panel.php'));
     }
 
@@ -83,7 +86,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix('mail')
             ->middleware('cors')
-            ->namespace($this->namespace)
+            ->namespace($this->namespaceEmail)
             ->group(base_path('routes/mail.php'));
     }
 

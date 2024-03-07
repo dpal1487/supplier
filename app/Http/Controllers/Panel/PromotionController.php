@@ -8,6 +8,7 @@ class PromotionController extends Controller
 {
     public function index()
     {
+        return "Promotion view page";
     	return view('backend.account.promotions');
     }
 }

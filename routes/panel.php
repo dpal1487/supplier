@@ -34,7 +34,9 @@ use Illuminate\Support\Facades\Broadcast;
 */
 
 
-Route::group(['prefix' => 'v1'], function () {
+// Route::group(['prefix' => 'v1'], function () {
+Route::group(['namespace' => 'panel', 'prefix' => 'v1'], function () {
+
 
 
 
@@ -74,7 +76,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('states', [AddressController::class, 'getStateByCountryId']);
     Route::get('cities', [AddressController::class, 'getCityByCountryId']);
 
-    Route::group(['middleware' => ['auth:sanctum']], function () {
+     Route::middleware('auth:sanctum')->group(function () {
         Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
         Route::group(['prefix' => 'account'], function () {

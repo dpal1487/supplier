@@ -4,11 +4,8 @@ namespace App\Http\Controllers\panel;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Files;
-use App\Models\User;
-use Validator,Redirect,Response;
-Use Image;
-
+use App\Models\{Files ,User};
+use Validator,Redirect,Response ,Image;
 
 class FileController extends Controller
 {

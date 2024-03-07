@@ -4,10 +4,9 @@ namespace App\Http\Controllers\panel;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\FeedbackCategory;
-use App\Models\Feedback;
-use JWTAuth;
-use App\Http\Resources\FeedbackResource;
+use App\Models\{FeedbackCategory ,Feedback};
+use Auth;
+use App\Http\Resources\Panel\FeedbackResource;
 class FeedbackController extends Controller
 {
    public function index(){
@@ -21,7 +20,7 @@ class FeedbackController extends Controller
            }
         else {
             return response()->json(['data'=>null,'meta'=>null,'success'=>false]);
-        } 
+        }
    }
 
    public function category(){

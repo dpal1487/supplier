@@ -8,12 +8,12 @@ use App\Models\PanelSurvey;
 use App\Models\PanelRespondent;
 use Illuminate\Http\Request;
 use JWTAuth;
-use App\Http\Resources\PanelSurveyResource;
+use App\Http\Resources\Panel\SurveyResource;
 class SurveyController extends Controller
 {
     private $data;
     public function index(){
-        
+
     $user =  JWTAuth::user();
     $panel_respondents = PanelRespondent::where('uid',$user->id)->get();
     if(count($panel_respondents)>0){
@@ -25,7 +25,7 @@ class SurveyController extends Controller
                 'survey_id'=>$panel_respondent->survey_id
             );
         }
-        $available = $panel_surveys = PanelSurvey::whereNotIn('id',$this->data)->count();    
+        $available = $panel_surveys = PanelSurvey::whereNotIn('id',$this->data)->count();
         $panel_surveys = PanelSurvey::whereNotIn('id',$this->data)->with(['project'=> function($query) {
             return $query->where('status','=','open');
         },])->get();
@@ -43,7 +43,7 @@ class SurveyController extends Controller
                 'survey_id'=>$panel_respondent->survey_id
             );
         }*/
-        $available = $panel_surveys = PanelSurvey::count();    
+        $available = $panel_surveys = PanelSurvey::count();
         $panel_surveys = PanelSurvey::with(['project'=> function($query) {
             return $query->where('status','=','open');
         },])->get();
@@ -54,6 +54,6 @@ class SurveyController extends Controller
            }
     }
 }
-    
-    
+
+
 }

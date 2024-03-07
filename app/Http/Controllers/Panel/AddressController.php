@@ -2,37 +2,32 @@
 
 namespace App\Http\Controllers\Panel;
 
-use JWTAuth;
+use Auth;
 use Validator;
-use App\Models\User;
-use App\Models\State;
-use App\Models\Address;
-use App\Models\Country;
-use App\Models\UserAddress;
 use Illuminate\Http\Request;
-use App\Http\Resources\AddressResource;
-use App\Http\Resources\CountryListResource;
-use App\Http\Resources\CountryResource;
-use App\Models\City;
+use App\Models\{User, State, Address, Country, UserAddress, City};
+use App\Http\Resources\Panel\{AddressResource, CountryListResource, CountryResource};
 
 class AddressController extends Controller
 {
     public function index()
     {
-        $user = JwtAuth::user();
+        $user = Auth::user();
 
         $countries = Country::with('states')->get();
 
-        // return  new AddressResource($user);
+        $address = Address::where(['entity_id' => $user->id, 'entity_type' => 'user'])->first();
 
-        $address = Address::with('address.country', 'address.state')->where('user_id', $user->id)->first();
-
-        return response()->json(['address' =>  new AddressResource($user), 'countries' => CountryResource::collection($countries), 'success' => true]);
+        return response()->json([
+            'address' => $address  ?   new AddressResource($address) : null,
+            'countries' => CountryResource::collection($countries),
+            'success' => true
+        ]);
     }
     public function update(Request $request)
     {
 
-        $user = JwtAuth::user();
+        $user = Auth::user();
 
         $validator = Validator::make($request->all(), [
             'address' => 'required',
@@ -45,8 +40,10 @@ class AddressController extends Controller
             return response()->json(['success' => false, 'message' => $validator->errors()->first()]);
         } else {
             $status = Address::updateOrCreate(
-                ['user_id' => $user->id],
+                ['entity_id' => $user->id],
                 [
+                    'entity_type' => 'user',
+                    'entity_id' => $user->id,
                     'address' => $request->address,
                     'country_id' => $request->country,
                     'state_id' => $request->state,

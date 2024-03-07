@@ -24,7 +24,6 @@ class UserResource extends JsonResource
             'join_date' => date('d-M-Y h:i A', strtotime($this->created_at)),
             'gender' => ucfirst($this->gender),
             'status' => $this->status,
-            'role' => $this->role?->role,
         ];
     }
 }

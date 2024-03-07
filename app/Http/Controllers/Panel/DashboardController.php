@@ -4,17 +4,9 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Wallet;
-use App\Models\Address;
-use App\Models\PanelSurvey;
-use App\Models\ReferralUser;
-use App\Models\NewsLetter;
-use App\Models\Report;
-use App\Models\ReportType;
-use App\Models\FeedbackCategory;
-use JWTAuth;
-use App\Http\Resources\PanelSurveyResource;
-use App\Http\Resources\NewsLetterResource;
+use App\Models\{Wallet , FeedbackCategory ,Address ,PanelSurvey ,ReferralUser ,NewsLetter ,Report ,ReportType};
+use Auth;
+use App\Http\Resources\Panel\{PanelSurveyResource , NewsLetterResource};
 class DashboardController extends Controller
 {
 	private $data;
@@ -31,7 +23,7 @@ class DashboardController extends Controller
 	}
 
 	public function dailySurvey(){
-        
+
     $user =  JWTAuth::user();
     $address = Address::where(['user_id'=>$user->id])->first();
     $panel_surveys = PanelSurvey::with(['project'=> function($query) use ($address) {
@@ -59,7 +51,7 @@ class DashboardController extends Controller
     }
 
     public function storeReport(Request $request){
-        
+
         $user = JwtAuth::user();
         $report = New Report();
         $report->user_id = $user->id;
@@ -68,7 +60,7 @@ class DashboardController extends Controller
         $result  = $report->save();
         if($result) {
             return response()->json(['message'=>'Report Submitted Successfully.','success'=>true]);
-        } 
+        }
     }
 
     public function referralUser(){
@@ -76,7 +68,7 @@ class DashboardController extends Controller
         $result = ReferralUser::where(['user_id'=>$user->id])->get();
         if($result) {
             return response()->json(['data'=>count($result),'success'=>true]);
-        } 
+        }
         }
     public function feedbackCategory(){
     $feedback_category = FeedbackCategory::all();

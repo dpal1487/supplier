@@ -8,6 +8,7 @@ class ReferralController extends Controller
 {
     public function index()
     {
-    	return view('backend.account.referrals');
+        return "account refrel view page view";
+        return view('backend.account.referrals');
     }
 }

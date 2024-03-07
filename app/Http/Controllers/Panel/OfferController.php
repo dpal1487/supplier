@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Panel;
 
 use Illuminate\Http\Request;
 use App\Models\Offer;
-use App\Http\Resources\OfferResource;
+use App\Http\Resources\Panel\OfferResource;
 
 class OfferController extends Controller
 {

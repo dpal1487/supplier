@@ -3,19 +3,15 @@
 namespace App\Http\Controllers\Panel;
 
 use Illuminate\Http\Request;
-use App\Models\Industries;
-use App\Models\Question;
-use App\Models\Answer;
-use App\Models\UserInformation;
-use App\Models\User;
-use JwtAuth;
+use App\Models\{Industries ,Question ,Answer , Industry, UserInformation ,User};
+use Auth;
 use Validator;
 use Redirect;
 class InfoController extends Controller
 {
     private $data=array(), $answers;
     public function index(){
-    	$industries = Industries::with('image','questions','questions.userinformations')->get();
+    	$industries = Industry::with('image','questions','questions.userinformations')->get();
         foreach($industries as $indistry)
         {
             $this->data[]=array(
@@ -24,7 +20,7 @@ class InfoController extends Controller
                 'image'=>$indistry->image,
                 'questions'=>count($indistry->questions)
             );
-            
+
         }
 
         return response()->json(['data'=>$this->data,'success'=>true]);
@@ -34,7 +30,7 @@ class InfoController extends Controller
         $userData='';
         $data=null;
         $isSelected = false;
-    	$user = JwtAuth::user();
+    	$user = Auth::user();
         $industry = Industries::find($id);
         $questions = Question::where('industry_id',$id)->with('answers')->get();
         if($questions!=null){
@@ -48,11 +44,11 @@ class InfoController extends Controller
 
                     else{
                         $isSelected = false;
-                    }   
+                    }
                 }
                 else{
                     $isSelected = false;
-                }   
+                }
                 $answers[] = array(
                      'id'=>$answer->id,
                      'question_id'=>$answer->question_id,
@@ -72,27 +68,27 @@ class InfoController extends Controller
             } else {
                 return response()->json(['data'=>null]);
             }
-            
+
         } else {
             return response()->json(['data'=>null]);
         }
-         
-    	
+
+
     }
 
     public function postProfile(Request $request, $id)
-    {   
-        
+    {
+
             $someJSON = $request->question;
             if(!empty($request->question)){
                 foreach ($someJSON as $key => $value) {
                 $user = UserInformation::updateOrCreate([
-                    'user_id' => JwtAuth::user()->id,
+                    'user_id' => Auth::user()->id,
                 'industry_id'=> $id,
                 'question_id' =>$key,
                 ],[
-                'user_id' => JwtAuth::user()->id,
-                'industry_id'=> $id,    
+                'user_id' => Auth::user()->id,
+                'industry_id'=> $id,
                 'question_id' =>$key,
                     'answers' =>json_encode($value),
                 ]);
@@ -100,9 +96,9 @@ class InfoController extends Controller
             if($user)
             {
                 return response()->json(['message'=>'Survey Updated Successfully!','success'=>true]);
-            }    
+            }
         }
-        
+
 
 	}
 }

@@ -7,7 +7,7 @@ use Validator;
 
 use App\Models\Review;
 use Illuminate\Http\Request;
-use App\Http\Resources\ReviewResource;
+use App\Http\Resources\Panel\ReviewResource;
 
 
 class ReviewController extends Controller

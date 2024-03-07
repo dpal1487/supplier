@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Models\Support;
-use App\Models\Support_ticket;
 use App\Models\SupportProblem;
 use Illuminate\Http\Request;
 use Validator;
 use DB;
 use Redirect;
-use JwtAuth;
-use App\Http\Resources\SupportTicketResource;
+use Auth;
+use App\Http\Resources\Panel\SupportTicketResource;
+use App\Models\SupportTicket;
+use Illuminate\Http\Response;
 
 class SupportController extends Controller
 {
@@ -21,45 +22,48 @@ class SupportController extends Controller
      */
     public function index()
     {
-        $user =  JwtAuth::user();
+        $user =  Auth::user();
         $support_problems = SupportProblem::all();
-        $tickets = Support_ticket::where(['user_id'=>$user->id,'status'=>0])->paginate(10);
-        $close_tickets = Support_ticket::where(['user_id'=>$user->id,'status'=>1])->get();
+        $tickets = SupportTicket::where(['user_id' => $user->id, 'status' => 0])->paginate(10);
+        $close_tickets = SupportTicket::where(['user_id' => $user->id, 'status' => 1])->get();
 
-        if(count($tickets)>0){
-            return SupportTicketResource::collection($tickets)->additional(['supportProblems'=>$support_problems,'close_tickets'=>$close_tickets,'success'=>true]);
-           } else {
-            return response()->json(['data'=>null,'supportProblems'=>$support_problems,'meta'=>null,'success'=>false]);
-           }
+        if (count($tickets) > 0) {
+            return SupportTicketResource::collection($tickets)->additional(['supportProblems' => $support_problems, 'close_tickets' => $close_tickets, 'success' => true]);
+        } else {
+            return response()->json(['data' => null, 'supportProblems' => $support_problems, 'meta' => null, 'success' => false]);
+        }
     }
 
     public function store(Request $request)
     {
         //return $request->all();
-        $user = JwtAuth::user();
+        $user = Auth::user();
         $validator = Validator::make($request->all(), [
+            'subject' => 'required',
+            'due_date' => 'required',
             'problem' => 'required',
             'priority' => 'required',
             'description' => 'required'
-            ]);
-        if($validator->fails()) {
-            return response()->json(['success'=>false,'message'=>$validator->errors()->first()]);
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'message' => $validator->errors()->first()]);
         } else {
-            $ticket = New Support_ticket();
-            $ticket->user_id = $user->id;
-            $ticket->problem = $request->problem;
-            $ticket->priority = $request->priority;
-            $ticket->description = $request->description;
-            if($ticket->save())
-            {
-            return response()->json(['success'=>true,'message'=>'Ticket created successfully.']);
-            }
-            else
-            {
-            return response()->json(['success'=>false,'message'=>'Opps someting went wrong']);
+            try {
+                $ticket = SupportTicket::create([
+                    'user_id' => $user->id,
+                    'subject' => $request->subject,
+                    'priority' => $request->priority,
+                    'problem' => $request->problem,
+                    'due_date' => $request->due_date,
+                    'description' => $request->description,
+                ]);
+                if ($ticket->save()) {
+                    return response()->json(['success' => true, 'message' => createMessage('Ticket')], Response::HTTP_OK);
+                }
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
             }
         }
-
     }
 
     /**
@@ -112,7 +116,7 @@ class SupportController extends Controller
     }
 
     public function AddTicket(Request $request){
-        $user =  JwtAuth::user();
+        $user =  Auth::user();
         $validator = Validator::make($request->all(), [
             'problem' => 'required',
             'priority' => 'required',
@@ -129,10 +133,10 @@ class SupportController extends Controller
             $project =  $request->project;
             $description =  $request->description;
             $result = DB::table('support_tickets')->insert([
-            'user_id' => $user_id,   
-            'problem' => $problem, 
+            'user_id' => $user_id,
+            'problem' => $problem,
             'priority' => $priority,
-            'project' => $project, 
+            'project' => $project,
             'description' => $description,
             'status' => '0',
             'created_at' => date('Y-m-d'),
@@ -141,7 +145,7 @@ class SupportController extends Controller
 
             if($result){
                 return response()->json(['message'=>'Ticket Created Successfully!','success'=>true]);
-            }    
+            }
 
         }
     }
@@ -166,17 +170,17 @@ class SupportController extends Controller
             $project =  $request->project;
             $description =  $request->description;
             $result = Support_ticket::where('id',$id)->update([
-            'user_id' => Auth::user()->id,   
-            'problem' => $problem, 
+            'user_id' => Auth::user()->id,
+            'problem' => $problem,
             'priority' => $priority,
-            'project' => $project, 
+            'project' => $project,
             'description' => $description,
             'updated_at' => date('Y-m-d H:i:s')
             ]);
 
             if($result){
                 return response()->json(['message'=>'Ticket Updated Successfully!','success'=>true]);
-            }    
+            }
 
         }
     }*/
