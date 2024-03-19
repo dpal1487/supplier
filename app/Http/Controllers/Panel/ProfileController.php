@@ -9,9 +9,8 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Response;
 
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\{Auth, Validator};
 use Maatwebsite\Excel\Facades\Excel;
-use Validator;
 use Redirect;
 
 class ProfileController extends Controller
@@ -25,7 +24,6 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
-
         $validator = Validator::make($request->all(), [
             'first_name' => 'required',
             'last_name' => 'required',
@@ -34,7 +32,7 @@ class ProfileController extends Controller
             'mobile' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => $validator->errors()->first()]);
+            return response()->json(['success' => false, 'message' => $validator->errors()->first()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
             $status = User::where('id', $user->id)->update([
@@ -42,9 +40,9 @@ class ProfileController extends Controller
                 'last_name' => $request->last_name,
                 'gender' => $request->gender,
                 'date_of_birth' => $request->dob,
-                'mobile' => $request->mobile
+                'mobile' => $request->mobile,
+                'country_id' => $request->country
             ]);
-
             if ($status) {
                 return response()->json(['message' => 'Profile successfully updated.', 'success' => true], Response::HTTP_OK);
             }
@@ -56,7 +54,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         if ($request->file()) {
-            $file = new FileController();
+            $file = new ImageController();
             return $file->updateProfileImage($request, $user);
         }
     }

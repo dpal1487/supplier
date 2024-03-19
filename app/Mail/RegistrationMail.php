@@ -11,16 +11,16 @@ class RegistrationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-      public $title; 
-      public $user; 
-      public function __construct($title, $user) 
+      public $title;
+      public $user;
+      public function __construct($title, $user)
       {
-      // 
-      $this->title = $title; 
-      $this->user= $user; 
+      //
+      $this->title = $title;
+      $this->user= $user;
       }
-      public function build() 
-      { 
+      public function build()
+      {
           return $this->subject($this->title)->view('registrationVerifyEmail');
       }
 }

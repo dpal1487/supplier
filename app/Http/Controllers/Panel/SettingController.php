@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Panel;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Panel\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Setting;
-use Hash;
-use Auth;
+use App\Models\{User, Setting};
+use Exception;
+use Illuminate\Support\Facades\{Auth, Hash, Validator};
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rules\Password;
-use Validator;
+use Illuminate\Database\QueryException;
 
 class SettingController extends Controller
 {
@@ -25,8 +24,6 @@ class SettingController extends Controller
     }*/
     public function updateChangePassword(Request $request)
     {
-        $user = Auth::user();
-        //Auth::user()->id;
         $validator = Validator::make($request->all(), [
             'old_password' => 'required|min:4',
             'password' => Password::min(8),
@@ -94,6 +91,43 @@ class SettingController extends Controller
 
         if ($status) {
             return response()->json(['message' => 'Setting updated successfully.', 'success' => true]);
+        }
+    }
+
+    public function deactivateAccount(Request $request)
+    {
+
+        try {
+            // Validate the request
+            $validator = Validator::make($request->all(), [
+                'password' => 'required',
+                'reason' => 'required',
+                'option' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
+            }
+            // Find the user
+            $user = Auth::user();
+            $singleuser = User::findOrFail($user->id);
+
+            // Check if the password matches
+            if (!Hash::check($request->password, $singleuser->password)) {
+                return response()->json(['message' => 'Invalid password'], 401);
+            }
+            $user->tokens()->delete();
+            $updateUser = $singleuser->update([
+                'status' => 0,
+                'deactivate_reason' => $request->reason,
+                'deactivate_type' => $request->option,
+            ]);
+            if ($updateUser) {
+                return response()->json(['message' => 'User deactivated successfully'], 200);
+            }
+        } catch (QueryException $e) {
+            return response()->json(['message' => 'Database error: ' . $e->getMessage()], 500);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }
 }

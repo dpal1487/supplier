@@ -15,9 +15,24 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
 
+    public function uid()
+    {
+        $user = Auth::guard('api')->user();
+        return $user->id;
+    }
+    public function user()
+    {
+        return Auth::guard('api')->user();
+    }
     public function getTokenId()
     {
         $user = Auth::user();
-        return $user->id;
+        $token = $user->currentAccessToken();
+
+        if ($token) {
+            return $token->tokenable_id;
+        } else {
+            return response()->json(['error' => 'Token not found.'], 404);
+        }
     }
 }

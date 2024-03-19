@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Panel\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Website\BlogController;
 use App\Http\Controllers\Website\ServiceController;
@@ -32,6 +33,9 @@ Route::get('email', [IndexController::class, 'index']);
 });*/
 
 Route::group(['prefix' => 'v1'], function () {
+
+    Route::post('login', [AuthController::class, 'authenticate']);
+
     Route::get('sliders', [IndexController::class, 'sliders']);
     Route::get('testimonials', [IndexController::class, 'testimonials']);
     Route::get('services', [ServiceController::class, 'index']);
@@ -51,4 +55,6 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get("own/quotafull", [RedirectController::class, 'redirect']);
         Route::get("own/terminate", [RedirectController::class, 'redirect']);
     });
+
+    Route::get('/me', [AuthController::class, 'getAuthenticatedUser'])->middleware('auth:sanctum');
 });

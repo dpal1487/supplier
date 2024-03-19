@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Panel;
 
+use App\Http\Resources\Panel\User\ImageResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -20,10 +21,13 @@ class UserResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'email' => $this->email,
-            'date_of_birth' => date('m/d/Y', strtotime($this->date_of_birth)),
+            'date_of_birth' => $this->date_of_birth,
             'join_date' => date('d-M-Y h:i A', strtotime($this->created_at)),
             'gender' => ucfirst($this->gender),
             'status' => $this->status,
+            'mobile' => $this->mobile,
+            'country_code' => $this->country,
+            'profile_photo' => $this->image ?  new ImageResource($this->image) : null,
         ];
     }
 }

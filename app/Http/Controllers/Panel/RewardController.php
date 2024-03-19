@@ -4,15 +4,16 @@ namespace App\Http\Controllers\Panel;
 
 use App\Models\WalletHistory;
 use Illuminate\Http\Request;
-use JWTAuth;
 use App\Http\Resources\Panel\WalletHistoryResource;
+use Illuminate\Support\Facades\Auth;
+
 class RewardController extends Controller
 {
 
     public function index()
     {
 
-        $user = JWTAuth::user();
+        $user = Auth::user();
         $credit = WalletHistory::where(['user_id'=>$user->id,'status'=>'Credit'])->sum('current_points');
         $debit = WalletHistory::where(['user_id'=>$user->id,'status'=>'Debit'])->sum('current_points');
         $available = $credit- $debit;

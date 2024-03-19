@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Panel;
 
-use Auth;
-use Validator;
+
 use Illuminate\Http\Request;
 use App\Models\{User, State, Address, Country, UserAddress, City};
 use App\Http\Resources\Panel\{AddressResource, CountryListResource, CountryResource};
+use Exception;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\{Auth, Validator};
 
 class AddressController extends Controller
 {
@@ -26,9 +28,6 @@ class AddressController extends Controller
     }
     public function update(Request $request)
     {
-
-        $user = Auth::user();
-
         $validator = Validator::make($request->all(), [
             'address' => 'required',
             'country' => 'required',
@@ -37,8 +36,10 @@ class AddressController extends Controller
             'pincode' => 'required'
         ]);
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => $validator->errors()->first()]);
-        } else {
+            return response()->json(['success' => false, 'message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
+        }
+        try {
+            $user = Auth::user();
             $status = Address::updateOrCreate(
                 ['entity_id' => $user->id],
                 [
@@ -52,9 +53,10 @@ class AddressController extends Controller
                 ]
             );
             if ($status) {
-                return response()->json(['message' => 'Address has been updated successfully!', 'success' => true]);
+                return response()->json(['message' => 'Address has been updated successfully!', 'success' => true], Response::HTTP_OK);
             }
-            return response()->json(['message' => 'Address not updated please try again.', 'success' => false]);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 'success' => false], Response::HTTP_CONFLICT);
         }
     }
     public function getStateByCountryId(Request $request)

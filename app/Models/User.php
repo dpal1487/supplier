@@ -14,8 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Authenticatable
 {
     use Billable;
-    use HasApiTokens, HasFactory, Notifiable, HasPermissionsTrait;
-    use HasFactory;
+    use HasPermissionsTrait;
+    use HasFactory, Notifiable, HasApiTokens;
     protected $primaryKey = 'id';
     protected $keyType = 'string';
     public $incrementing = false;
@@ -38,6 +38,10 @@ class User extends Authenticatable
         'password',
         'date_of_birth',
         'gender',
+        'mobile',
+        'country_id',
+        'deactivate_reason',
+        'deactivate_type'
     ];
 
     /**
@@ -109,10 +113,19 @@ class User extends Authenticatable
     }
     public function hasRole($role)
     {
-        
         if ($this->roles()->where('slug', $role)->first()) {
             return true;
         }
         return false;
+    }
+
+    public function country()
+    {
+        return $this->hasOne(Country::class, 'id', 'country_id');
+    }
+
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'user_id', 'id')->where('entity_type', 'user');
     }
 }

@@ -77,7 +77,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapPanelRoutes()
     {
         Route::prefix('panel')
-            ->middleware('cors')
+            ->middleware('api')
             ->namespace($this->namespacePanel)
             ->group(base_path('routes/panel.php'));
     }
@@ -85,7 +85,6 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapMailRoutes()
     {
         Route::prefix('mail')
-            ->middleware('cors')
             ->namespace($this->namespaceEmail)
             ->group(base_path('routes/mail.php'));
     }

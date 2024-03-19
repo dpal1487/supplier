@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Panel\ImageController;
 use App\Http\Controllers\Panel\AuthController;
 use App\Http\Controllers\Panel\InfoController;
 use App\Http\Controllers\Panel\OfferController;
@@ -56,6 +57,7 @@ Route::group(['namespace' => 'panel', 'prefix' => 'v1'], function () {
     //Panel Authentication
     //Here is the protected Admin Routes Group
     Route::post('login', [AuthController::class, 'authenticate']);
+    Route::post('token-refresh', [AuthController::class, 'refresh'])->name('user.token-refresh');
     Route::post('register', [AuthController::class, 'register']);
     // Route::post('sociallogin/{provider}', 'Auth\AuthController@SocialSignup');
     // Route::get('auth/{provider}/callback', 'OutController@index')->where('provider', '.*');
@@ -76,11 +78,11 @@ Route::group(['namespace' => 'panel', 'prefix' => 'v1'], function () {
     Route::get('states', [AddressController::class, 'getStateByCountryId']);
     Route::get('cities', [AddressController::class, 'getCityByCountryId']);
 
-     Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
         Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
         Route::group(['prefix' => 'account'], function () {
-            Route::post('/change-image', [ProfileController::class, 'profileImageUpdate']);
+            Route::post('/change-image/{entity}', [ImageController::class, 'store']);
             Route::get('/withdrawals', [WithdrawalController::class, 'index']);
             Route::get('/offer', [OfferController::class, 'index']);
             Route::get('/promotion', [PromotionController::class, 'index']);
@@ -93,6 +95,7 @@ Route::group(['namespace' => 'panel', 'prefix' => 'v1'], function () {
             Route::post('/change-password', [SettingController::class, 'updateChangePassword']);
             Route::get('/settings', [SettingController::class, 'index']);
             Route::post('/setting-update', [SettingController::class, 'updateSetting']);
+            Route::post('/deactivate', [SettingController::class, 'deactivateAccount']);
         });
         Route::get('/me', [AuthController::class, 'getAuthenticatedUser']);
 
