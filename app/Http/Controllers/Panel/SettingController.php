@@ -6,7 +6,7 @@ use App\Http\Controllers\Panel\Controller;
 use Illuminate\Http\Request;
 use App\Models\{User, Setting};
 use Exception;
-use Illuminate\Support\Facades\{Auth, Hash, Validator};
+use Illuminate\Support\Facades\{Auth, Cache, DB, Hash, Validator};
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Database\QueryException;
@@ -96,13 +96,12 @@ class SettingController extends Controller
 
     public function deactivateAccount(Request $request)
     {
-
         try {
             // Validate the request
             $validator = Validator::make($request->all(), [
                 'password' => 'required',
                 'reason' => 'required',
-                'option' => 'required',
+                'option' => 'required|string',
             ]);
             if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
@@ -110,7 +109,6 @@ class SettingController extends Controller
             // Find the user
             $user = Auth::user();
             $singleuser = User::findOrFail($user->id);
-
             // Check if the password matches
             if (!Hash::check($request->password, $singleuser->password)) {
                 return response()->json(['message' => 'Invalid password'], 401);
@@ -129,5 +127,38 @@ class SettingController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function activateAccount(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'otp' => 'required|digits:6',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'message' => $validator->errors()->first()], 400);
+        }
+        $email = $request->email;
+        $otp = $request->otp;
+        // Check if OTP exists in cache
+        if (!Cache::has('otp_' . $email)) {
+            return response()->json(['message' => 'OTP not found or expired', 'success' => false], Response::HTTP_BAD_REQUEST);
+        }
+        // Get the OTP from cache
+        $cachedOTP = Cache::get('otp_' . $email);
+        // Verify if OTP matches
+        if ($cachedOTP != $otp) {
+            return response()->json(['message' => 'Invalid OTP', 'success' => false], 400);
+        }
+        // Clear the OTP from cache after successful verification
+        Cache::forget('otp_' . $email);
+        $user = User::where('email', $email)->first();
+        if (!$user) {
+            return response()->json(['message' => 'User not found', 'success' => false], 404);
+        }
+
+        $user->status = 1; // Assuming you're using Laravel's built-in email verification feature
+        $user->save();
+        return response()->json(['message' => 'OTP verified successfully y', 'success' => true], Response::HTTP_OK);
     }
 }

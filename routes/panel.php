@@ -66,12 +66,14 @@ Route::group(['namespace' => 'panel', 'prefix' => 'v1'], function () {
     Route::get('sociallogin/{provider}', [SocialController::class, 'SocialSignup'])->name('social.oauth');
     Route::get('sociallogin/{provider}/callback', [SocialController::class, 'loginWithSocial'])->name('social.callback');
 
-    Route::post('email/verify-otp', [AuthController::class, 'verifyOtp']);
+    // Route::post('email/verify-otp', [AuthController::class, 'verifyOtp']);
+    Route::post('{type}/verify-otp', [AuthController::class, 'verifyOtp']);
     Route::post('email/verify', [AuthController::class, 'verify']);
     Route::post('email/resend-verification', [AuthController::class, 'resendVerification']);
-    Route::post('email/send-otp', [AuthController::class, 'sendOtp']);
 
-    Route::post('forget/send-otp', [ForgetController::class, 'sendOtp']);
+    //Send OTP 
+    Route::post('{type}/send-otp', [AuthController::class, 'sendOtp']);
+    // Route::post('forget/send-otp', [ForgetController::class, 'sendOtp']);
     Route::post('forget/verify-otp', [ForgetController::class, 'verifyOtp']);
     Route::get('customer-reviews', [FeedbackController::class, 'index']);
     Route::get('countries', [AddressController::class, 'getCountries']);
@@ -96,6 +98,7 @@ Route::group(['namespace' => 'panel', 'prefix' => 'v1'], function () {
             Route::get('/settings', [SettingController::class, 'index']);
             Route::post('/setting-update', [SettingController::class, 'updateSetting']);
             Route::post('/deactivate', [SettingController::class, 'deactivateAccount']);
+            Route::post('/{type}', [SettingController::class, 'activateAccount']);
         });
         Route::get('/me', [AuthController::class, 'getAuthenticatedUser']);
 

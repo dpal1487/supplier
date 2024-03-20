@@ -74,18 +74,30 @@ class AuthController extends Controller
     }
     public function sendOTP(Request  $request)
     {
-        $email = $request->email;
-        // Generate OTP
-        $otp = rand(100000, 999999);
-
-        // Store OTP in cache or database for verification
-        // For example, you can use Laravel Cache:
-        cache(['otp_' . $email => $otp], now()->addMinutes(15)); // Cache OTP for 15 minutes
-        // Send OTP via email
-        Mail::raw("Your OTP for verification is: $otp", function ($message) use ($email) {
-            $message->to($email)->subject('OTP Verification');
-        });
-        return response()->json(['message' => 'OTP sent successfully', 'success' => true], Response::HTTP_OK);
+        $validation = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ]);
+        if ($validation->fails()) {
+            return response()->json(['success' => false, 'message' => $validation->errors()->first()], Response::HTTP_BAD_REQUEST);
+        }
+        try {
+            $otp = rand(111111, 999999);
+            $email = $request->email;
+            $title = 'All Reasearch Account - ' . $otp . ' is your verification code for secure access';
+            // $customer_details = ['otp' => $otp, 'email' => $email];
+            // $sendmail = Mail::to($customer_details['email'])->send(new AccountMail($title, $customer_details));
+            cache(['otp_' . $email => $otp], now()->addMinutes(15)); // Cache OTP for 15 minutes
+            Mail::raw($title, function ($message) use ($email) {
+                $message->to($email)->subject('OTP Verification');
+            });
+            if (User::where('email', $email)->first()) {
+                return response()->json(['success' => true, 'message' => 'OTP successfully sent to ' . $email], Response::HTTP_OK);
+            } else {
+                return response()->json(['success' => false, 'message' => 'This Email not exist our database.'], Response::HTTP_NO_CONTENT);
+            }
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 'success' => false], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     // public function sendOtp(Request $request)
@@ -184,23 +196,17 @@ class AuthController extends Controller
 
     public function verify(Request $request)
     {
-        return $request;
         try {
             $token = $request->token;
-
             // Find the token in the personal_access_tokens table
             $accessToken = DB::table('personal_access_tokens')->where('token', hash('sha256', $token))->first();
-
             if (!$accessToken) {
                 return response()->json(['success' => false, 'message' => 'Invalid token'], 400);
             }
-
             $user = User::find($accessToken->tokenable_id);
-
             if (!$user) {
                 return response()->json(['success' => false, 'message' => 'User not found'], 404);
             }
-
             if ($user->email_verified != 1) {
                 $user->email_verified = 1;
                 $user->save();
@@ -222,7 +228,7 @@ class AuthController extends Controller
 
 
 
-    public function verifyOTP(Request $request)
+    public function verifyOTP(Request $request, $type)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
@@ -249,10 +255,10 @@ class AuthController extends Controller
         if (!$user) {
             return response()->json(['message' => 'User not found', 'success' => false], 404);
         }
-
-        $user->email_verified_at = now(); // Assuming you're using Laravel's built-in email verification feature
+        // id type is account the status is 1 if email the email_verification 
+        $user->{$type === 'account' ? 'status' : 'email_verified_at'} = $type === 'account' ? 1 : now();
         $user->save();
-        return response()->json(['message' => 'OTP verified successfully', 'success' => true], Response::HTTP_OK);
+        return response()->json(['message' => 'OTP verified successfully now u can login your account', 'success' => true], Response::HTTP_OK);
     }
 
     public function getAuthenticatedUser(Request $request)
