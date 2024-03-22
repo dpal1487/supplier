@@ -12,16 +12,3 @@ use Illuminate\Support\Facades\Broadcast;
 | used to check if an authenticated user can listen to the channel.
 |
 */
-
-Broadcast::channel('create-project', function ($project) {
-    return true;
-});
-
-Broadcast::channel('send-message', function ($project) {
-    return true;
-});
-
-
-Broadcast::channel('notifications', function ($notifications) {
-    return true;
-});

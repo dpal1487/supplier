@@ -12,10 +12,6 @@ class HandleInertiaRequests extends Middleware
 
     protected $rootView = 'app';
     protected $user = [];
-    protected $company = [];
-    protected $email = [];
-    protected $role = [];
-    protected $address = [];
     protected $status = [
         [
             'name' => 'All',
@@ -40,14 +36,11 @@ class HandleInertiaRequests extends Middleware
 
     public function share(Request $request)
     {
-        $this->user = $request->user();
-        $this->role = $request->user() ? $request->user()->role?->role->pluck('slug') : [];
         return array_merge(parent::share($request), [
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy())->toArray(), [
                     'user' => $this->user,
                     'status' => $this->status,
-                    'role' => $this->role,
                     'flash' => [
                         'message' => fn () => $request->session()->get('message'),
                     ],

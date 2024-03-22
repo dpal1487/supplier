@@ -6,7 +6,6 @@ use App\Exports\UserReport;
 use App\Http\Resources\RespondentResource;
 use App\Http\Resources\UserResource;
 use App\Models\Respondent;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,18 +16,10 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AccountController extends Controller
 {
-    public $role;
-    public function __construct()
-    {
-        $this->role = Role::get();
-    }
-
     public function index()
     {
         $user = Auth::user();
-
-        return Inertia::render('Account/Overview', [
-            'role' => $this->role,
+        return Inertia::render('Account/Index', [
             'user' => new UserResource($user),
         ]);
     }
@@ -36,34 +27,31 @@ class AccountController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
-        if ($user->id != 1) {
-            $validator = Validator::make($request->all(), [
-                'first_name' => 'required|string',
-                'last_name' => 'required|string',
-                'gender' => 'required',
-                'date_of_birth' => 'required',
-            ]);
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
-            }
-            if (!Hash::check($request->password, auth()->user()->password)) {
-                return back()->withErrors(["message" => "Password Doesn't match!"]);
-            }
-            if ($user->id) {
-
-                User::where('id', $user->id)->update([
-                    'first_name' => $request->first_name,
-                    'last_name' => $request->last_name,
-                    'date_of_birth' => $request->date_of_birth,
-                    'gender' => $request->gender,
-                    'password' => ($request->password ?  Hash::make($request->password) : auth()->user()->password),
-                    'status' => $request->status,
-                ]);
-                return redirect('/account')->with('flash', ['message' => updateMessage('User')]);
-            }
-            return redirect('/account')->with('error', ['message' => errorMessage()]);
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'gender' => 'required',
+            'date_of_birth' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
         }
-        return redirect('users')->with('error', "Your can't be edit super admin.");
+        if (!Hash::check($request->password, auth()->user()->password)) {
+            return back()->withErrors(["message" => "Password Doesn't match!"]);
+        }
+        if ($user->id) {
+
+            User::where('id', $user->id)->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'date_of_birth' => $request->date_of_birth,
+                'gender' => $request->gender,
+                'password' => ($request->password ?  Hash::make($request->password) : auth()->user()->password),
+                'status' => $request->status,
+            ]);
+            return redirect('/account')->with('flash', ['message' => updateMessage('User')]);
+        }
+        return redirect('/account')->with('error', ['message' => errorMessage()]);
     }
     public function projects(Request $request)
     {

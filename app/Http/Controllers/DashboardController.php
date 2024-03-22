@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function index()
     {
         $projects = new Project();
-        return Inertia::render('Dashboard', [
+        return Inertia::render('Dashboard/Index', [
             'projects' => [
                 'live_projects' => $projects->where('status' ,'live')->count(),
                 'inactive_projects' => $projects->where('status', 'hold')->count(),

@@ -11,6 +11,7 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
+import VueApexCharts from "vue3-apexcharts";
 
 const vuetify = createVuetify({
     components,
@@ -20,14 +21,6 @@ const vuetify = createVuetify({
 import Vue3Toastify from 'vue3-toastify';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
-
-import Echo from 'laravel-echo';
-
-window.Echo = new Echo({
-    broadcaster: 'socket.io',
-    // host: "http://localhost:6001",
-    host: window.location.hostname + ':6001',
-});
 
 import "vue3-toastify/dist/index.css";
 import VueClipboard from 'vue3-clipboard';
@@ -44,6 +37,8 @@ createInertiaApp({
             })
             .use(CKEditor)
             .use(vuetify)
+            .use(VueApexCharts)
+
             .use(plugin).use(Vue3Toastify, { autoClose: 3000, theme: "colored" })
             .mixin({ methods: { route } })
             .mount(el);

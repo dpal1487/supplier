@@ -26,11 +26,5 @@ class ExportExcelController extends Controller
         }
     }
 
-    public function exportSupplier($id)
-    {
-        $project_link = ProjectLink::where('project_id', $id)->first();
-        if ($project_link) {
-            return Excel::download(new ProjectLinkIdExport($project_link->id), $project_link->project_name . '.xlsx');
-        }
-    }
+    
 }
