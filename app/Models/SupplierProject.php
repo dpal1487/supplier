@@ -28,6 +28,10 @@ class SupplierProject extends Model
     {
         return $this->hasOne(Project::class, 'id', 'project_id');
     }
+    public function projects()
+    {
+        return $this->hasMany(Project::class, 'id', 'project_id');
+    }
     public function project_link()
     {
         return $this->hasOne(ProjectLink::class, 'id', 'project_link_id');

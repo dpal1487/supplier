@@ -36,6 +36,7 @@ class HandleInertiaRequests extends Middleware
 
     public function share(Request $request)
     {
+        $this->user = Auth::user();
         return array_merge(parent::share($request), [
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy())->toArray(), [
@@ -46,7 +47,6 @@ class HandleInertiaRequests extends Middleware
                     ],
                 ]);
             },
-
         ]);
     }
 }

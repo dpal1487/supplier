@@ -1,4 +1,5 @@
 <template>
+
     <Head title="Log in" />
     <jet-authentication-card>
         <form @submit.prevent="submit" class="form w-100 fv-plugins-bootstrap5 fv-plugins-framework">
@@ -15,9 +16,9 @@
             <div class="fv-row mb-8 fv-plugins-icon-container">
                 <!--begin::Email-->
                 <jet-label for="email" value="Email" />
-                <jet-input id="email" type="email" v-model="v$.form.email.$model" autofocus :class="v$.form.email.$errors.length > 0 ? 'is-invalid' : ''
-                    " />
-                <div v-for="(error, index) of v$.form.email.$errors" :key="index">
+                <jet-input id="email" type="email" v-model="v$.form.email_address.$model" autofocus :class="v$.form.email_address.$errors.length > 0 ? 'is-invalid' : ''
+            " />
+                <div v-for="(error, index) of v$.form.email_address.$errors" :key="index">
                     <input-error :message="error.$message" />
                 </div>
             </div>
@@ -26,7 +27,7 @@
                 <!--begin::Password-->
                 <jet-label for="password" value="Password" />
                 <jet-input id="password" type="password" v-model="v$.form.password.$model" :class="v$.form.password.$errors.length > 0 ? 'is-invalid' : ''
-                    " />
+            " />
                 <div v-for="(error, index) of v$.form.password.$errors" :key="index">
                     <input-error :message="error.$message" />
                 </div>
@@ -77,7 +78,7 @@ export default defineComponent({
     validations() {
         return {
             form: {
-                email: {
+                email_address: {
                     required,
                     email,
                 },
@@ -91,7 +92,7 @@ export default defineComponent({
     data() {
         return {
             form: this.$inertia.form({
-                email: "",
+                email_address: "",
                 password: "",
                 remember: false,
             }),
@@ -111,27 +112,6 @@ export default defineComponent({
                         onFinish: () => this.form.reset("password"),
                     });
             }
-        },
-        authProvider(provider) {
-            let self = this;
-            this.$auth
-                .authenticate(provider)
-                .then((response) => {
-                    self.socialLogin(provider, response);
-                })
-                .catch((err) => {
-                    console.log({ err: err });
-                });
-        },
-        socialLogin(provider, response) {
-            this.$http
-                .post("/social/" + provider, response)
-                .then((response) => {
-                    return response.data.token;
-                })
-                .catch((err) => {
-                    console.log({ err: err });
-                });
         },
     },
 });

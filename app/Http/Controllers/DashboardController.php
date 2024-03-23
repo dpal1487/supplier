@@ -20,7 +20,6 @@ class DashboardController extends Controller
                 'archived_projects' => $projects->where('status', 'archived')->count(),
                 'cancelled_projects' => $projects->where('status', 'cancelled')->count(),
                 'invoiced_projects' => $projects->where('status', 'invoiced')->count(),
-                'latest_projects' => ProjectResource::collection($projects->latest()->limit(10)->get()),
             ]
         ]);
     }

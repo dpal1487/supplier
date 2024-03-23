@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\ProjectLink;
+use App\Models\Respondent;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SuppliersResponedentResource extends JsonResource
@@ -14,20 +16,23 @@ class SuppliersResponedentResource extends JsonResource
      */
     public function toArray($request)
     {
+        $collection = collect(Respondent::where('project_id', $this->id)->get());
+        $complete = $collection->where('status', 'complete');
         return [
             'id' => $this->id,
-            'project_id' => $this->project?->project->project_name ?? $this->project_id,
+            'project_id' => $this->project->project_id ?? $this->project_id,
+            'project_name' => $this->project->project_name ?? '',
             'user' =>  $this->user_id,
             'supplier_name' => $this->supplier?->supplier_name,
             'supplier_project_id' => $this->supplier_project_id,
             'project_name' => $this->project_link?->project_name,
-            'starting_ip' => $this->starting_ip,
-            'end_ip' => $this->end_ip,
-            'client_browser' => $this->client_browser,
-            'device' => $this->device,
-            'status' => $this->status,
+            'cpi' =>  $this->project_link?->cpi,
+            'loi' => $this->project_link?->loi,
+            'ir' => $this->project_link?->ir,
+            'status' => $this->supplier?->status == 1 ? 'Live' : 'Offline',
+            'country' => $this->supplier->country,
             'created_at' => date('d-m-Y H:i:s', strtotime($this->created_at)),
-            'duration' => $this->created_at->diff($this->updated_at)->format('%H:%I:%S'),
+            'complete' => $complete ? count($complete) : 0,
         ];
     }
 }

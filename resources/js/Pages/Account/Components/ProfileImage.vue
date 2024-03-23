@@ -2,10 +2,7 @@
 import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 import ImageInput from "@/Components/ImageInput.vue";
-import JetLabel from "@/Jetstream/Label.vue";
-import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import { toast } from "vue3-toastify";
 
 export default defineComponent({
@@ -31,9 +28,8 @@ export default defineComponent({
         return {
             url: null,
             form: this.$inertia.form({
-                option_name: "blog_empty_image_url",
+                id: this.image?.entity_id,
                 image: null,
-                option_value: this.image?.data || null,
             }),
         };
     },
@@ -45,7 +41,7 @@ export default defineComponent({
                     .transform((data) => ({
                         ...data,
                     }))
-                    .post(this.route("settings.image-store"), {
+                    .post(this.route("profile-image.store"), {
                         onSuccess: (data) => {
                             toast.success(
                                 this.$page.props.jetstream.flash.message
@@ -79,12 +75,10 @@ export default defineComponent({
             </div>
         </div>
         <div class="card-body">
-            <ImageInput
-                :image="this.image?.blog_empty_image_url"
-                :onchange="uploadImage"
-                :remove="removeSelectedAvatar"
-                :selectedImage="url"
-            />
+            <div class="align-itemx-center w-100">
+                <ImageInput :image="image?.url" :onchange="uploadImage" :remove="removeSelectedAvatar"
+                    :selectedImage="url" />
+            </div>
         </div>
     </div>
 </template>

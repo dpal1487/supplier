@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 
-class Supplier extends Model
+class Supplier extends Model implements Authenticatable
 {
+    use AuthenticatableTrait;
     use HasFactory;
     protected $primaryKey = 'id';
     protected $keyType = 'string';
@@ -27,6 +30,11 @@ class Supplier extends Model
     public function country()
     {
         return $this->hasOne(Country::class, 'id', 'country_id');
+    }
+
+    public function project()
+    {
+        return $this->hasOne(SupplierProject::class, 'id', 'supplier_id');
     }
     public function supplier_redirect()
     {

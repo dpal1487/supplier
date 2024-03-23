@@ -14,8 +14,6 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Authenticatable
 {
     use Billable;
-    use HasPermissionsTrait;
-    use HasFactory, Notifiable, HasApiTokens;
     protected $primaryKey = 'id';
     protected $keyType = 'string';
     public $incrementing = false;
@@ -41,7 +39,8 @@ class User extends Authenticatable
         'mobile',
         'country_id',
         'deactivate_reason',
-        'deactivate_type'
+        'deactivate_type',
+        'profile_image'
     ];
 
     /**
@@ -62,62 +61,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public function role()
-    {
-        return $this->hasOne(UsersRole::class, 'user_id', 'id');
-    }
-
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'users_roles', 'user_id', 'role_id');
-    }
-    public function completes()
-    {
-        return $this->HasMany(Respondent::class, 'user_id', 'id')->where('status', 'complete');
-    }
-    public function terminates()
-    {
-        return $this->HasMany(Respondent::class, 'user_id', 'id')->where('status', 'terminate');
-    }
-    public function quotafull()
-    {
-        return $this->HasMany(Respondent::class, 'user_id', 'id')->where('status', 'terminate');
-    }
-    public function projects()
-    {
-        return $this->HasMany(Respondent::class, 'user_id', 'id');
-    }
-
-    public function authorizeRoles($roles)
-    {
-        if ($this->hasAnyRole($roles)) {
-            return true;
-        }
-        abort(401, 'This action is unauthorized.');
-    }
-    public function hasAnyRole($roles)
-    {
-        if (is_array($roles)) {
-            foreach ($roles as $role) {
-                if ($this->hasRole($role)) {
-                    return true;
-                }
-            }
-        } else {
-            if ($this->hasRole($roles)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    public function hasRole($role)
-    {
-        if ($this->roles()->where('slug', $role)->first()) {
-            return true;
-        }
-        return false;
-    }
 
     public function country()
     {

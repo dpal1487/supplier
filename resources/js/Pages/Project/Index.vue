@@ -1,115 +1,219 @@
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import Pagination from "../../Jetstream/Pagination.vue";
 import Multiselect from "@vueform/multiselect";
+import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
-import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/css/index.css";
-import ProjectList from "./Components/ProjectList.vue";
 import NoRecordMessage from "../../Components/NoRecordMessage.vue";
 export default defineComponent({
-    props: ["projects", "status", "clients"],
+    props: ["projects"],
     data() {
         return {
-            form: {},
-            action: "project.page",
-            isLoading: false,
-            fullPage: true,
             title: "Projects",
-            selectOrderBy: null,
+            first_name: "",
+            label: "",
+            form: {},
+            tbody: [
+                "S.No",
+                "Project ID",
+                "Project Name",
+                "CPI",
+                "Actual LOI",
+                "IR",
+                "Project N",
+                "Total Complete",
+                "Project Revenue",
+                "Project Status",
+                "Country",
+                "Start Date",
+                "Action",
+            ],
+            checkbox: [],
+            status: [
+                { value: "complete", label: "Completed" },
+                { value: "terminate", label: "Terminated" },
+                { value: "quotafull", label: "Quotafull" },
+            ],
         };
     },
     components: {
-    AppLayout,
-    Link,
-    Head,
-    Pagination,
-    Multiselect,
-    Loading,
-    ProjectList,
-    NoRecordMessage
-},
+        AppLayout,
+        Link,
+        Head,
+        Pagination,
+        Multiselect,
+        NoRecordMessage,
+    },
     methods: {
         search() {
-            this.isLoading = true;
-            Inertia.get("/projects", this.form, {
-                onFinish(response) {
-                    this.isLoading = false;
-                },
-            });
+            Inertia.get("/master", this.form);
         },
-        orderBy() {
-            this.isLoading = true;
-            Inertia.get(route('projects.index', { order_by: this.selectOrderBy }),
-                {
-                    onFinish(response) {
-                        this.isLoading = false;
-                    }
-                });
+        $queryParams(...args) {
+            let queryString = this.$page.url;
+            if (queryString.indexOf("?") === -1) {
+                return {};
+            }
+            queryString = queryString.substring(queryString.indexOf("?") + 1);
+            return Object.assign(
+                Object.fromEntries(new URLSearchParams(queryString)),
+                ...args
+            );
         },
+    },
+    created() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        this.form.status = urlParams.get("status");
+        this.form.q = urlParams.get("q");
     },
 });
 </script>
 <template>
     <Head :title="title" />
     <app-layout :title="title">
-        <loading v-model:active="isLoading" :can-cancel="false" :is-full-page="fullPage" />
         <template #breadcrumb>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
-            <li class="breadcrumb-item text-muted">Projects</li>
-        </template>
-        <template #toolbar v-if="$page.props.user.role.role.slug != 'user'">
-            <div class="d-flex align-items-center gap-2 gap-lg-3">
-                <Link href="/project/create" class="btn btn-sm fw-bold btn-primary">
-                <i class="bi bi-plus-circle"></i>Add New Project</Link>
-            </div>
+            <li class="breadcrumb-item">
+                <span class="text-muted text-hover-primary">Projects </span>
+            </li>
         </template>
         <div class="card">
-                <form @submit.prevent="search" class="card-header justify-content-start p-5 gap-2 gap-md-5">
-                      <div class="d-flex align-items-center position-relative w-100 mw-200px">
-                    <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
-                                transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
+            <form
+                class="card-header justify-content-start p-5 gap-2 gap-md-5"
+                @submit.prevent="search()"
+            >
+                <div
+                    class="d-flex align-items-center position-relative w-100 mw-150px"
+                >
+                    <span class="svg-icon svg-icon-1 position-absolute ms-4"
+                        ><svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <rect
+                                opacity="0.5"
+                                x="17.0365"
+                                y="15.1223"
+                                width="8.15546"
+                                height="2"
+                                rx="1"
+                                transform="rotate(45 17.0365 15.1223)"
+                                fill="currentColor"
+                            ></rect>
                             <path
                                 d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                fill="currentColor"></path>
+                                fill="currentColor"
+                            ></path>
                         </svg>
                     </span>
-                    <input type="text" v-model="form.q" class="form-control form-control-solid ps-14"
-                        placeholder="Search Client" />
+                    <input
+                        type="text"
+                        v-model="form.q"
+                        class="form-control form-control-solid ps-14"
+                        placeholder="Search "
+                    />
                 </div>
-                    <div class="w-100 mw-200px">
-                        <Multiselect :can-clear="false" :options="status.data" label="label" valueProp="value"
-                            class="form-control form-control-solid" placeholder="Select Status" v-model="form.status" />
+                <div class="w-100 mw-150px">
+                    <Multiselect
+                        :options="status"
+                        label="label"
+                        :can-clear="false"
+                        valueProp="value"
+                        :searchable="true"
+                        :track-by="label"
+                        class="form-control form-control-solid"
+                        placeholder="Select "
+                        v-model="form.status"
+                    />
+                </div>
+                <div class="d-flex  gap-5">
+                    <button type="submit" class="btn btn-primary">
+                        Search
+                    </button>
+                    <a
+                        target="_blank"
+                        :href="route('project.report',)"
+                        class="btn btn-primary"
+                        ><i class="bi bi-graph-down-arrow"></i>Export Report</a
+                    >
+                </div>
+            </form>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table
+                        class="table align-middle table-row-dashed fs-6 gy-5"
+                    >
+                        <thead>
+                            <tr
+                                class="text-gray-700 fw-bold fs-7 w-100 text-uppercase"
+                            >
+                                <th
+                                    class="min-w-120px"
+                                    v-for="(th, index) in tbody"
+                                    :key="index"
+                                >
+                                    {{ th }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody
+                            class="fw-semibold text-gray-500"
+                            v-if="projects?.data?.length > 0"
+                        >
+                            <tr
+                                v-for="(project, index) in projects.data"
+                                :key="index"
+                            >
+                                <td>{{ index + 1 }}</td>
+                                <td>{{ project?.project_id }}</td>
+                                <td>{{ project?.project_name }}</td>
+                                <td>{{ project?.cpi }}</td>
+                                <td>{{ project?.loi }}</td>
+                                <td>{{ project?.ir }}</td>
+                                <td>{{ project?.project }}</td>
+                                <td>{{ project?.complete }}</td>
+                                <td>{{ project?.device }}</td>
+                                <td>{{ project?.status }}</td>
+                                <td>
+                                    {{ project?.country?.name }}
+                                </td>
+                                <td>{{ project?.created_at }}</td>
+                                <td>{{ project?.created_at }}</td>
+                            </tr>
+                        </tbody>
+
+                        <tbody class="fw-semibold text-gray-600" v-else>
+                            <tr
+                                class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px"
+                            >
+                                <td colspan="10" class="text-center h-full">
+                                    <NoRecordMessage />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row" v-if="projects?.data?.length > 0">
+                        <div
+                            class="col-sm-12 d-flex align-items-center justify-content-between"
+                            v-if="projects.meta"
+                        >
+                            <span class="fw-bold text-gray-700">
+                                Showing {{ projects.meta.from }} to
+                                {{ projects.meta.to }} of
+                                {{ projects.meta.total }} entries
+                            </span>
+                            <Pagination :links="projects.meta.links" />
+                        </div>
                     </div>
-                    <div class="w-100 mw-200px">
-                        <Multiselect :can-clear="false" :options="clients.data" label="display_name" valueProp="id"
-                            class="form-control form-control-solid" placeholder="Select Client" v-model="form.client" />
-                    </div>
-                    <button type="submit" class="btn btn-primary w-200px">Search</button>
-                </form>
-        </div>
-        <!-- {{ projects }} -->
-        <div v-if="projects.data.length > 0">
-            <project-list :projects="projects.data" :status="status.data" :action="action" />
-        </div>
-        <div class="d-flex justify-content-center align-content-center pt-10 pb-10" v-else>
-            <div class="text-center py-10">
-               <NoRecordMessage />
-            </div>
-        </div>
-        <div class="row" v-if="projects.data.length > 0">
-            <div class="col-sm-12 d-flex align-items-center justify-content-between" v-if="projects.meta">
-                <span class="fw-bold text-gray-700">
-                    Showing {{ projects.meta.from }} to
-                    {{ projects.meta.to }} of {{ projects.meta.total }} entries
-                </span>
-                <Pagination :links="projects.meta.links" />
+                </div>
             </div>
         </div>
     </app-layout>
