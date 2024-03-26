@@ -7,10 +7,8 @@ import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import useVuelidate from "@vuelidate/core";
 import Multiselect from "@vueform/multiselect";
-
 import { required, numeric } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
-import axios from "axios";
 export default defineComponent({
     props: ["countries", "supplier"],
     setup() {
@@ -37,6 +35,9 @@ export default defineComponent({
                     required,
                 },
                 skype: {
+                    required,
+                },
+                linkedin: {
                     required,
                 },
                 aol: {
@@ -83,43 +84,41 @@ export default defineComponent({
             isLoading: false,
             isFullPage: true,
             form: this.$inertia.form({
-                company_name: "All Research Solutions ",
+                id: this.supplier?.id,
+                company_name: this.supplier?.supplier_name || "",
                 name: this.supplier?.supplier_name || "",
-                phone: this?.supplier?.email_address || "",
+                phone: this?.supplier?.contact_number || "",
                 contact_email: this?.supplier?.email_address || "",
-                rfq_email: this?.supplier?.email_address || "",
+                rfq_email: this?.supplier?.rfq_email || "",
                 skype: this?.supplier?.skype_profile || "",
-                aol: this?.supplier?.email_address || "",
-                mailing_adress: this?.supplier?.email_address || "",
-                city: this?.supplier?.email_address || "",
-                state: this?.supplier?.email_address || "",
-                zipcode: this?.supplier?.email_address || "",
-                final_id: this?.supplier?.email_address || "",
-                country: this?.supplier?.email_address || "",
-                traffic_details: this?.supplier?.email_address || "",
-                name_of_contact: this?.supplier?.email_address || "",
+                linkedin: this?.supplier?.linkedin_profile || "",
+                aol: this?.supplier?.aol || "",
+                mailing_adress: this?.supplier?.mailing_adress || "",
+                city: this?.supplier?.city || "",
+                state: this?.supplier?.state || "",
+                zipcode: this?.supplier?.zipcode || "",
+                final_id: this?.supplier?.final_id || "",
+                country: this?.supplier?.country?.id || "",
+                traffic_details: this?.supplier?.traffic_details || "",
+                name_of_contact: this?.supplier?.name_of_contact || "",
+                country: this?.supplier?.country?.id || "",
             }),
         };
     },
     methods: {
         submit() {
             this.v$.$touch();
-            this.processing = true;
             if (!this.v$.form.$invalid) {
                 this.form
                     .transform((data) => ({
                         ...data,
                     }))
-                    .post(
-                        route().current() == "account.create"
-                            ? this.route("account.store")
-                            : this.route("account.update", this.user.id),
+                    .post(this.route("account-information.store"),
                         {
                             onSuccess: (data) => {
                                 toast.success(
                                     this.$page.props.jetstream.flash.message
                                 );
-                                this.processing = false;
                             },
                             onError: (data) => {
                                 if (data.message) {
@@ -132,30 +131,12 @@ export default defineComponent({
                     );
             }
         },
-        getStates(id) {
-            const state = this.states?.data?.find((state) => state.id == id);
-            this.form.project_state = state?.name;
-            axios
-                .get("/account/state", {
-                    params: {
-                        country_id: id,
-                    },
-                })
-                .then((response) => {
-                    if (response.data?.states?.length > 0) {
-                        this.states = response.data.states;
-                        this.cities = response.data?.cities;
-                    } else {
-                        this.states = [];
-                        this.cities = [];
-                    }
-                });
-        },
     },
 });
 </script>
 
 <template>
+    <JetValidationErrors />
     <form @submit.prevent="submit" autocomplete="off">
         <div class="card mb-5">
             <div class="card-header">
@@ -168,10 +149,8 @@ export default defineComponent({
                     <div class="col-6">
                         <jet-label for="company-name" value="Company Name" class="required" />
                         <jet-input id="company-name" type="text" placeholder="Enter company name"
-                            v-model="v$.form.company_name.$model" :class="v$.form.company_name.$errors.length > 0
-        ? 'is-invalid'
-        : ''
-        " />
+                            v-model="v$.form.company_name.$model"
+                            :class="v$.form.company_name.$errors.length > 0 ? 'is-invalid' : ''" />
                         <div v-for="(error, index) of v$.form.company_name.$errors" :key="index">
                             <input-error :message="error.$message" />
                         </div>
@@ -229,6 +208,15 @@ export default defineComponent({
                 </div>
 
                 <div class="row mb-3">
+                    <div class="col-md-6 col-sm-12">
+                        <jet-label for="linkdin-profile" value="LinkedIn" class="required" />
+                        <jet-input id="linkdin-profile" type="text" placeholder="Enter LinkedIn profile "
+                            v-model="v$.form.linkedin.$model"
+                            :class="v$.form.linkedin.$errors.length > 0 ? 'is-invalid' : ''" />
+                        <div v-for="(error, index) of v$.form.linkedin.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
 
                     <div class="col-md-6 col-sm-12">
                         <jet-label for="aol" value="AOL" class="required" />
@@ -238,6 +226,9 @@ export default defineComponent({
                             <input-error :message="error.$message" />
                         </div>
                     </div>
+
+                </div>
+                <div class="row mb-3">
                     <div class="col-6">
                         <jet-label for="mailing-address" value="Mailing Address" class="required" />
                         <jet-input id="mailing-address" type="text" placeholder="Enter mailing address"
@@ -247,8 +238,6 @@ export default defineComponent({
                             <input-error :message="error.$message" />
                         </div>
                     </div>
-                </div>
-                <div class="row mb-3">
                     <div class="col-6">
                         <jet-label for="city" value="City" class="required" />
                         <jet-input id="city" type="text" placeholder="Enter city" v-model="v$.form.city.$model"
@@ -257,6 +246,9 @@ export default defineComponent({
                             <input-error :message="error.$message" />
                         </div>
                     </div>
+
+                </div>
+                <div class="row mb-3">
                     <div class="col-md-6 col-sm-12">
                         <jet-label for="state" value="State" class="required" />
                         <jet-input id="state" type="text" placeholder="Enter state" v-model="v$.form.state.$model"
@@ -265,8 +257,6 @@ export default defineComponent({
                             <input-error :message="error.$message" />
                         </div>
                     </div>
-                </div>
-                <div class="row mb-3">
                     <div class="col-md-6 col-sm-12">
                         <jet-label for="zipcode" value="Zipcode" class="required" />
                         <jet-input id="zipcode" type="text" placeholder="Enter zipcode" v-model="v$.form.zipcode.$model"
@@ -275,6 +265,9 @@ export default defineComponent({
                             <input-error :message="error.$message" />
                         </div>
                     </div>
+
+                </div>
+                <div class="row mb-3">
                     <div class="col-md-6 col-sm-12">
                         <jet-label for="country" value="Country" class="required" />
                         <Multiselect :can-clear="false" :options="countries" label="label" valueProp="id"
@@ -285,9 +278,7 @@ export default defineComponent({
                             <input-error :message="error.$message" />
                         </div>
                     </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-12 col-sm-12">
+                    <div class="col-md-6 col-sm-12">
                         <jet-label for="final-id" value="Final ID" class="required" />
                         <jet-input id="final-id" type="text" placeholder="Enter final id"
                             v-model="v$.form.final_id.$model"
@@ -319,7 +310,7 @@ export default defineComponent({
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-6 col-sm-12">
+                    <div class="col-md-12 col-sm-12">
                         <jet-label for="name-of-contact" value="Name OF Contact" />
                         <jet-input id="name-of-contact" type="text" placeholder="Enter name of contact"
                             v-model="v$.form.name_of_contact.$model"

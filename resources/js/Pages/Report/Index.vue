@@ -10,24 +10,23 @@ export default defineComponent({
     props: ["surveys", "users"],
     data() {
         return {
-            title: "Surveys",
+            title: "Reports",
             first_name: '',
             label: '',
             form: {},
             tbody: [
                 "S.No",
-                "RESPONDENT ID",
-                "PID",
-                "USERNAME",
-                "STARTING IP",
-                "END IP",
-                "DURATION",
-                "DATE/TIME",
-                "DEVICE",
-                "BROWSER",
-                "STATUS",
+                "Project ID",
+                "Project Name",
+                "Vender User ID",
+                "Status Remark",
+                "Start Date",
+                "End Date",
+                "LOI",
+                "CPI",
+                "IP",
+                "Status",
             ],
-            checkbox: [],
             status: [
                 { value: "complete", label: "Completed" },
                 { value: "terminate", label: "Terminated" },
@@ -46,7 +45,7 @@ export default defineComponent({
     methods: {
         search() {
             Inertia.get(
-                "/master", this.form,
+                "/project-reports", this.form,
             );
         },
         $queryParams(...args) {
@@ -69,6 +68,7 @@ export default defineComponent({
 });
 </script>
 <template>
+
     <Head :title="title" />
     <app-layout :title="title">
         <template #breadcrumb>
@@ -76,15 +76,15 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted text-hover-primary">Surveys </span>
+                <span class="text-muted text-hover-primary">Project Reports </span>
             </li>
 
         </template>
         <div class="card">
             <form class="card-header justify-content-start p-5 gap-2 gap-md-5" @submit.prevent="search()">
                 <div class="d-flex align-items-center position-relative w-100 mw-150px">
-                    <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
                                 transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
                             <path
@@ -94,11 +94,6 @@ export default defineComponent({
                     </span>
                     <input type="text" v-model="form.q" class="form-control form-control-solid ps-14"
                         placeholder="Search " />
-                </div>
-                <div class="w-100 mw-150px">
-                    <Multiselect :options="users.data" :can-clear="false" label="full_name" valueProp="id"
-                        :searchable="true" track-by="full_name" class="form-control form-control-solid"
-                        placeholder="Select User" v-model="form.user" />
                 </div>
                 <div class="w-100 mw-150px">
                     <Multiselect :options="status" label="label" :can-clear="false" valueProp="value" :searchable="true"
@@ -114,12 +109,12 @@ export default defineComponent({
                         v-model="form.to_date" />
                 </div>
                 <div class="d-flex w-400px gap-5">
-                <button type="submit" class="btn btn-primary w-100">
-                    Search
-                </button>
-                <a target="_blank" :href="route('project-reports.report', { ...$queryParams() })" class="btn btn-primary w-100"><i
-                        class="bi bi-graph-down-arrow"></i>Export
-                    Report</a>
+                    <button type="submit" class="btn btn-primary w-100">
+                        Search
+                    </button>
+                    <a target="_blank" :href="route('project-reports.report', { ...$queryParams() })"
+                        class="btn btn-primary w-100"><i class="bi bi-graph-down-arrow"></i>Export
+                        Report</a>
                 </div>
             </form>
             <div class="card-body p-0">
@@ -135,15 +130,15 @@ export default defineComponent({
                         <tbody class="fw-semibold text-gray-500" v-if="surveys?.data?.length > 0">
                             <tr v-for="(survey, index) in surveys.data" :key="index">
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ survey.id }} </td>
-                                <td>{{ survey.project_id }}</td>
-                                <td>{{ survey.user }}</td>
-                                <td>{{ survey.starting_ip }}</td>
-                                <td>{{ survey.end_ip }}</td>
+                                <td>{{ survey.project_id }} </td>
+                                <td>{{ survey?.project_name }}</td>
+                                <td>{{ survey?.vender?.name }}</td>
                                 <td>{{ survey.duration }}</td>
                                 <td>{{ survey.created_at }}</td>
-                                <td>{{ survey.device }}</td>
-                                <td>{{ survey.client_browser }}</td>
+                                <td>{{ survey.end_date }}</td>
+                                <td>{{ survey.loi }}</td>
+                                <td>{{ survey?.cpi }}</td>
+                                <td>{{ survey?.starting_ip }}</td>
                                 <td>
                                     <div v-if="(survey.status == 'terminate')"
                                         class="mx-1 text-capitalize badge badge-light-danger">Terminate</div>
@@ -157,6 +152,7 @@ export default defineComponent({
                                         Security Terminate</div>
                                     <div v-else class="mx-1 text-capitalize badge badge-light">Incomplete</div>
                                 </td>
+
                             </tr>
                         </tbody>
 
@@ -169,17 +165,9 @@ export default defineComponent({
                         </tbody>
                     </table>
                 </div>
-                <div class="card-footer">
-                    <div class="row" v-if="surveys?.data?.length > 0">
-                    <div class="col-sm-12 d-flex align-items-center justify-content-between" v-if="surveys.meta">
-                        <span class="fw-bold text-gray-700">
-                            Showing {{ surveys.meta.from }} to {{ surveys.meta.to }}
-                            of {{ surveys.meta.total }} entries
-                        </span>
-                        <Pagination :links="surveys.meta.links" />
-                    </div>
-                </div>
-                </div>
+            </div>
+            <div class="card-footer">
+                <Pagination :links="surveys" />
             </div>
         </div>
     </app-layout>

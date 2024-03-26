@@ -2,25 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ProjectResource;
-use App\Models\Project;
-use App\Models\Respondent;
+use App\Http\Resources\ProjectListResource;
+use App\Models\Supplier;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $projects = new Project();
+        $id = Auth::user()->id;
+        $supplier = Supplier::where(['id' => $id])->first();
         return Inertia::render('Dashboard/Index', [
-            'projects' => [
-                'live_projects' => $projects->where('status' ,'live')->count(),
-                'inactive_projects' => $projects->where('status', 'hold')->count(),
-                'closed_projects' => $projects->where('status', 'close')->count(),
-                'archived_projects' => $projects->where('status', 'archived')->count(),
-                'cancelled_projects' => $projects->where('status', 'cancelled')->count(),
-                'invoiced_projects' => $projects->where('status', 'invoiced')->count(),
-            ]
+            'projects' => new ProjectListResource($supplier)
         ]);
     }
 }

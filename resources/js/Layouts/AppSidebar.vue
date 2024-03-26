@@ -28,7 +28,7 @@ export default defineComponent({
                 {
                     link: "/projects",
                     route: "projects.index",
-                    title: "Vie All Projects",
+                    title: "View All Projects",
                     icon: "bi bi-card-heading",
                     role: ["pm", "account", "admin", "user"],
                 },

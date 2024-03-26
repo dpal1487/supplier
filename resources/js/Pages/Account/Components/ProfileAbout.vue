@@ -27,7 +27,6 @@ export default defineComponent({
     components: {
         JetInput,
         JetLabel,
-        JetValidationErrors,
         InputError,
     },
     data() {
@@ -81,7 +80,7 @@ export default defineComponent({
             </div>
         </div>
         <div class="card-body pt-0">
-            <JetValidationErrors />
+            
             <form @submit.prevent="submit">
                 <div class="row mb-3">
                     <div class="col-12">

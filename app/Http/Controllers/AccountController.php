@@ -2,25 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\UserReport;
-use App\Http\Resources\ImageResource;
-use App\Http\Resources\RespondentResource;
-use App\Http\Resources\UserResource;
-use App\Models\Image;
-use App\Models\Respondent;
-use App\Models\User;
+use App\Http\Resources\{ImageResource, SupplierResource, CountryResource};
+use App\Models\{Image, Country, Supplier};
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\{Auth, Validator, DB, Hash};
 use Inertia\Inertia;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Helpers\ImageManager;
-use App\Http\Resources\CountryResource;
-use App\Http\Resources\SupplierResource;
-use App\Models\Country;
-use App\Models\Supplier;
 
 class AccountController extends Controller
 {
@@ -62,23 +49,6 @@ class AccountController extends Controller
             return back()->withErrors(["message" => $e->getMessage()]);
         }
     }
-    public function projects(Request $request)
-    {
-        $user = Auth::user();
-        $surveys = Respondent::where('user_id', $user->id)->orderBy('created_at', 'desc');
-        if ($request->q) {
-            $surveys = $surveys->whereHas('project', function ($query) use ($request) {
-                $query->where('project_name', 'like', "%$request->q%");
-            });
-        }
-        if ($request->status !== 'all' && $request->status !== null) {
-            $surveys = $surveys->where('status', $request->status);
-        }
-        return Inertia::render('Account/Project', [
-            'surveys' => RespondentResource::collection($surveys->paginate(100)->appends(request()->query())),
-            'user' => new UserResource($user),
-        ]);
-    }
 
     public function image(Request $request)
     {
@@ -118,6 +88,58 @@ class AccountController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->withErrors(['message' => $e->getMessage()]);
+        }
+    }
+
+    public function informationStore(Request $request)
+    {
+        $request->validate([
+            'name'   => 'required|string',
+            'company_name'    => 'required',
+            'company_name'    => 'required',
+            'name'            => 'required',
+            'phone'           => 'required',
+            'contact_email'   => 'required',
+            'rfq_email'       => 'required',
+            'skype'           => 'required',
+            'linkedin'        => 'required',
+            'aol'             => 'required',
+            'mailing_adress'  => 'required',
+            'city'            => 'required',
+            'zipcode'         => 'required',
+            'final_id'        => 'required',
+            'country'         => 'required',
+            'traffic_details' => 'required',
+            'name_of_contact' => 'required',
+        ]);
+        try {
+            if ($request->id) {
+                Supplier::where('id', $request->id)->updateOrCreate(
+                    ['id' => $request->id],
+                    [
+                        'supplier_name' => $request->name,
+                        'contact_number' => $request->phone,
+                        'email_address' => $request->contact_email,
+                        'rfq_email' => $request->rfq_email,
+                        'final_id' => $request->final_id,
+                        'skype_profile' => $request->skype,
+                        'linkedin_profile' => $request->linkedin,
+                        'aol' => $request->aol,
+                        'mailing_adress' => $request->mailing_adress,
+                        'city' => $request->city,
+                        'state' => $request->state,
+                        'country_id' => $request->country,
+                        'zipcode' => $request->zipcode,
+                        'final_id' => $request->final_id,
+                        'traffic_details' => $request->traffic_details,
+                        'name_of_contact' => $request->name_of_contact,
+
+                    ]
+                );
+                return redirect('/account')->with('flash',  updateMessage('User'));
+            }
+        } catch (\Exception $e) {
+            return back()->withErrors(["message" => $e->getMessage()]);
         }
     }
 }

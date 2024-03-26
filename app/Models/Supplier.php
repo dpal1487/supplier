@@ -15,16 +15,36 @@ class Supplier extends Model implements Authenticatable
     protected $primaryKey = 'id';
     protected $keyType = 'string';
     public $incrementing = false;
-    protected $fillable = ['supplier_name', 'country_id', 'notes', 'display_name', 'country_id',  'status', 'email_address', 'website', 'skype_profile', 'linkedin_profile'];
+    protected $fillable = [
+        'supplier_name',
+        'contact_number',
+        'email_address',
+        'rfq_email',
+        'password',
+        'final_id_emails',
+        'website',
+        'final_id',
+        'country_id',
+        'description',
+        'display_name',
+        'skype_profile',
+        'aol',
+        'mailing_adress',
+        'city',
+        'state',
+        'zipcode',
+        'country_id',
+        'status',
+        'linkedin_profile',
+        'traffic_details',
+        'name_of_contact'
+    ];
 
     protected static function boot()
     {
         parent::boot();
         static::creating(function (Model $model) {
             $model->setAttribute($model->getKeyName(), Uuid::uuid4());
-        });
-        static::deleting(function ($supplier) {
-            $supplier->supplier_redirect->delete();
         });
     }
     public function country()
@@ -34,18 +54,16 @@ class Supplier extends Model implements Authenticatable
 
     public function project()
     {
-        return $this->hasOne(SupplierProject::class, 'id', 'supplier_id');
+        return $this->hasOne(SupplierProject::class, 'supplier_id', 'id');
     }
-    public function supplier_redirect()
+
+    public function projects()
     {
-        return $this->hasOne(SupplierRedirect::class, 'supplier_id', 'id');
+        return $this->hasMany(SupplierProject::class, 'supplier_id', 'id');
     }
+
     public function respondents()
     {
         return $this->hasMany(Respondent::class, 'supplier_id', 'id');
-    }
-    public function getRouteKeyName()
-    {
-        return 'id';
     }
 }

@@ -31,16 +31,9 @@ class Client extends Model
     {
         return $this->hasOne(Country::class, 'id', 'country_id');
     }
-    public function address()
-    {
-        return $this->hasOne(Address::class, 'entity_id', 'id')->where('entity_type','client');
-    }
     public function projects()
     {
         return $this->hasMany(Project::class, 'client_id', 'id');
     }
-    public function getRouteKeyName()
-    {
-        return 'id';
-    }
+   
 }

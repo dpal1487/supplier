@@ -18,16 +18,25 @@ class SupplierResource extends JsonResource
             'website' => $this->website,
             'skype_profile' => $this->skype_profile,
             'linkedin_profile' => $this->linkedin_profile,
-            'description' => $this->notes,
-            'country' => new CountryResource($this->country),
+            'contact_number' => $this->contact_number,
+            'email_address' => $this->email_address,
+            'rfq_email' => $this->rfq_email,
+            'final_id_emails' => $this->final_id_emails,
+            'website' => $this->website,
+            'skype_profile' => $this->skype_profile,
+            'aol' => $this->aol,
+            'mailing_adress' => $this->mailing_adress,
+            'city' => $this->city,
+            'state' => $this->state,
+            'zipcode' => $this->zipcode,
             'status' => $this->status,
+            'final_id' => $this->final_id,
+            'traffic_details' => $this->traffic_details,
+            'name_of_contact' => $this->name_of_contact,
+            'description' => $this->description,
+            'country' => new CountryResource($this->country),
             'created_at' => $this->created_at,
-            'supplier_redirect' => $this->supplier_redirect,
-            'header' => [
-                'total_projects' => count($this->respondents),
-                'live_projects' => count($this->respondents->where('status', 'live')),
-                'completed_projects' => count($this->respondents->where('status', 'complete')),
-            ]
+            'supplier_redirect' => $this->supplier_redirect,          
         ];
     }
 }
