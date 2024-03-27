@@ -8,8 +8,6 @@ import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
-import Datepicker from "vue3-datepicker";
-import useVuelidate from "@vuelidate/core";
 import Multiselect from "@vueform/multiselect";
 import ImageInput from "@/components/ImageInput.vue";
 import { required } from "@vuelidate/validators";
@@ -31,7 +29,6 @@ export default defineComponent({
         InputError,
         Multiselect,
         ImageInput,
-        Datepicker,
     },
     validations() {
         return {

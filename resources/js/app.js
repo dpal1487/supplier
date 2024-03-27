@@ -5,7 +5,6 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
-import CKEditor from '@ckeditor/ckeditor5-vue';
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
@@ -35,7 +34,6 @@ createInertiaApp({
                 autoSetContainer: true,
                 appendToBody: true,
             })
-            .use(CKEditor)
             .use(vuetify)
             .use(VueApexCharts)
 
