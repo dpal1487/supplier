@@ -20,9 +20,8 @@ export default defineComponent({
                 "CPI",
                 "Actual LOI",
                 "IR",
-                "Project N",
+                // "Project N",
                 "Total Complete",
-                "Project Revenue",
                 "Project Status",
                 "Country",
                 "Start Date",
@@ -76,7 +75,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted text-hover-primary">Projects </span>
+                <span class="text-muted text-hover-primary">{{ title }} </span>
             </li>
         </template>
         <div class="card">
@@ -103,8 +102,8 @@ export default defineComponent({
                     <button type="submit" class="btn btn-primary">
                         Search
                     </button>
-                    <a target="_blank" :href="route('project.report',)" class="btn btn-primary"><i
-                            class="bi bi-graph-down-arrow"></i>Export Report</a>
+                    <a target="_blank" href="/project-report" class="btn btn-primary"><i
+                            class="bi bi-graph-down-arrow"></i>Export Report sadsa</a>
                 </div>
             </form>
             <div class="card-body p-0">
@@ -121,24 +120,20 @@ export default defineComponent({
                             <tr v-for="(supplier, index) in suppliers.data" :key="index">
                                 <td>{{ index + 1 }}</td>
                                 <td>
-                                    <Link :href="`project/${supplier?.id}`"
-                                        class="d-flex justify-content-center align-items-center">{{ supplier?.project_id
-                                    }}
+                                    <Link :href="`project/${supplier?.project?.id}`"
+                                        class="d-flex justify-content-center align-items-center">
+                                    {{ supplier?.project?.project_id }}
                                     </Link>
                                 </td>
                                 <td>{{ supplier?.cpi }}</td>
                                 <td>{{ supplier?.loi }}</td>
                                 <td>{{ supplier?.ir }}</td>
-                                <td>{{ supplier?.project }}</td>
                                 <td>{{ supplier?.complete }}</td>
-                                <td>{{ supplier?.device }}</td>
                                 <td>{{ supplier?.status }}</td>
-                                <td>
-                                    {{ supplier?.country?.display_name }}
-                                </td>
+                                <td>{{ supplier?.country?.display_name }}</td>
                                 <td>{{ supplier?.created_at }}</td>
                                 <td>
-                                    <Link :href="`project/${supplier?.id}`"
+                                    <Link :href="`project/${supplier?.project?.id}`"
                                         class="d-flex justify-content-center align-items-center"><i
                                         class="bi bi-eye"></i>
                                     </Link>
@@ -147,7 +142,7 @@ export default defineComponent({
                         </tbody>
                         <tbody class="fw-semibold text-gray-600" v-else>
                             <tr class="text-gray-600 fw-bold fs-7 align-middle text-uppercase h-100px">
-                                <td colspan="10" class="text-center h-full">
+                                <td colspan="11" class="text-center h-full">
                                     <NoRecordMessage />
                                 </td>
                             </tr>

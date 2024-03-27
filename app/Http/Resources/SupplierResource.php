@@ -25,7 +25,7 @@ class SupplierResource extends JsonResource
             'website' => $this->website,
             'skype_profile' => $this->skype_profile,
             'aol' => $this->aol,
-            'mailing_adress' => $this->mailing_adress,
+            'mailing_address' => $this->mailing_address,
             'city' => $this->city,
             'state' => $this->state,
             'zipcode' => $this->zipcode,
@@ -36,7 +36,7 @@ class SupplierResource extends JsonResource
             'description' => $this->description,
             'country' => new CountryResource($this->country),
             'created_at' => $this->created_at,
-            'supplier_redirect' => $this->supplier_redirect,          
+            'supplier_redirect' => $this->supplier_redirect,
         ];
     }
 }

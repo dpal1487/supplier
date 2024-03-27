@@ -43,7 +43,7 @@ export default defineComponent({
                 aol: {
                     required,
                 },
-                mailing_adress: {
+                mailing_address: {
                     required,
                 },
                 city: {
@@ -93,7 +93,7 @@ export default defineComponent({
                 skype: this?.supplier?.skype_profile || "",
                 linkedin: this?.supplier?.linkedin_profile || "",
                 aol: this?.supplier?.aol || "",
-                mailing_adress: this?.supplier?.mailing_adress || "",
+                mailing_address: this?.supplier?.mailing_address || "",
                 city: this?.supplier?.city || "",
                 state: this?.supplier?.state || "",
                 zipcode: this?.supplier?.zipcode || "",
@@ -232,9 +232,9 @@ export default defineComponent({
                     <div class="col-6">
                         <jet-label for="mailing-address" value="Mailing Address" class="required" />
                         <jet-input id="mailing-address" type="text" placeholder="Enter mailing address"
-                            v-model="v$.form.mailing_adress.$model"
-                            :class="v$.form.mailing_adress.$errors.length > 0 ? 'is-invalid' : ''" />
-                        <div v-for="(error, index) of v$.form.mailing_adress.$errors" :key="index">
+                            v-model="v$.form.mailing_address.$model"
+                            :class="v$.form.mailing_address.$errors.length > 0 ? 'is-invalid' : ''" />
+                        <div v-for="(error, index) of v$.form.mailing_address.$errors" :key="index">
                             <input-error :message="error.$message" />
                         </div>
                     </div>

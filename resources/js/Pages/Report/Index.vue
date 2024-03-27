@@ -17,9 +17,7 @@ export default defineComponent({
             tbody: [
                 "S.No",
                 "Project ID",
-                "Project Name",
-                "Vender User ID",
-                "Status Remark",
+                "Vender Name",
                 "Start Date",
                 "End Date",
                 "LOI",
@@ -68,7 +66,6 @@ export default defineComponent({
 });
 </script>
 <template>
-
     <Head :title="title" />
     <app-layout :title="title">
         <template #breadcrumb>
@@ -131,9 +128,7 @@ export default defineComponent({
                             <tr v-for="(survey, index) in surveys.data" :key="index">
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ survey.project_id }} </td>
-                                <td>{{ survey?.project_name }}</td>
                                 <td>{{ survey?.vender?.name }}</td>
-                                <td>{{ survey.duration }}</td>
                                 <td>{{ survey.created_at }}</td>
                                 <td>{{ survey.end_date }}</td>
                                 <td>{{ survey.loi }}</td>

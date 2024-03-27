@@ -41,7 +41,7 @@ class ReportController extends Controller
             $surveys = $surveys->whereDate('created_at', '>=', $request->from_date)
                 ->whereDate('created_at', '<=', $request->to_date);
         }
-        $surveys = $surveys->paginate(200)->appends(request()->query());
+        $surveys = $surveys->paginate(50)->appends(request()->query());
 
         return Inertia::render('Report/Index', [
             'surveys' => ReportResource::collection($surveys),
@@ -50,6 +50,6 @@ class ReportController extends Controller
 
     public function exportReport(Request $request)
     {
-        return Excel::download(new RespondentReport($request), "RespondentReport.xlsx");
+        return Excel::download(new RespondentReport($request, $this->uid()), "RespondentReport.xlsx");
     }
 }

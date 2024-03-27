@@ -22,10 +22,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
     Route::controller(ProjectController::class)->group(function () {
         Route::get('/projects', 'projects')->name('projects.index');
-        //Project Suppliers
         Route::get('project/{id}/suppliers', 'suppliers')->name('project.suppliers');
         Route::get('project/{id}', 'show')->name('project.show');
-        Route::get('project/report', 'report')->name('project.report');
+        Route::get('project-report', 'report')->name('project-report');
     });
     Route::controller(ReportController::class)->group(function () {
         Route::get('project-reports', 'index')->name('project-reports.index');

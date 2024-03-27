@@ -33,13 +33,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item text-muted">
-                <a href="/projects" class="text-muted text-hover-primary">Projects</a>
-            </li>
-            <li class="breadcrumb-item">
-                <span class="bullet bg-gray-400 w-5px h-2px"></span>
-            </li>
-            <li class="breadcrumb-item text-muted">
-                {{ title }}
+                <span class="text-muted text-hover-primary">Profile</span>
             </li>
         </template>
         <div class="row">

@@ -29,7 +29,7 @@ class Supplier extends Model implements Authenticatable
         'display_name',
         'skype_profile',
         'aol',
-        'mailing_adress',
+        'mailing_address',
         'city',
         'state',
         'zipcode',

@@ -39,22 +39,9 @@ class ProjectLink extends Model
     {
         return $this->hasOne(Country::class, 'id', 'country_id');
     }
-    public function state()
-    {
-        return $this->hasOne(State::class, 'id', 'state_id');
-    }
-    public function city()
-    {
-        return $this->hasOne(City::class, 'id', 'city_id');
-    }
     public function project()
     {
         return $this->hasOne(Project::class, 'id', 'project_id');
-    }
-
-    public function user()
-    {
-        return $this->hasOne(User::class, 'id', 'user_id');
     }
 
     public function total()

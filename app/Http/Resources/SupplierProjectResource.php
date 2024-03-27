@@ -15,9 +15,8 @@ class SupplierProjectResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'supplier' => new SupplierResource($this->supplier),
-            'project_id' => $this->project?->project_id,
+            'supplier_project_id' => $this->id,
+            'project' => $this->project,
             'project_name' => $this->project_link?->project_name,
             'country' => new CountryResource($this->project_link?->country),
             'client' => new ClientResource($this->project_link?->project->client),
@@ -33,7 +32,7 @@ class SupplierProjectResource extends JsonResource
             'loi' => $this->project_link?->loi,
             'ir' => $this->project_link?->ir,
             'created_at' => date('d/M/y-H:m:s A', strtotime($this->created_at)),
-            'complete' => $this->complete ? count($this->complete) : 0,
+            'complete' => $this->completes ? count($this->completes) : 0,
         ];
     }
 }

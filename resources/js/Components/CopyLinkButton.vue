@@ -28,7 +28,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <button style="min-width: 120px;"
+    <button
         :class="`btn btn-outline btn-sm clipboard ${copied ? 'bg-light-success btn-outline-success' : ' btn-outline-dark'}`"
         @click="copied ? () => null : doCopy(link)" :title="tooltip">
         <span v-if="copied">

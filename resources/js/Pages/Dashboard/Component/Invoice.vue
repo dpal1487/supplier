@@ -11,15 +11,18 @@ export default defineComponent({
             series: [this.invoice.report.total_projects, this.invoice.report.total_clicks, this.invoice.report.completes, this.invoice.report.quotafull, this.invoice.report.terminates,],
             chartOptions: {
                 chart: {
-                    width: 380,
+                    width: 280,
                     type: "pie",
                 },
                 labels: ["Total Project", "Total Click", "Total Completed", "Total Quotafull", "Total Terminate"],
+                legend: {
+                    position: 'bottom'
+                },
                 responsive: [{
-                    breakpoint: 480,
+                    breakpoint: 380,
                     options: {
                         chart: {
-                            width: 300
+                            width: 200
                         },
                         legend: {
                             position: 'bottom'
@@ -38,7 +41,7 @@ export default defineComponent({
         <div class="card-body pt-2">
             <div class="row justify-content-center">
                 <div class="col-md-6 d-flex align-items-center">
-                    <apexchart type="pie" height="450" width="450" :options="chartOptions" :series="series">
+                    <apexchart type="pie" height="350" width="350" :options="chartOptions" :series="series">
                     </apexchart>
                 </div>
                 <div class="col-md-6 p-2">

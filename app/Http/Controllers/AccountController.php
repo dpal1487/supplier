@@ -17,7 +17,6 @@ class AccountController extends Controller
         $user = Auth::user();
         $image = Image::where(['entity_id' => $user->id, 'entity_type' => 'supplier'])->first();
         $countries = Country::get();
-
         return Inertia::render('Account/Index', [
             'user' => new SupplierResource($user),
             'image' => new ImageResource($image),
@@ -64,7 +63,6 @@ class AccountController extends Controller
             !is_dir($path) &&  mkdir($path, 0777, true);
             if ($file = $request->file('image')) {
                 $fileData = $this->uploadImage($path, $file);
-                // $image = User::where('id', $request->id)->first();
                 $image = Image::where(['entity_id' => $request->id, 'entity_type' => 'supplier'])->first();
                 if ($image) {
                     if (file_exists($image->profile_image)) {
@@ -104,7 +102,7 @@ class AccountController extends Controller
             'skype'           => 'required',
             'linkedin'        => 'required',
             'aol'             => 'required',
-            'mailing_adress'  => 'required',
+            'mailing_address'  => 'required',
             'city'            => 'required',
             'zipcode'         => 'required',
             'final_id'        => 'required',
@@ -125,7 +123,7 @@ class AccountController extends Controller
                         'skype_profile' => $request->skype,
                         'linkedin_profile' => $request->linkedin,
                         'aol' => $request->aol,
-                        'mailing_adress' => $request->mailing_adress,
+                        'mailing_address' => $request->mailing_address,
                         'city' => $request->city,
                         'state' => $request->state,
                         'country_id' => $request->country,
